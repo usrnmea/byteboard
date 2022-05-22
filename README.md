@@ -39,4 +39,4 @@ ceedling test:all
 Following tdd, after creating a branch with new features, the first thing to do is to create unit tests. All tests must be in `test/`.
 
 ## License
-[MIT](https://choosealicense.com/licenses/mit/)yteboard is a free UCI chess engine written in C
+[MIT](https://choosealicense.com/licenses/mit/)
