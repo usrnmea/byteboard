@@ -1,5 +1,8 @@
 #include "bitboard.h"
 
+#include <stdint.h>
+#include <assert.h>
+
 const U64 UNIVERSE = 0xFFFFFFFFFFFFFFFFULL;
 const U64 EMPTY = 0x0000000000000000ULL;
 
@@ -24,10 +27,35 @@ const U64 FILE_A = 0x0101010101010101ULL;
 const U64 LIGHT_SQUARES = 0x55AA55AA55AA55AAULL;
 const U64 DARK_SQUARES = 0xAA55AA55AA55AA55ULL;
 
+static const uint32_t bit_scan_indexes[64] = {
+	0,  47, 1,  56, 48, 27, 2,  60,
+	57, 49, 41, 37, 28, 16, 3,  61,
+	54, 58, 35, 52, 50, 42, 21, 44,
+	38, 32, 29, 23, 17, 11, 4,  62,
+	46, 55, 26, 59, 40, 36, 15, 53,
+	34, 51, 20, 43, 31, 22, 10, 45,
+	25, 39, 14, 33, 19, 30, 9,  24,
+	13, 18, 8,  12, 7,  6,  5,  63
+};
+
+/// \see https://www.chessprogramming.org/BitScan#With_separated_LS1B
 uint32_t bit_scan_forward(U64 bitboard) {
-	return bitboard;
+	assert(bitboard != EMPTY);
+
+	return bit_scan_indexes[
+		((bitboard ^ (bitboard - 1ULL)) * 0x03f79d71b4cb0a89ULL) >> 58
+	];
 }
 
+/// \see https://www.chessprogramming.org/BitScan#De_Bruijn_Multiplication_2
 uint32_t bit_scan_reverse(U64 bitboard) {
-	return bitboard;
+	assert(bitboard != EMPTY);
+
+	bitboard |= bitboard >> 1ULL;
+	bitboard |= bitboard >> 2ULL;
+	bitboard |= bitboard >> 4ULL;
+	bitboard |= bitboard >> 8ULL;
+	bitboard |= bitboard >> 16ULL;
+	bitboard |= bitboard >> 32ULL;
+	return bit_scan_indexes[(bitboard * 0x03f79d71b4cb0a89ULL) >> 58ULL];
 }

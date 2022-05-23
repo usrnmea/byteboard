@@ -42,13 +42,19 @@ extern const U64 LIGHT_SQUARES;
 /// Bitboard of all dark squares (1 = dark, 0 = light)
 extern const U64 DARK_SQUARES;
 
+/// A set of indexes used in the implementation of the bit_scan functions
+/// \see https://www.chessprogramming.org/BitScan#With_separated_LS1B
+static const uint32_t bit_scan_indexes[64];
+
 /**
  * \brief a function that determines the bit-index of the least significant 1
  * bit (LS1B) in an integer such as bitboards
  *
  * \param bitboard target bitboard
  *
- * \return bit-index of the least significant 1 bit 
+ * \return bit-index of the least significant 1 bit
+ *
+ * \see https://www.chessprogramming.org/BitScan
  */
 uint32_t bit_scan_forward(U64 bitboard);
 
@@ -59,6 +65,8 @@ uint32_t bit_scan_forward(U64 bitboard);
  * \param bitboard target bitboard
  *
  * \return bit-index of the most significant 1 bit 
+ *
+ * \see https://www.chessprogramming.org/BitScan
  */
 uint32_t bit_scan_reverse(U64 bitboard);
 
