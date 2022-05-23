@@ -39,7 +39,8 @@ static const uint32_t bit_scan_indexes[64] = {
 };
 
 /// \see https://www.chessprogramming.org/BitScan#With_separated_LS1B
-uint32_t bit_scan_forward(U64 bitboard) {
+uint32_t bit_scan_forward(U64 bitboard)
+{
 	assert(bitboard != EMPTY);
 
 	return bit_scan_indexes[
@@ -48,7 +49,8 @@ uint32_t bit_scan_forward(U64 bitboard) {
 }
 
 /// \see https://www.chessprogramming.org/BitScan#De_Bruijn_Multiplication_2
-uint32_t bit_scan_reverse(U64 bitboard) {
+uint32_t bit_scan_reverse(U64 bitboard)
+{
 	assert(bitboard != EMPTY);
 
 	bitboard |= bitboard >> 1ULL;
