@@ -9,7 +9,7 @@ project(
 
 ###############################################################################
 
-source_files = ['src/main.c']
+source_files = ['src/main.c', 'src/bitboard.c']
 
 incdir = include_directories('include')
 
