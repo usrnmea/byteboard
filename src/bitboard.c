@@ -66,5 +66,13 @@ uint32_t bit_scan_reverse(U64 bitboard)
 /// https://www.chessprogramming.org/Population_Count#Brian_Kernighan.27s_way
 uint32_t population_count(U64 bitboard)
 {
-	return 0;
+	uint32_t count = 0;
+
+	while(bitboard) {
+		count++;
+
+		remove_lsb(bitboard);
+	}
+
+	return count;
 }
