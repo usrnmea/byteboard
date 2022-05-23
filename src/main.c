@@ -1,4 +1,6 @@
 #include <stdio.h>
+#include "bitboard.h"
+#include "bitboard_mapping.h"
 
 int main(void)
 {
