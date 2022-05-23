@@ -22,3 +22,18 @@ void test_population_count(void)
 	TEST_ASSERT_EQUAL_UINT32(8, population_count(0xFFULL));
 	TEST_ASSERT_EQUAL_UINT32(4, population_count(0x0000F0ULL));
 }
+
+void test_remove_lsb_macro(void)
+{
+	U64 bitboard = 0x01ULL;
+	remove_lsb(bitboard);
+	TEST_ASSERT_EQUAL_UINT64(bitboard, EMPTY);
+
+	bitboard = UNIVERSE;
+	remove_lsb(bitboard);
+	TEST_ASSERT_EQUAL_UINT64(bitboard, 0xFFFFFFFFFFFFFFFEULL);
+
+	bitboard = EMPTY;
+	remove_lsb(bitboard);
+	TEST_ASSERT_EQUAL_UINT64(bitboard, 0x00ULL);
+}

@@ -42,6 +42,10 @@ extern const U64 LIGHT_SQUARES;
 /// Bitboard of all dark squares (1 = dark, 0 = light)
 extern const U64 DARK_SQUARES;
 
+/// Removes least significant 1 bit (LS1B)
+/// \see https://www.chessprogramming.org/BitScan
+#define remove_lsb(bitboard) ((bitboard) &= (bitboard - 1))
+
 /// A set of indexes used in the implementation of the bit_scan functions
 /// \see https://www.chessprogramming.org/BitScan#With_separated_LS1B
 static const uint32_t bit_scan_indexes[64];
