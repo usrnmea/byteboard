@@ -59,3 +59,10 @@ uint32_t bit_scan_reverse(U64 bitboard) {
 	bitboard |= bitboard >> 32ULL;
 	return bit_scan_indexes[(bitboard * 0x03f79d71b4cb0a89ULL) >> 58ULL];
 }
+
+/// \see
+/// https://www.chessprogramming.org/Population_Count#Brian_Kernighan.27s_way
+uint32_t population_count(U64 bitboard)
+{
+	return 0;
+}

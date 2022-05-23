@@ -70,4 +70,18 @@ uint32_t bit_scan_forward(U64 bitboard);
  */
 uint32_t bit_scan_reverse(U64 bitboard);
 
+/**
+ * \brief An operation to determine the cardinality of a bitboard, also called
+ * Hamming weight or sideways sum.
+ *
+ * \param bitboard target bitboard
+ *
+ * \return number of one bits in a bitboard
+ *
+ * \see https://www.chessprogramming.org/Population_Count
+ * \see https://en.wikipedia.org/wiki/Cardinality
+ * \see https://en.wikipedia.org/wiki/Hamming_weight
+ */
+uint32_t population_count(U64 bitboard);
+
 #endif
