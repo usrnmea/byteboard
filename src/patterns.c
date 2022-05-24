@@ -30,8 +30,8 @@ U64 white_pawn_attack_pattern(Square target)
 	U64 bitboard = square_to_bitboard(target);
 
 	return (
-		((bitboard & (~FILE_H)) << 9)
-		| ((bitboard & (~FILE_A)) << 7)
+		((bitboard & ~FILE_H) << 9)
+		| ((bitboard & ~FILE_A) << 7)
 	);
 }
 
@@ -42,8 +42,8 @@ U64 black_pawn_attack_pattern(Square target)
 	U64 bitboard = square_to_bitboard(target);
 
 	return (
-		((bitboard & (~FILE_A)) >> 9)
-		| ((bitboard & (~FILE_H)) >> 7)
+		((bitboard & ~FILE_A) >> 9)
+		| ((bitboard & ~FILE_H) >> 7)
 	);
 }
 
