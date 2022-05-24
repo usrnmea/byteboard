@@ -1,4 +1,7 @@
 #include "unity.h"
+#include "bitboard.h"
+#include "bitboard_mapping.h"
+#include "rays.h"
 #include "patterns.h"
 
 void test_pawn_move_pattern(void)
