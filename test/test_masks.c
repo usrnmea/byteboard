@@ -35,26 +35,26 @@ void test_pawn_move_mask(void)
 void test_rook_attacks_mask(void)
 {
 	TEST_ASSERT_EQUAL_UINT64(
-		0xFE01010101010101ULL, test_rook_attacks_mask(SQ_A8, 0x00ULL)
+		0xFE01010101010101ULL, rook_attacks_mask(SQ_A8, 0x00ULL)
 	);
 
 	TEST_ASSERT_EQUAL_UINT64(
-		0x808080808080807FULL, test_rook_attacks_mask(SQ_H1, 0x00ULL)
+		0x808080808080807FULL, rook_attacks_mask(SQ_H1, 0x00ULL)
 	);
 
 	TEST_ASSERT_EQUAL_UINT64(
-		0x8080808F7080808ULL, test_rook_attacks_mask(SQ_D4, 0x00ULL)
+		0x8080808F7080808ULL, rook_attacks_mask(SQ_D4, 0x00ULL)
 	);
 
 	TEST_ASSERT_EQUAL_UINT64(
-		0x00ULL, test_rook_attacks_mask(SQ_H1, 0x8040ULL)
+		0x00ULL, rook_attacks_mask(SQ_H1, 0x8040ULL)
 	);
 
 	TEST_ASSERT_EQUAL_UINT64(
-		0xFE00000000000000ULL, test_rook_attacks_mask(SQ_A8, 0x1000000000000ULL)
+		0xFE00000000000000ULL, rook_attacks_mask(SQ_A8, 0x1000000000000ULL)
 	);
 
 	TEST_ASSERT_EQUAL_UINT64(
-		0x00ULL, test_rook_attacks_mask(SQ_D4, 0x814080000ULL)
+		0x00ULL, rook_attacks_mask(SQ_D4, 0x814080000ULL)
 	);
 }
