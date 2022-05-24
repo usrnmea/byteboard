@@ -4,6 +4,9 @@
 #ifndef __RAYS_H__
 #define __RAYS_H__
 
+#include "bitboard.h"
+#include "bitboard_mapping.h"
+
 /**
  * \brief  A function that generates a ray between two given squares.
  *
@@ -62,7 +65,8 @@ U64 get_ray_east(Square square);
 U64 get_ray_north(Square square);
 
 /**
- * \brief  A function that generates a diagonal from one given square.
+ * \brief  A function that generates a diagonal from one given square, including
+ * square.
  *
  * \param square target square
  *
@@ -73,7 +77,8 @@ U64 get_ray_north(Square square);
 U64 get_ray_diagonal(Square square);
 
 /**
- * \brief  A function that generates a anti-diagonal from one given square.
+ * \brief  A function that generates a anti-diagonal from one given square,
+ * including square.
  *
  * \param square target square
  *
