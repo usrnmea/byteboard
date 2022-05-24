@@ -1,5 +1,6 @@
 #include "bitboard.h"
 #include "bitboard_mapping.h"
+#include "rays.h"
 
 #include <assert.h>
 
@@ -21,7 +22,37 @@ U64 ray_north_east[SQ_NB];
 U64 ray_south_west[SQ_NB];
 U64 ray_south_east[SQ_NB];
 
-void init_rays(void) {}
+void init_rays(void) {
+	for(Square sq = SQ_A1; sq < SQ_NB; sq++) {
+		ray_west[sq] = get_ray_west(sq);
+		ray_south[sq] = get_ray_south(sq);
+		ray_east[sq] = get_ray_east(sq);
+		ray_north[sq] = get_ray_north(sq);
+
+		ray_vertical[sq] = (
+			square_to_bitboard(sq)
+			| ray_north[sq]
+			| ray_south[sq]
+		);
+		ray_horizontal[sq] = (
+			square_to_bitboard(sq)
+			| ray_west[sq]
+			| ray_east[sq]
+		);
+
+		ray_north_west[sq] = get_ray_north_west(sq);
+		ray_north_east[sq] = get_ray_north_east(sq);
+		ray_south_west[sq] = get_ray_south_west(sq);
+		ray_south_east[sq] = get_ray_south_east(sq);
+
+		ray_diagonal[sq] = get_ray_diagonal(sq);
+		ray_anti_diagonal[sq] = get_ray_anti_diagonal(sq);
+
+		for(Square to = SQ_A1; to < SQ_NB; to++) {
+			ray_between[sq][to] = get_ray_between(sq, to);
+		}
+	}
+}
 
 //RAYS
 //Returns a ray between 2 squares

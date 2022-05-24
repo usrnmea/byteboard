@@ -113,7 +113,7 @@ void test_init_rays(void)
 	);
 
 	TEST_ASSERT_EQUAL_UINT64(
-		ray_horizontal[SQ_C3],
+		ray_vertical[SQ_C3],
 		(
 			get_ray_north(SQ_C3)
 			| get_ray_south(SQ_C3)
@@ -121,7 +121,7 @@ void test_init_rays(void)
 		)
 	);
 	TEST_ASSERT_EQUAL_UINT64(
-		ray_vertical[SQ_C3],
+		ray_horizontal[SQ_C3],
 		(
 			get_ray_east(SQ_C3)
 			| get_ray_west(SQ_C3)
@@ -135,7 +135,7 @@ void test_init_rays(void)
 	TEST_ASSERT_EQUAL_UINT64(ray_north[SQ_C3], get_ray_north(SQ_C3));
 
 	TEST_ASSERT_EQUAL_UINT64(
-		ray_south_west[SQ_C3], get_ray_south_east(SQ_C3)
+		ray_south_east[SQ_C3], get_ray_south_east(SQ_C3)
 	);
 	TEST_ASSERT_EQUAL_UINT64(
 		ray_south_west[SQ_C3], get_ray_south_west(SQ_C3)
