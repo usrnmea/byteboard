@@ -6,6 +6,8 @@
 
 int main(void)
 {
+	init_rays();
+
 	printf("Hello, byteboard!\n");
 
 	return 0;
