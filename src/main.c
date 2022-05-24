@@ -3,6 +3,7 @@
 #include "bitboard_mapping.h"
 #include "piece.h"
 #include "rays.h"
+#include "patterns.h"
 
 int main(void)
 {
