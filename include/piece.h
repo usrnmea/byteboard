@@ -48,4 +48,4 @@ typedef enum Color {
 
 
 
-#endif // PIECE_H_INCLUDED
+#endif
