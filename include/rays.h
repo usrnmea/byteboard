@@ -8,36 +8,43 @@
 #include "bitboard_mapping.h"
 
 extern U64 ray_between[SQ_NB][SQ_NB];	/*!< Calculated rays from
-					get_ray_between() for each squares*/
+					get_ray_between() for each pair of squares
+					(if possible)
+					(not including squares)*/
 
 extern U64 ray_horizontal[SQ_NB];	/*!< Calculated horizontal rays for
-					each square*/
+					each square(include square)*/
 extern U64 ray_vertical[SQ_NB];	/*!< Calculated vertical rays from for
-				each square*/
+				each square(include square)*/
 
 extern U64 ray_west[SQ_NB];	/*!< Calculated rays from get_ray_west() for
-				each square*/
+				each square (not including square)*/
 extern U64 ray_south[SQ_NB];	/*!< Calculated rays from get_ray_south() for
-				each square*/
+				each square (not including square)*/
 extern U64 ray_east[SQ_NB];	/*!< Calculated rays from get_ray_east() for
-				each square*/
+				each square (not including square)*/
 extern U64 ray_north[SQ_NB];	/*!< Calculated rays from get_ray_north() for
-				each square*/
+				each square (not including square)*/
 
-extern U64 ray_diagonal[SQ_NB];	/*!< Calculated rays from
-					get_ray_diagonal() for each square*/
+extern U64 ray_diagonal[SQ_NB];		/*!< Calculated rays from
+					get_ray_diagonal() for each square
+					(include square)*/
 extern U64 ray_anti_diagonal[SQ_NB];	/*!< Calculated rays from
 					get_ray_anti_diagonal() for
-					each square*/
+					each square (include square)*/
 
 extern U64 ray_north_west[SQ_NB];	/*!< Calculated rays from
-					get_ray_north_west() for each square*/
+					get_ray_north_west() for each square
+					(not including square)*/
 extern U64 ray_north_east[SQ_NB];	/*!< Calculated rays from
-					get_ray_north_east() for each square*/
+					get_ray_north_east() for each square
+					(not including square)*/
 extern U64 ray_south_west[SQ_NB];	/*!< Calculated rays from
-					get_ray_south_west() for each square*/
+					get_ray_south_west() for each square
+					(not including square)*/
 extern U64 ray_south_east[SQ_NB];	/*!< Calculated rays from
-					get_ray_south_east() for each square*/
+					get_ray_south_east() for each square
+					(not including square)*/
 
 /**
  * \brief Calculates values for #ray_between #ray_west #ray_south #ray_east
