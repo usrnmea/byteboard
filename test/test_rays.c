@@ -84,3 +84,22 @@ void test_get_ray_south_east(void)
 	);
 	TEST_ASSERT_EQUAL_UINT64(0X0ULL, get_ray_south_east(SQ_H1));
 }
+
+void test_get_ray_between(void)
+{
+	TEST_ASSERT_EQUAL_UINT64(
+		0x7EULL, get_ray_between(SQ_A1, SQ_H1)
+	);
+	TEST_ASSERT_EQUAL_UINT64(
+		0x40404040000ULL, get_ray_between(SQ_C2, SQ_C7)
+	);
+	TEST_ASSERT_EQUAL_UINT64(
+		0x2040810204000ULL, get_ray_between(SQ_A8, SQ_H1)
+	);
+	TEST_ASSERT_EQUAL_UINT64(
+		0x8040200ULL, get_ray_between(SQ_A1, SQ_E5)
+	);
+	TEST_ASSERT_EQUAL_UINT64(
+		get_ray_between(SQ_A3, SQ_F3), get_ray_between(SQ_F3, SQ_A3)
+	);
+}
