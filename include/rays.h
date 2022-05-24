@@ -7,6 +7,45 @@
 #include "bitboard.h"
 #include "bitboard_mapping.h"
 
+extern U64 ray_between[SQ_NB][SQ_NB];	/*!< Calculated rays from
+					get_ray_between() for each squares*/
+
+extern U64 ray_horizontal[SQ_NB];	/*!< Calculated horizontal rays for
+					each square*/
+extern U64 ray_vertical[SQ_NB];	/*!< Calculated vertical rays from for
+				each square*/
+
+extern U64 ray_west[SQ_NB];	/*!< Calculated rays from get_ray_west() for
+				each square*/
+extern U64 ray_south[SQ_NB];	/*!< Calculated rays from get_ray_south() for
+				each square*/
+extern U64 ray_east[SQ_NB];	/*!< Calculated rays from get_ray_east() for
+				each square*/
+extern U64 ray_north[SQ_NB];	/*!< Calculated rays from get_ray_north() for
+				each square*/
+
+extern U64 ray_diagonal[SQ_NB];	/*!< Calculated rays from
+					get_ray_diagonal() for each square*/
+extern U64 ray_anti_diagonal[SQ_NB];	/*!< Calculated rays from
+					get_ray_anti_diagonal() for
+					each square*/
+
+extern U64 ray_north_west[SQ_NB];	/*!< Calculated rays from
+					get_ray_north_west() for each square*/
+extern U64 ray_north_east[SQ_NB];	/*!< Calculated rays from
+					get_ray_north_east() for each square*/
+extern U64 ray_south_west[SQ_NB];	/*!< Calculated rays from
+					get_ray_south_west() for each square*/
+extern U64 ray_south_east[SQ_NB];	/*!< Calculated rays from
+					get_ray_south_east() for each square*/
+
+/**
+ * \brief Calculates values for #ray_between #ray_west #ray_south #ray_east
+ * #ray_north #ray_north_west #ray_north_east #ray_south_west #ray_south_west
+ * #ray_horizontal #ray_vertical #ray_diagonal #ray_anti_diagonal
+ */
+void init_rays(void);
+
 /**
  * \brief  A function that generates a ray between two given squares.
  * Squares must be on the same diagonal/vertical/horizontal.

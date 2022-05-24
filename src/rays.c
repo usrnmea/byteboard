@@ -3,6 +3,26 @@
 
 #include <assert.h>
 
+U64 ray_between[SQ_NB][SQ_NB];
+
+U64 ray_horizontal[SQ_NB];
+U64 ray_vertical[SQ_NB];
+
+U64 ray_west[SQ_NB];
+U64 ray_south[SQ_NB];
+U64 ray_east[SQ_NB];
+U64 ray_north[SQ_NB];
+
+U64 ray_diagonal[SQ_NB];
+U64 ray_anti_diagonal[SQ_NB];
+
+U64 ray_north_west[SQ_NB];
+U64 ray_north_east[SQ_NB];
+U64 ray_south_west[SQ_NB];
+U64 ray_south_east[SQ_NB];
+
+void init_rays(void) {}
+
 //RAYS
 //Returns a ray between 2 squares
 U64 get_ray_between(Square from, Square to) {

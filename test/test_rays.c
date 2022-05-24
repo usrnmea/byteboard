@@ -103,3 +103,54 @@ void test_get_ray_between(void)
 		get_ray_between(SQ_A3, SQ_F3), get_ray_between(SQ_F3, SQ_A3)
 	);
 }
+
+void test_init_rays(void)
+{
+	init_rays();
+
+	TEST_ASSERT_EQUAL_UINT64(
+		ray_between[SQ_C3][SQ_C8], get_ray_between(SQ_C3, SQ_C8)
+	);
+
+	TEST_ASSERT_EQUAL_UINT64(
+		ray_horizontal[SQ_C3],
+		(
+			get_ray_north(SQ_C3)
+			| get_ray_south(SQ_C3)
+			| square_to_bitboard(SQ_C3)
+		)
+	);
+	TEST_ASSERT_EQUAL_UINT64(
+		ray_vertical[SQ_C3],
+		(
+			get_ray_east(SQ_C3)
+			| get_ray_west(SQ_C3)
+			| square_to_bitboard(SQ_C3)
+		)
+	);
+
+	TEST_ASSERT_EQUAL_UINT64(ray_west[SQ_C3], get_ray_west(SQ_C3));
+	TEST_ASSERT_EQUAL_UINT64(ray_east[SQ_C3], get_ray_east(SQ_C3));
+	TEST_ASSERT_EQUAL_UINT64(ray_south[SQ_C3], get_ray_south(SQ_C3));
+	TEST_ASSERT_EQUAL_UINT64(ray_north[SQ_C3], get_ray_north(SQ_C3));
+
+	TEST_ASSERT_EQUAL_UINT64(
+		ray_south_west[SQ_C3], get_ray_south_east(SQ_C3)
+	);
+	TEST_ASSERT_EQUAL_UINT64(
+		ray_south_west[SQ_C3], get_ray_south_west(SQ_C3)
+	);
+	TEST_ASSERT_EQUAL_UINT64(
+		ray_north_east[SQ_C3], get_ray_north_east(SQ_C3)
+	);
+	TEST_ASSERT_EQUAL_UINT64(
+		ray_north_west[SQ_C3], get_ray_north_west(SQ_C3)
+	);
+
+	TEST_ASSERT_EQUAL_UINT64(
+		ray_diagonal[SQ_C3], get_ray_diagonal(SQ_C3)
+	);
+	TEST_ASSERT_EQUAL_UINT64(
+		ray_anti_diagonal[SQ_C3], get_ray_anti_diagonal(SQ_C3)
+	);
+}
