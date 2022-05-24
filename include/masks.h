@@ -6,6 +6,7 @@
 
 #include "bitboard.h"
 #include "bitboard_mapping.h"
+#include "piece.h"
 
 /**
  * \brief Returns the bit of the board, where bits equal to one indicate the
@@ -13,13 +14,13 @@
  *
  * \param target square with pawn
  *
- * \param mask bitboard with enemy pieces
+ * \param occupied bitboard with enemy pieces
  *
  * \param color pawn color
  *
  * \return bitboard with pawn move mask
  */
-U64 pawn_move_mask(Square target, U64 mask, Color color);
+U64 pawn_move_mask(Square target, U64 occupied, Color color);
 
 /**
  * \brief Returns the bit of the board, where bits equal to one indicate the
@@ -27,11 +28,11 @@ U64 pawn_move_mask(Square target, U64 mask, Color color);
  *
  * \param target square with rook
  *
- * \param mask bitboard with enemy pieces
+ * \param occupied bitboard with enemy pieces
  *
- * \return bitboard with pawn move mask
+ * \return bitboard with rook move mask
  */
-U64 rook_attacks_mask(Square target, U64 mask);
+U64 rook_attacks_mask(Square target, U64 occupied);
 
 /**
  * \brief Returns the bit of the board, where bits equal to one indicate the
@@ -39,11 +40,11 @@ U64 rook_attacks_mask(Square target, U64 mask);
  *
  * \param target square with bishop
  *
- * \param mask bitboard with enemy pieces
+ * \param occupied bitboard with enemy pieces
  *
- * \return bitboard with pawn move patter
+ * \return bitboard with bishop move mask
  */
-U64 bishop_attacks_mask(Square target, U64 mask);
+U64 bishop_attacks_mask(Square target, U64 occupied);
 
 /**
  * \brief Returns the bit of the board, where bits equal to one indicate the
@@ -51,10 +52,10 @@ U64 bishop_attacks_mask(Square target, U64 mask);
  *
  * \param target square with queen
  *
- * \param mask bitboard with enemy pieces
+ * \param occupied bitboard with enemy pieces
  *
- * \return bitboard with pawn move patter
+ * \return bitboard with queen move mask
  */
-U64 queen_attacks_mask(Square target, U64 mask);
+U64 queen_attacks_mask(Square target, U64 occupied);
 
 #endif
