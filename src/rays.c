@@ -5,9 +5,9 @@
 
 //RAYS
 //Returns a ray between 2 squares
-U64 in_between(Square first, Square second) {
-	assert(first < SQ_NB);
-	assert(second < SQ_NB);
+U64 get_ray_between(Square from, Square to) {
+	assert(from < SQ_NB);
+	assert(to < SQ_NB);
 
 	const U64 m1   = -1ULL;
 	const U64 a2a7 = 0x0001010101010100ULL;
@@ -15,9 +15,9 @@ U64 in_between(Square first, Square second) {
 	const U64 h1b7 = 0x0002040810204080ULL;
 	U64 between, line, rank, file;
 
-	between  = (m1 << first) ^ (m1 << second);
-	file  = (second & 7) - (first & 7);
-	rank  = ((second | 7) -  first) >> 3 ;
+	between  = (m1 << from) ^ (m1 << to);
+	file  = (to & 7) - (from & 7);
+	rank  = ((to | 7) -  from) >> 3 ;
 	line  = ((file  &  7) - 1) & a2a7;
 	line += 2 * (((rank  &  7) - 1) >> 58);
 	line += (((rank - file) & 15) - 1) & b2g7;

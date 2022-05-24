@@ -9,16 +9,17 @@
 
 /**
  * \brief  A function that generates a ray between two given squares.
+ * Squares must be on the same diagonal/vertical/horizontal.
  *
- * \param first first target square
+ * \param from first target square
  *
- * \param second second target square
+ * \param to second target square
  *
- * \return A bitboard containing a west ray.
+ * \return A bitboard containing a ray between two squares.
  *
  * \see https://www.chessprogramming.org/Rays
  */
-U64 in_between(Square first, Square second);
+U64 get_ray_between(Square from, Square to);
 
 /**
  * \brief  A function that generates a west ray from one given square.
