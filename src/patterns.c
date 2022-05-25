@@ -91,11 +91,15 @@ U64 rook_move_pattern(Square target)
 
 U64 bishop_move_pattern(Square target)
 {
-	return square_to_bitboard(target);
+	assert(target < SQ_NB);
+
+	return ray_diagonal[target] ^ ray_anti_diagonal[target];
 }
 
 U64 queen_move_pattern(Square target)
 {
-	return square_to_bitboard(target);
+	assert(target < SQ_NB);
+
+	return rook_move_pattern(target) | bishop_move_pattern(target);
 }
 

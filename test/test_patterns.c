@@ -123,7 +123,7 @@ void test_queen_move_pattern(void)
 		0x81412111090503FEULL, queen_move_pattern(SQ_A1)
 	);
 	TEST_ASSERT_EQUAL_UINT64(
-		0xFE01010101010101ULL, queen_move_pattern(SQ_A8)
+		0xFE03050911214181ULL, queen_move_pattern(SQ_A8)
 	);
 
 	TEST_ASSERT_EQUAL_UINT64(
