@@ -50,6 +50,8 @@ U64 black_pawn_attack_pattern(Square target)
 /// https://www.chessprogramming.org/Knight_Pattern
 U64 knight_move_pattern(Square target)
 {
+	assert(target < SQ_NB);
+
 	U64 bitboard = square_to_bitboard(target);
 
 	U64 l1 = (bitboard >> 1) & ~FILE_H;
