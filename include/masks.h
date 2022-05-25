@@ -7,6 +7,7 @@
 #include "bitboard.h"
 #include "bitboard_mapping.h"
 #include "piece.h"
+#include "rays.h"
 
 /**
  * \brief Returns the bit of the board, where bits equal to one indicate the
