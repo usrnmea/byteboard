@@ -4,6 +4,12 @@
 #include "rays.h"
 #include "patterns.h"
 
+// Initializing everything needed for tests
+void test_patterns_init(void)
+{
+	init_rays();
+}
+
 void test_pawn_move_pattern(void)
 {
 	TEST_ASSERT_EQUAL_UINT64(0x2020000ULL, white_pawn_move_pattern(SQ_B2));

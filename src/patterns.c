@@ -1,5 +1,6 @@
 #include "bitboard.h"
 #include "bitboard_mapping.h"
+#include "rays.h"
 #include "patterns.h"
 
 #include <assert.h>
@@ -83,7 +84,9 @@ U64 king_move_pattern(Square target)
 
 U64 rook_move_pattern(Square target)
 {
-	return square_to_bitboard(target);
+	assert(target < SQ_NB);
+
+	return ray_vertical[target] ^ ray_horizontal[target];
 }
 
 U64 bishop_move_pattern(Square target)
