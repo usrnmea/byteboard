@@ -1,6 +1,7 @@
 #include "unity.h"
 #include "bitboard.h"
 #include "bitboard_mapping.h"
+#include "piece.h"
 #include "rays.h"
 #include "patterns.h"
 
@@ -21,6 +22,13 @@ void test_pawn_move_pattern(void)
 	TEST_ASSERT_EQUAL_UINT64(
 		0x808000000000ULL, black_pawn_move_pattern(SQ_H7)
 	);
+
+	TEST_ASSERT_EQUAL_UINT64(
+		white_pawn_move_pattern(SQ_C3), pawn_move_pattern[WHITE](SQ_C3)
+	);
+	TEST_ASSERT_EQUAL_UINT64(
+		black_pawn_move_pattern(SQ_C3), pawn_move_pattern[BLACK](SQ_C3)
+	);
 }
 
 void test_pawn_attack_pattern(void)
@@ -37,6 +45,15 @@ void test_pawn_attack_pattern(void)
 
 	TEST_ASSERT_EQUAL_UINT64(0x40ULL, black_pawn_attack_pattern(SQ_H2));
 	TEST_ASSERT_EQUAL_UINT64(0x02ULL, black_pawn_attack_pattern(SQ_A2));
+
+	TEST_ASSERT_EQUAL_UINT64(
+		white_pawn_attack_pattern(SQ_C3),
+		pawn_attack_pattern[WHITE](SQ_C3)
+	);
+	TEST_ASSERT_EQUAL_UINT64(
+		black_pawn_attack_pattern(SQ_C3),
+		pawn_attack_pattern[BLACK](SQ_C3)
+	);
 }
 
 void test_knight_move_pattern(void)
