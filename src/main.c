@@ -4,6 +4,7 @@
 #include "piece.h"
 #include "rays.h"
 #include "patterns.h"
+#include "masks.h"
 
 int main(void)
 {

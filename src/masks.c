@@ -25,10 +25,23 @@ U64 rook_attacks_mask(Square target, U64 occupied)
 {
 	assert(target < SQ_NB);
 
-	U64 mask_west_occupied = (ray_west[target] & occupied) | 0x01ULL;
-	U64 mask_east_occupied = (ray_east[target] & occupied) | 0x8000000000000000ULL;
-	U64 mask_north_occupied = (ray_north[target] & occupied) | 0x8000000000000000ULL;
-	U64 mask_south_occupied = (ray_south[target] & occupied) | 0x01ULL;
+	// Setting the least significant bit(| 0x01ULL and |0x80...00ULL)
+	// ensures to scan at least an outer square, which would address an
+	// empty ray set anyway, therefor not affecting the final result with
+	// no blocker or a most outer one.
+
+        U64 mask_west_occupied = (
+		(ray_west[target] & occupied) | 0x01ULL
+	);
+	U64 mask_east_occupied = (
+		(ray_east[target] & occupied) | 0x8000000000000000ULL
+	);
+	U64 mask_north_occupied = (
+		(ray_north[target] & occupied) | 0x8000000000000000ULL
+	);
+	U64 mask_south_occupied = (
+		(ray_south[target] & occupied) | 0x01ULL
+	);
 
 	Square nearest_west_occupied = bit_scan_reverse(mask_west_occupied);
 	Square nearest_east_occupied = bit_scan_forward(mask_east_occupied);
@@ -56,6 +69,11 @@ U64 bishop_attacks_mask(Square target, U64 occupied)
 	U64 north_west_ray = ray_north_west[target];
 	U64 south_east_ray = ray_south_east[target];
 	U64 south_west_ray = ray_south_west[target];
+
+	// Setting the least significant bit(| 0x01ULL and |0x80...00ULL)
+	// ensures to scan at least an outer square, which would address an
+	// empty ray set anyway, therefor not affecting the final result with
+	// no blocker or a most outer one.
 
 	Square nearest_north_east_occupied = bit_scan_forward(
 		(north_east_ray & occupied) | 0x8000000000000000ULL
