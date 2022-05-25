@@ -14,7 +14,7 @@
  *
  * \param target square with pawn
  *
- * \param occupied bitboard with enemy pieces
+ * \param occupied bitboard with chess pieces
  *
  * \param color pawn color
  *
@@ -28,7 +28,7 @@ U64 pawn_move_mask(Square target, U64 occupied, Color color);
  *
  * \param target square with rook
  *
- * \param occupied bitboard with enemy pieces
+ * \param occupied bitboard with chess pieces
  *
  * \return bitboard with rook move mask
  */
@@ -40,7 +40,7 @@ U64 rook_attacks_mask(Square target, U64 occupied);
  *
  * \param target square with bishop
  *
- * \param occupied bitboard with enemy pieces
+ * \param occupied bitboard with chess pieces
  *
  * \return bitboard with bishop move mask
  */
@@ -52,7 +52,7 @@ U64 bishop_attacks_mask(Square target, U64 occupied);
  *
  * \param target square with queen
  *
- * \param occupied bitboard with enemy pieces
+ * \param occupied bitboard with chess pieces
  *
  * \return bitboard with queen move mask
  */
