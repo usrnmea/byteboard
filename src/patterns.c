@@ -47,9 +47,21 @@ U64 black_pawn_attack_pattern(Square target)
 	);
 }
 
+/// https://www.chessprogramming.org/Knight_Pattern
 U64 knight_move_pattern(Square target)
 {
-	return square_to_bitboard(target);
+	U64 bitboard = square_to_bitboard(target);
+
+	U64 l1 = (bitboard >> 1) & ~FILE_H;
+	U64 l2 = (bitboard >> 2) & ~(FILE_H | FILE_G);
+	U64 r1 = (bitboard << 1) & ~FILE_A;
+	U64 r2 = (bitboard << 2) & ~(FILE_A | FILE_B);
+	return (
+		(l1 | r1) << 16
+		| (l2 | r2) << 8
+		| (l1 | r1) >> 16
+		| (l2 | r2) >> 8
+	);
 }
 
 U64 king_move_pattern(Square target)
