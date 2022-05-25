@@ -66,9 +66,19 @@ U64 knight_move_pattern(Square target)
 	);
 }
 
+/// https://www.chessprogramming.org/King_Pattern
 U64 king_move_pattern(Square target)
 {
-	return square_to_bitboard(target);
+	assert(target < SQ_NB);
+
+	U64 bitboard = square_to_bitboard(target);
+
+	return (
+		(bitboard << 8) | (bitboard >> 8) | ((bitboard << 1) & ~FILE_A)
+		| ((bitboard >> 1 ) & ~FILE_H) | ((bitboard << 9) & ~FILE_A)
+		| ((bitboard << 7) & ~FILE_H) | ((bitboard >> 9) & ~FILE_H)
+		| ((bitboard >> 7) & ~FILE_A)
+	);
 }
 
 U64 rook_move_pattern(Square target)
