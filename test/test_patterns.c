@@ -1,5 +1,14 @@
 #include "unity.h"
+#include "bitboard.h"
+#include "bitboard_mapping.h"
+#include "rays.h"
 #include "patterns.h"
+
+// Initializing everything needed for tests
+void test_patterns_init(void)
+{
+	init_rays();
+}
 
 void test_pawn_move_pattern(void)
 {
@@ -114,7 +123,7 @@ void test_queen_move_pattern(void)
 		0x81412111090503FEULL, queen_move_pattern(SQ_A1)
 	);
 	TEST_ASSERT_EQUAL_UINT64(
-		0xFE01010101010101ULL, queen_move_pattern(SQ_A8)
+		0xFE03050911214181ULL, queen_move_pattern(SQ_A8)
 	);
 
 	TEST_ASSERT_EQUAL_UINT64(
