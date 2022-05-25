@@ -11,7 +11,14 @@ U64 pawn_move_mask(Square target, U64 occupied, Color color)
 {
 	assert(color < COLOR_NB);
 	assert(target < SQ_NB);
-	return square_to_bitboard(target);
+
+	U64 bitboard = square_to_bitboard(target);
+
+	bitboard = (bitboard << 8) >> (color * 16) & ~occupied;
+	U64 bitboard_2 = bitboard & ((RANK_3 * !color) | (RANK_6 * color));
+	bitboard |= (bitboard_2 << 8) >> (color * 16) & ~occupied;
+
+	return bitboard;
 }
 
 U64 rook_attacks_mask(Square target, U64 occupied)
@@ -23,10 +30,10 @@ U64 rook_attacks_mask(Square target, U64 occupied)
 	U64 mask_north_occupied = (ray_north[target] & occupied) | 0x8000000000000000ULL;
 	U64 mask_south_occupied = (ray_south[target] & occupied) | 0x01ULL;
 
-	uint32_t nearest_west_occupied = bit_scan_reverse(mask_west_occupied);
-	uint32_t nearest_east_occupied = bit_scan_forward(mask_east_occupied);
-	uint32_t nearest_north_occupied = bit_scan_forward(mask_north_occupied);
-	uint32_t nearest_south_occupied = bit_scan_reverse(mask_south_occupied);
+	Square nearest_west_occupied = bit_scan_reverse(mask_west_occupied);
+	Square nearest_east_occupied = bit_scan_forward(mask_east_occupied);
+	Square nearest_north_occupied = bit_scan_forward(mask_north_occupied);
+	Square nearest_south_occupied = bit_scan_reverse(mask_south_occupied);
 
 	U64 west_occupied_ray = ~(ray_west[nearest_west_occupied]);
 	U64 east_occupied_ray = ~(ray_east[nearest_east_occupied]);
@@ -44,11 +51,41 @@ U64 rook_attacks_mask(Square target, U64 occupied)
 U64 bishop_attacks_mask(Square target, U64 occupied)
 {
 	assert(target < SQ_NB);
-	return square_to_bitboard(target);
+
+	U64 north_east_ray = ray_north_east[target];
+	U64 north_west_ray = ray_north_west[target];
+	U64 south_east_ray = ray_south_east[target];
+	U64 south_west_ray = ray_south_west[target];
+
+	Square nearest_north_east_occupied = bit_scan_forward(
+		(north_east_ray & occupied) | 0x8000000000000000ULL
+	);
+
+	Square nearest_north_west_occupied = bit_scan_forward(
+		(north_west_ray & occupied) | 0x8000000000000000ULL
+	);
+
+	Square nearest_south_east_occupied = bit_scan_reverse(
+		(south_east_ray & occupied) | 0x01ULL
+	);
+
+	Square nearest_south_west_occupied = bit_scan_reverse(
+		(south_west_ray & occupied) | 0x01ULL
+	);
+
+	north_east_ray &= ~(ray_north_east[nearest_north_east_occupied]);
+	north_west_ray &= ~(ray_north_west[nearest_north_west_occupied]);
+	south_east_ray &= ~(ray_south_east[nearest_south_east_occupied]);
+	south_west_ray &= ~(ray_south_west[nearest_south_west_occupied]);
+
+
+	return north_east_ray | north_west_ray | south_east_ray | south_west_ray;
 }
 
 U64 queen_attacks_mask(Square target, U64 occupied)
 {
 	assert(target < SQ_NB);
-	return square_to_bitboard(target);
+
+	return rook_attacks_mask(target, occupied) |
+		bishop_attacks_mask(target, occupied);
 }
