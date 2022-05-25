@@ -23,6 +23,11 @@ U64 black_pawn_move_pattern(Square target)
 	return (bitboard >> 8) | ((bitboard & RANK_7) >> 16); 
 }
 
+U64 (*pawn_move_pattern[COLOR_NB]) (Square) = {
+	&white_pawn_move_pattern,
+	&black_pawn_move_pattern
+};
+
 U64 white_pawn_attack_pattern(Square target)
 {
 
@@ -47,6 +52,11 @@ U64 black_pawn_attack_pattern(Square target)
 		| ((bitboard & ~FILE_H) >> 7)
 	);
 }
+
+U64 (*pawn_attack_pattern[COLOR_NB]) (Square) = {
+	&white_pawn_attack_pattern,
+	&black_pawn_attack_pattern
+};
 
 /// https://www.chessprogramming.org/Knight_Pattern
 U64 knight_move_pattern(Square target)

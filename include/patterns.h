@@ -6,6 +6,24 @@
 
 #include "bitboard.h"
 #include "bitboard_mapping.h"
+#include "piece.h"
+
+/** Stores function pointers needed to get the pawn move pattern.
+ * Example:
+ * \code{.c}
+ * pawn_move_pattern[WHITE](SQ_C3);
+ * \endcode
+ * See white_pawn_move_pattern() and black_pawn_move_pattern()
+ */
+extern U64 (*pawn_move_pattern[COLOR_NB]) (Square);
+/** Stores function pointers needed to get the pawn attack pattern.
+ * Example:
+ * \code{.c}
+ * pawn_attack_pattern[WHITE](SQ_C3);
+ * \endcode
+ * See white_pawn_attack_pattern() and black_pawn_attack_pattern()
+ */
+extern U64 (*pawn_attack_pattern[COLOR_NB]) (Square);
 
 /**
  * \brief Returns the bit of the board, where bits equal to one indicate the
