@@ -58,3 +58,73 @@ void test_rook_attacks_mask(void)
 		0x00ULL, rook_attacks_mask(SQ_D4, 0x814080000ULL)
 	);
 }
+
+void test_bishop_attacks_mask(void)
+{
+	TEST_ASSERT_EQUAL_UINT64(
+		0x2040810204080ULL, bishop_attacks_mask(SQ_A8, 0x00ULL)
+	);
+
+	TEST_ASSERT_EQUAL_UINT64(
+		0x40201008040201ULL, bishop_attacks_mask(SQ_H8, 0x00ULL)
+	);
+
+	TEST_ASSERT_EQUAL_UINT64(
+		0x8041221400142241ULL, bishop_attacks_mask(SQ_D4, 0x00ULL)
+	);
+
+	TEST_ASSERT_EQUAL_UINT64(
+		0x00ULL, bishop_attacks_mask(SQ_A1, 0x200ULL)
+	);
+
+	TEST_ASSERT_EQUAL_UINT64(
+		0x80402010080400ULL, bishop_attacks_mask(SQ_B1, 0x100ULL)
+	);
+
+	TEST_ASSERT_EQUAL_UINT64(
+		0x00ULL, bishop_attacks_mask(SQ_B1, 0x500ULL)
+	);
+
+	TEST_ASSERT_EQUAL_UINT64(
+		0x00ULL, bishop_attacks_mask(SQ_D4, 0x1400140000ULL)
+	);
+
+	TEST_ASSERT_EQUAL_UINT64(
+		0x142241ULL, bishop_attacks_mask(SQ_D4, 0x1400000000ULL)
+	);
+}
+
+void test_queen_attacks_mask(void)
+{
+	TEST_ASSERT_EQUAL_UINT64(
+		0x81412111090503FEULL, queen_attacks_mask(SQ_A1, 0x00ULL)
+	);
+
+	TEST_ASSERT_EQUAL_UINT64(
+		0xC0A09088848281ULL, queen_attacks_mask(SQ_H8, 0x4000000000000000ULL)
+	);
+
+	TEST_ASSERT_EQUAL_UINT64(
+		0x8090A0CF71C2A49ULL, queen_attacks_mask(SQ_D4, 0x00ULL)
+	);
+
+	TEST_ASSERT_EQUAL_UINT64(
+		0x8041221400142241ULL, queen_attacks_mask(SQ_D4, 0x814080000ULL)
+	);
+
+	TEST_ASSERT_EQUAL_UINT64(
+		0x8080808F7080808ULL, queen_attacks_mask(SQ_D4, 0x1400140000ULL)
+	);
+
+	TEST_ASSERT_EQUAL_UINT64(
+		0x20202020202020DFULL, queen_attacks_mask(SQ_F1, 0x5000ULL)
+	);
+
+	TEST_ASSERT_EQUAL_UINT64(
+		0x00ULL, queen_attacks_mask(SQ_D4, 0x1C141C0000ULL)
+	);
+
+	TEST_ASSERT_EQUAL_UINT64(
+		0x00ULL, queen_attacks_mask(SQ_A1, 0x302ULL)
+	);
+}
