@@ -20,7 +20,6 @@ extern U64 (*pawn_move_pattern[COLOR_NB]) (Square);
  * Example:
  * \code{.c}
  * pawn_attack_pattern[WHITE](SQ_C3);
- * pawn[color](square);
  * \endcode
  * See white_pawn_attack_pattern() and black_pawn_attack_pattern()
  */
