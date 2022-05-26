@@ -74,7 +74,7 @@ typedef struct PositionState {
 	Castling castling;	///< Able castlings
 	uint32_t move_50_rule;	///< 50 move rule counter
 
-	U64 allies;	///< bitboard of all ally pieces 
+	U64 allies;	///< bitboard of all ally pieces
 	U64 enemies;	///< bitboard of all enemy pieces
 	U64 occupied;	///< bitboard of all occupied squares
 	U64 pinned;	///< bitboard of all pinned pieces
@@ -95,14 +95,15 @@ typedef struct Position {
  *
  * \param fen fen string
  *
- * \return pointer to #position
- * 
+ * \return pointer to #position or NULL, when fen is incorrect or memory allocation
+ * failed.
+ *
  * \see https://www.chessprogramming.org/Forsyth-Edwards_Notation
  */
 Position* init_position(const char *fen);
 
 /**
- * \brief Returns a bitboard with all the pieces that attacked the square 
+ * \brief Returns a bitboard with all the pieces that attacked the square
  *
  * \param position
  *
