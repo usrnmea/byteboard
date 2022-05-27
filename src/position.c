@@ -77,9 +77,9 @@ static bool init_board(Position *position, char* board)
 			/// FEN stores ranks in reverse order for us
 			Square target = (7 - rank_number) * 8 + square_number;
 
-			position->board.pieces[
-				(color * 6) + piece_type - 1
-			] |= square_to_bitboard(target);
+			set_piece(
+				position, make_piece(color, piece_type), target
+			);
 
 			square_number += 1;
 		}
@@ -282,7 +282,7 @@ Position* init_position(const char *fen)
 	state->allies = EMPTY;
 	state->enemies = EMPTY;
 
-	for(PieceType pt = PAWN; pt < 7; pt++) {
+	for(PieceType pt = PAWN; pt <= PIECE_TYPE_NB; pt++) {
 		state->allies |= pieces(position, make_piece(!color, pt));
 		state->enemies |= pieces(position, make_piece(color, pt));
 	}
