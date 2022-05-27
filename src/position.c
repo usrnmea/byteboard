@@ -307,7 +307,9 @@ U64 attacked_by(const Position *pos, Square target, Color attackers_color)
 
 U64 pieces(const Position *pos, Piece piece)
 {
-	return EMPTY;
+	return pos->board.pieces[
+		color_of_piece(piece) * 6 + type_of_piece(piece) - 1
+	];
 }
 
 Piece piece_on(const Position *pos, Square target)
