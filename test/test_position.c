@@ -10,11 +10,11 @@
 
 void test_init_position(void)
 {
-	Position *pos = init_position("4k2b/1b6/8/p7/8/7B/2B5/2p3K1 w - - 0 1");
+	Position *pos = init_position("4k2b/1b6/8/p7/8/7B/2B5/6K1 w - - 0 1");
 
 	TEST_ASSERT_NOT_NULL(pos);
 
-	TEST_ASSERT_EQUAL_UINT64(0x9002000100800444ULL, pos->position_state->occupied);
+	TEST_ASSERT_EQUAL_UINT64(0x9002000100800440ULL, pos->position_state->occupied);
 	
 	TEST_ASSERT_EQUAL_UINT64(0x00ULL, pos->board.pieces[0]);
 	TEST_ASSERT_EQUAL_UINT64(0x00ULL, pos->board.pieces[1]);
@@ -26,7 +26,7 @@ void test_init_position(void)
 
 	TEST_ASSERT_EQUAL_UINT64(0x800400ULL, pos->board.pieces[2]);
 	TEST_ASSERT_EQUAL_UINT64(0x40ULL, pos->board.pieces[5]);
-	TEST_ASSERT_EQUAL_UINT64(0x100000004ULL, pos->board.pieces[6]);
+	TEST_ASSERT_EQUAL_UINT64(0x100000000ULL, pos->board.pieces[6]);
 	TEST_ASSERT_EQUAL_UINT64(0x8002000000000000ULL, pos->board.pieces[8]);
 	TEST_ASSERT_EQUAL_UINT64(0x1000000000000000ULL, pos->board.pieces[11]);
 	free(pos);
