@@ -339,6 +339,12 @@ void set_piece(Position *pos, Piece piece, Square target)
 
 void remove_piece(Position *pos, Piece piece, Square target)
 {
+	assert(pos != NULL);
+	assert(target < SQ_NB);
+
+	pos->board.pieces[
+		((color_of_piece(piece)) * 6) + type_of_piece(piece) - 1
+	] &= ~(0x01ULL << target);
 }
 
 void do_castling(Position *pos, Castling castling)
