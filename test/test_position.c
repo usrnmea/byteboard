@@ -237,3 +237,21 @@ void test_piece_on(void)
 	free(pos->position_state);
 	free(pos);
 }
+
+void test_attaked_by(void)
+{
+	Position *pos = init_position(
+		"8/6b1/3p4/r1r1K3/8/5n2/4q3/k7 w - - 0 1"
+	);
+
+	TEST_ASSERT_EQUAL_UINT64(
+		0x40080400201000ULL, attacked_by(pos, SQ_E5, BLACK)
+	);
+	TEST_ASSERT_EQUAL_UINT64(EMPTY, attacked_by(pos, SQ_D6, BLACK));
+	TEST_ASSERT_EQUAL_UINT64(
+		0x1000000000ULL, attacked_by(pos, SQ_D6, WHITE)
+	);
+
+	free(pos->position_state);
+	free(pos);
+}
