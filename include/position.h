@@ -145,6 +145,7 @@ Piece piece_on(const Position *position, Square target);
 
 /**
  * \brief Moves piece from source square to destination square
+ * (this function doesn't update occupied field)
  *
  * \param position
  *
@@ -162,7 +163,7 @@ void move_piece(
 );
 
 /**
- * \brief Sets piece to square
+ * \brief Sets piece to square (this function doesn't update occupied field)
  *
  * \param position
  *
@@ -173,7 +174,7 @@ void move_piece(
 void set_piece(Position *position, Piece piece, Square target);
 
 /**
- * \brief Removes piece from square
+ * \brief Removes piece from square (this function doesn't update occupied field)
  *
  * \param position
  *

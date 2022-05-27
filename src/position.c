@@ -320,10 +320,6 @@ Piece piece_on(const Position *pos, Square target)
 	return NO_PIECE;
 }
 
-void move_piece(Position *pos, Piece piece, Square source, Square destination)
-{
-}
-
 void set_piece(Position *pos, Piece piece, Square target)
 {
 	assert(pos != NULL);
@@ -345,6 +341,16 @@ void remove_piece(Position *pos, Piece piece, Square target)
 	pos->board.pieces[
 		((color_of_piece(piece)) * 6) + type_of_piece(piece) - 1
 	] &= ~(0x01ULL << target);
+}
+
+void move_piece(Position *pos, Piece piece, Square source, Square destination)
+{
+	assert(pos != NULL);
+	assert(source < SQ_NB);
+	assert(destination < SQ_NB);
+
+	remove_piece(pos, piece, source);
+	set_piece(pos, piece, destination);
 }
 
 void do_castling(Position *pos, Castling castling)

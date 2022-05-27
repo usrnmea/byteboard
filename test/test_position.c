@@ -185,6 +185,36 @@ void test_remove_piece(void)
 		0x8000000000000000ULL, pos->board.BlackBishops
 	);
 	TEST_ASSERT_EQUAL_UINT64(0x1000000000000000ULL, pos->board.BlackKing);
+
+	free(pos->position_state);
+	free(pos);
+}
+
+void test_move_piece(void)
+{
+	Position *pos = init_position("4k2b/1b6/8/p7/8/7B/2B5/6K1 w - - 0 1");
+
+	move_piece(pos, W_PAWN, SQ_A2, SQ_A3);
+	move_piece(pos, W_KING, SQ_G1, SQ_F2);
+	move_piece(pos, B_BISHOP, SQ_B7, SQ_C8);
+	move_piece(pos, W_BISHOP, SQ_C2, SQ_B1);
+
+	TEST_ASSERT_EQUAL_UINT64(0x00ULL, pos->board.WhiteKnights);
+	TEST_ASSERT_EQUAL_UINT64(0x00ULL, pos->board.WhiteRooks);
+	TEST_ASSERT_EQUAL_UINT64(0x00ULL, pos->board.WhiteQueens);
+	TEST_ASSERT_EQUAL_UINT64(0x00ULL, pos->board.BlackKnights);
+	TEST_ASSERT_EQUAL_UINT64(0x00ULL, pos->board.BlackRooks);
+	TEST_ASSERT_EQUAL_UINT64(0x00ULL, pos->board.BlackQueens);
+
+	TEST_ASSERT_EQUAL_UINT64(0x800002ULL, pos->board.WhiteBishops);
+	TEST_ASSERT_EQUAL_UINT64(0x2000ULL, pos->board.WhiteKing);
+	TEST_ASSERT_EQUAL_UINT64(0x100000000ULL, pos->board.BlackPawns);
+	TEST_ASSERT_EQUAL_UINT64(
+		0x8400000000000000ULL, pos->board.BlackBishops
+	);
+	TEST_ASSERT_EQUAL_UINT64(0x1000000000000000ULL, pos->board.BlackKing);
+	TEST_ASSERT_EQUAL_UINT64(0x10000ULL, pos->board.WhitePawns);
+
 	free(pos->position_state);
 	free(pos);
 }
