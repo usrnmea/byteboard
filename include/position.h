@@ -8,6 +8,8 @@
 #include "bitboard_mapping.h"
 #include "piece.h"
 
+#include <stdbool.h>
+
 /// Indicates the type of move
 typedef enum MoveType {
 	COMMON = 0,	///< Common movement of a piece

@@ -14,7 +14,9 @@ void test_init_position(void)
 
 	TEST_ASSERT_NOT_NULL(pos);
 
-	TEST_ASSERT_EQUAL_UINT64(0x9002000100800440ULL, pos->position_state->occupied);
+	TEST_ASSERT_EQUAL_UINT64(
+		0x9002000100800440ULL, pos->position_state->occupied
+	);
 	
 	TEST_ASSERT_EQUAL_UINT64(0x00ULL, pos->board.WhitePawns);
 	TEST_ASSERT_EQUAL_UINT64(0x00ULL, pos->board.WhiteKnights);
@@ -27,8 +29,11 @@ void test_init_position(void)
 	TEST_ASSERT_EQUAL_UINT64(0x800400ULL, pos->board.WhiteBishops);
 	TEST_ASSERT_EQUAL_UINT64(0x40ULL, pos->board.WhiteKing);
 	TEST_ASSERT_EQUAL_UINT64(0x100000000ULL, pos->board.BlackPawns);
-	TEST_ASSERT_EQUAL_UINT64(0x8002000000000000ULL, pos->board.BlackBishops);
+	TEST_ASSERT_EQUAL_UINT64(
+		0x8002000000000000ULL, pos->board.BlackBishops
+	);
 	TEST_ASSERT_EQUAL_UINT64(0x1000000000000000ULL, pos->board.BlackKing);
+	free(pos->position_state);
 	free(pos);
 
 	pos = init_position("this is not valid FEN");
@@ -56,11 +61,15 @@ void test_init_position(void)
 	TEST_ASSERT_NULL(pos);
 	free(pos);
 
-	pos = init_position("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1");
+	pos = init_position(
+		"rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1"
+	);
 
 	TEST_ASSERT_NOT_NULL(pos);
 
-	TEST_ASSERT_EQUAL_UINT64(0xFFFF00000000FFFFULL, pos->position_state->occupied);
+	TEST_ASSERT_EQUAL_UINT64(
+		0xFFFF00000000FFFFULL, pos->position_state->occupied
+	);
 
 	TEST_ASSERT_EQUAL_UINT64(0xFF00ULL, pos->board.WhitePawns);
 	TEST_ASSERT_EQUAL_UINT64(0x42ULL, pos->board.WhiteKnights);
@@ -74,5 +83,7 @@ void test_init_position(void)
 	TEST_ASSERT_EQUAL_UINT64(0x8100000000000000ULL, pos->board.BlackRooks);
 	TEST_ASSERT_EQUAL_UINT64(0x800000000000000ULL, pos->board.BlackQueens);
 	TEST_ASSERT_EQUAL_UINT64(0x1000000000000000ULL, pos->board.BlackKing);
+
+	free(pos->position_state);
 	free(pos);
 }
