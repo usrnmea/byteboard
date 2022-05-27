@@ -1,6 +1,7 @@
 #include "unity.h"
 #include "bitboard.h"
 #include "bitboard_mapping.h"
+#include "piece.h"
 #include "rays.h"
 #include "patterns.h"
 #include "masks.h"
@@ -214,6 +215,24 @@ void test_move_piece(void)
 	);
 	TEST_ASSERT_EQUAL_UINT64(0x1000000000000000ULL, pos->board.BlackKing);
 	TEST_ASSERT_EQUAL_UINT64(0x10000ULL, pos->board.WhitePawns);
+
+	free(pos->position_state);
+	free(pos);
+}
+
+void test_piece_on(void)
+{
+	Position *pos = init_position(
+		"rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1"
+	);
+
+	TEST_ASSERT_EQUAL(W_PAWN, piece_on(pos, SQ_A2));
+	TEST_ASSERT_EQUAL(W_ROOK, piece_on(pos, SQ_A1));
+	TEST_ASSERT_EQUAL(W_KING, piece_on(pos, SQ_E1));
+
+	TEST_ASSERT_EQUAL(B_PAWN, piece_on(pos, SQ_A7));
+	TEST_ASSERT_EQUAL(B_ROOK, piece_on(pos, SQ_A8));
+	TEST_ASSERT_EQUAL(B_QUEEN, piece_on(pos, SQ_D8));
 
 	free(pos->position_state);
 	free(pos);
