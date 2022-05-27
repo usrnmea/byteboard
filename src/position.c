@@ -309,14 +309,6 @@ U64 pieces(const Position *pos, Piece piece)
 
 void set_piece(Position *pos, Piece piece, Square target)
 {
-}
-
-void remove_piece(Position *pos, Piece piece, Square target)
-{
-}
-
-void set_piece(Position *pos, Piece piece, Square target)
-{
 	assert(pos != NULL);
 	assert(target < SQ_NB);
 
