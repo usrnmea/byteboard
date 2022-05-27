@@ -1,6 +1,8 @@
 #include "bitboard.h"
 #include "bitboard_mapping.h"
 #include "piece.h"
+#include "patterns.h"
+#include "masks.h"
 #include "position.h"
 
 #include <stdio.h>
@@ -369,7 +371,31 @@ Piece piece_on(const Position *pos, Square target)
 
 U64 attacked_by(const Position *pos, Square target, Color attackers_color)
 {
-	return EMPTY;
+	assert(pos != NULL);
+	assert(attackers_color < COLOR_NB);
+	assert(target < SQ_NB);
+
+	const U64 occupied = pos->position_state->occupied;
+
+	const U64 pawns = pieces(pos, make_piece(attackers_color, PAWN));
+	const U64 knights = pieces(pos, make_piece(attackers_color, KNIGHT));
+	const U64 king = pieces(pos, make_piece(attackers_color, KING));
+
+	const U64 queens = pieces(pos, make_piece(attackers_color, QUEEN));
+	const U64 rooks = pieces(
+		pos, make_piece(attackers_color, ROOK)
+	) | queens;
+	const U64 bishops = pieces(
+		pos, make_piece(attackers_color, BISHOP)
+	) | queens;
+
+	return (
+		(pawn_attack_pattern[!attackers_color](target)	& pawns)
+		| (knight_move_pattern(target)			& knights)
+		| (bishop_attacks_mask(target, occupied)	& bishops)
+		| (rook_attacks_mask(target, occupied)		& rooks)
+		| (king_move_pattern(target)			& king)
+	);
 }
 
 void do_castling(Position *pos, Castling castling)

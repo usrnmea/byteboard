@@ -9,6 +9,12 @@
 
 #include <stdlib.h>
 
+// Initializing everything needed for tests
+void test_init(void)
+{
+	init_rays();
+}
+
 void test_init_position(void)
 {
 	Position *pos = init_position("4k2b/1b6/8/p7/8/7B/2B5/6K1 w - - 0 1");
