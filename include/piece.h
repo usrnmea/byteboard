@@ -23,7 +23,8 @@
 typedef enum PieceType {
 	NO_PIECE_TYPE,	/*!< If it is needed, the absence of the piece type
 			equals zero. */
-	PAWN, KNIGHT, BISHOP, ROOK, QUEEN, KING
+	PAWN, KNIGHT, BISHOP, ROOK, QUEEN, KING,
+	PIECE_TYPE_NB = 6,	///< Number of types
 } PieceType;
 
 /**
@@ -36,6 +37,7 @@ typedef enum Piece {
 			equals zero. */
 	W_PAWN = 1, W_KNIGHT, W_BISHOP, W_ROOK, W_QUEEN, W_KING,
 	B_PAWN = 9, B_KNIGHT, B_BISHOP, B_ROOK, B_QUEEN, B_KING,
+	PIECE_NB = 12,	///< Number of pieces
 } Piece;
 
 /**
