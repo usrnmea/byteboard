@@ -310,6 +310,7 @@ U64 pieces(const Position *pos, Piece piece)
 void set_piece(Position *pos, Piece piece, Square target)
 {
 	assert(pos != NULL);
+	assert(piece != NO_PIECE);
 	assert(target < SQ_NB);
 
 	const Color color = color_of_piece(piece);
@@ -317,22 +318,24 @@ void set_piece(Position *pos, Piece piece, Square target)
 
 	pos->board.pieces[
 		(color * 6) + piece_type - 1
-	] |= 0x01ULL << target;
+	] |= square_to_bitboard(target);
 }
 
 void remove_piece(Position *pos, Piece piece, Square target)
 {
 	assert(pos != NULL);
+	assert(piece != NO_PIECE);
 	assert(target < SQ_NB);
 
 	pos->board.pieces[
 		((color_of_piece(piece)) * 6) + type_of_piece(piece) - 1
-	] &= ~(0x01ULL << target);
+	] &= ~(square_to_bitboard(target));
 }
 
 void move_piece(Position *pos, Piece piece, Square source, Square destination)
 {
 	assert(pos != NULL);
+	assert(piece != NO_PIECE);
 	assert(source < SQ_NB);
 	assert(destination < SQ_NB);
 

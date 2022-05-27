@@ -162,7 +162,8 @@ void move_piece(
 );
 
 /**
- * \brief Sets piece to square (this function doesn't update occupied field)
+ * \brief Sets piece to square (this function doesn't update any position state
+ * field)
  *
  * \param position
  *
@@ -173,7 +174,8 @@ void move_piece(
 void set_piece(Position *position, Piece piece, Square target);
 
 /**
- * \brief Removes piece from square (this function doesn't update occupied field)
+ * \brief Removes piece from square (this function doesn't update any position
+ * state field)
  *
  * \param position
  *
