@@ -345,7 +345,26 @@ void move_piece(Position *pos, Piece piece, Square source, Square destination)
 
 Piece piece_on(const Position *pos, Square target)
 {
-	return NO_PIECE;
+	assert(pos != NULL);
+	assert(target < SQ_NB);
+
+	const U64 bb = square_to_bitboard(target);
+
+	return (
+		!!(bb & ~pos->position_state->occupied)	* NO_PIECE
+		| !!(pieces(pos, W_PAWN  ) & bb)	* W_PAWN
+		| !!(pieces(pos, W_KNIGHT) & bb)	* W_KNIGHT
+		| !!(pieces(pos, W_BISHOP) & bb)	* W_BISHOP
+		| !!(pieces(pos, W_ROOK  ) & bb)	* W_ROOK
+		| !!(pieces(pos, W_QUEEN ) & bb)	* W_QUEEN
+		| !!(pieces(pos, W_KING  ) & bb)	* W_KING
+		| !!(pieces(pos, B_PAWN  ) & bb)	* B_PAWN
+		| !!(pieces(pos, B_KNIGHT) & bb)	* B_KNIGHT
+		| !!(pieces(pos, B_BISHOP) & bb)	* B_BISHOP
+		| !!(pieces(pos, B_ROOK  ) & bb)	* B_ROOK
+		| !!(pieces(pos, B_QUEEN ) & bb)	* B_QUEEN
+		| !!(pieces(pos, B_KING  ) & bb)	* B_KING
+	);
 }
 
 U64 attacked_by(const Position *pos, Square target, Color attackers_color)
