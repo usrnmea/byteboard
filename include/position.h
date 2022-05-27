@@ -79,7 +79,6 @@ typedef struct PositionState {
 	U64 allies;	///< bitboard of all ally pieces
 	U64 enemies;	///< bitboard of all enemy pieces
 	U64 occupied;	///< bitboard of all occupied squares
-	U64 pinned;	///< bitboard of all pinned pieces
 
 	Piece captured_piece;	///< The piece captured on the previous move
 
