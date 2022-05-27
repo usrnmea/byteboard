@@ -87,3 +87,47 @@ void test_init_position(void)
 	free(pos->position_state);
 	free(pos);
 }
+
+void test_pieces(void)
+{
+	Position *pos = init_position("4k2b/1b6/8/p7/8/7B/2B5/6K1 w - - 0 1");
+
+	TEST_ASSERT_EQUAL_UINT64(0x00ULL, pieces(pos, W_PAWN));
+	TEST_ASSERT_EQUAL_UINT64(0x00ULL, pieces(pos, W_KNIGHT));
+	TEST_ASSERT_EQUAL_UINT64(0x00ULL, pieces(pos, W_ROOK));
+	TEST_ASSERT_EQUAL_UINT64(0x00ULL, pieces(pos, W_QUEEN));
+	TEST_ASSERT_EQUAL_UINT64(0x00ULL, pieces(pos, B_KNIGHT));
+	TEST_ASSERT_EQUAL_UINT64(0x00ULL, pieces(pos, B_ROOK));
+	TEST_ASSERT_EQUAL_UINT64(0x00ULL, pieces(pos, B_QUEEN));
+
+	TEST_ASSERT_EQUAL_UINT64(0x800400ULL, pieces(pos, W_BISHOP));
+	TEST_ASSERT_EQUAL_UINT64(0x40ULL, pieces(pos, W_KING));
+	TEST_ASSERT_EQUAL_UINT64(0x100000000ULL, pieces(pos, B_PAWN));
+	TEST_ASSERT_EQUAL_UINT64(
+		0x8002000000000000ULL, pieces(pos, B_BISHOP)
+	);
+	TEST_ASSERT_EQUAL_UINT64(0x1000000000000000ULL, pieces(pos, B_KING));
+
+	free(pos->position_state);
+	free(pos);
+
+	pos = init_position(
+		"rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1"
+	);
+
+	TEST_ASSERT_EQUAL_UINT64(0xFF00ULL, pieces(pos, W_PAWN));
+	TEST_ASSERT_EQUAL_UINT64(0x42ULL, pieces(pos, W_KNIGHT));
+	TEST_ASSERT_EQUAL_UINT64(0x24ULL, pieces(pos, W_BISHOP));
+	TEST_ASSERT_EQUAL_UINT64(0x81ULL, pieces(pos, W_ROOK));
+	TEST_ASSERT_EQUAL_UINT64(0x8ULL, pieces(pos, W_QUEEN));
+	TEST_ASSERT_EQUAL_UINT64(0x10ULL, pieces(pos, W_KING));
+	TEST_ASSERT_EQUAL_UINT64(0xFF000000000000ULL, pieces(pos, B_PAWN));
+	TEST_ASSERT_EQUAL_UINT64(0x4200000000000000ULL, pieces(pos, B_KNIGHT));
+	TEST_ASSERT_EQUAL_UINT64(0x2400000000000000ULL, pieces(pos, B_BISHOP));
+	TEST_ASSERT_EQUAL_UINT64(0x8100000000000000ULL, pieces(pos, B_ROOK));
+	TEST_ASSERT_EQUAL_UINT64(0x800000000000000ULL, pieces(pos, B_QUEEN));
+	TEST_ASSERT_EQUAL_UINT64(0x1000000000000000ULL, pieces(pos, B_KING));
+
+	free(pos->position_state);
+	free(pos);
+}
