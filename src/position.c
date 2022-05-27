@@ -42,7 +42,7 @@ static bool init_board(Position *position, char* board)
 
 				continue;
 			}
-			
+
 			Color color = WHITE;
 
 			if(islower(rank[index]))
@@ -233,7 +233,7 @@ static bool is_board_correct(const Position *position)
 		white_king != EMPTY
 		|| black_king != EMPTY
 	)
-		return false; 
+		return false;
 
 	if(
 		board->WhitePawns & (RANK_1 | RANK_8)
@@ -305,7 +305,7 @@ U64 attacked_by(const Position *pos, Square target, Color attackers_color)
 	return EMPTY;
 }
 
-U64 pieces(const Position *pos, PieceType piece_type, Color color)
+U64 pieces(const Position *pos, Piece piece)
 {
 	return EMPTY;
 }

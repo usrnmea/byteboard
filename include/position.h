@@ -126,13 +126,11 @@ U64 attacked_by(
  *
  * \param position
  *
- * \param piece_type type of pieces
- *
- * \param color color of pieces
+ * \param piece what pieces we need to get
  *
  * \return bitboard with pieces
  */
-U64 pieces(const Position *position, PieceType piece_type, Color color);
+U64 pieces(const Position *pos, Piece piece);
 
 /**
  * \brief Returns piece on target square
