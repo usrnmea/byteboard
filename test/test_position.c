@@ -131,3 +131,32 @@ void test_pieces(void)
 	free(pos->position_state);
 	free(pos);
 }
+
+void test_set_piece(void)
+{
+	Position *pos = init_position("4k2b/1b6/8/p7/8/7B/2B5/6K1 w - - 0 1");
+	
+	set_piece(pos, W_PAWN, SQ_E5);
+	set_piece(pos, B_ROOK, SQ_A8);
+	set_piece(pos, B_QUEEN, SQ_A2);
+	set_piece(pos, W_KNIGHT, SQ_H5);
+	
+	TEST_ASSERT_EQUAL_UINT64(0x00ULL, pos->board.WhiteRooks);
+	TEST_ASSERT_EQUAL_UINT64(0x00ULL, pos->board.WhiteQueens);
+	TEST_ASSERT_EQUAL_UINT64(0x00ULL, pos->board.BlackKnights);
+
+	TEST_ASSERT_EQUAL_UINT64(0x800400ULL, pos->board.WhiteBishops);
+	TEST_ASSERT_EQUAL_UINT64(0x40ULL, pos->board.WhiteKing);
+	TEST_ASSERT_EQUAL_UINT64(0x100000000ULL, pos->board.BlackPawns);
+	TEST_ASSERT_EQUAL_UINT64(
+		0x8002000000000000ULL, pos->board.BlackBishops
+	);
+	TEST_ASSERT_EQUAL_UINT64(0x1000000000000000ULL, pos->board.BlackKing);
+	TEST_ASSERT_EQUAL_UINT64(0x100000000000000ULL, pos->board.BlackRooks);
+	TEST_ASSERT_EQUAL_UINT64(0x1000000000ULL, pos->board.WhitePawns);
+	TEST_ASSERT_EQUAL_UINT64(0x100ULL, pos->board.BlackQueens);
+	TEST_ASSERT_EQUAL_UINT64(0x8000000000ULL, pos->board.WhiteKnights);
+
+	free(pos->position_state);
+	free(pos);
+}

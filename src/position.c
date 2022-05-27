@@ -8,6 +8,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <stdbool.h>
+#include <assert.h>
 
 /**
  * \brief Initializes the first part of FEN. Returns True if everything went
@@ -307,6 +308,8 @@ U64 attacked_by(const Position *pos, Square target, Color attackers_color)
 
 U64 pieces(const Position *pos, Piece piece)
 {
+	assert(pos != NULL);
+
 	return pos->board.pieces[
 		color_of_piece(piece) * 6 + type_of_piece(piece) - 1
 	];
@@ -323,6 +326,15 @@ void move_piece(Position *pos, Piece piece, Square source, Square destination)
 
 void set_piece(Position *pos, Piece piece, Square target)
 {
+	assert(pos != NULL);
+	assert(target < SQ_NB);
+
+	const Color color = color_of_piece(piece);
+	const PieceType piece_type = type_of_piece(piece);
+
+	pos->board.pieces[
+		(color * 6) + piece_type - 1
+	] |= 0x01ULL << target;
 }
 
 void remove_piece(Position *pos, Piece piece, Square target)
