@@ -283,14 +283,11 @@ Position* init_position(const char *fen)
 	state->enemies = EMPTY;
 
 	for(PieceType pt = PAWN; pt < 7; pt++) {
-		state->allies |= position->board.pieces[(!color * 6) + pt - 1];
-		state->enemies |= position->board.pieces[(color * 6) + pt - 1];
+		state->allies |= pieces(position, make_piece(!color, pt));
+		state->enemies |= pieces(position, make_piece(color, pt));
 	}
 
 	state->occupied = state->allies | state->enemies;
-
-	/// TODO: get_pinned_pieces(position)
-	state->pinned = EMPTY;
 
 	return position;
 
@@ -299,11 +296,6 @@ err:
 	free(position);
 
 	return NULL;
-}
-
-U64 attacked_by(const Position *pos, Square target, Color attackers_color)
-{
-	return EMPTY;
 }
 
 U64 pieces(const Position *pos, Piece piece)
@@ -315,9 +307,12 @@ U64 pieces(const Position *pos, Piece piece)
 	];
 }
 
-Piece piece_on(const Position *pos, Square target)
+void set_piece(Position *pos, Piece piece, Square target)
 {
-	return NO_PIECE;
+}
+
+void remove_piece(Position *pos, Piece piece, Square target)
+{
 }
 
 void set_piece(Position *pos, Piece piece, Square target)
@@ -351,6 +346,16 @@ void move_piece(Position *pos, Piece piece, Square source, Square destination)
 
 	remove_piece(pos, piece, source);
 	set_piece(pos, piece, destination);
+}
+
+Piece piece_on(const Position *pos, Square target)
+{
+	return NO_PIECE;
+}
+
+U64 attacked_by(const Position *pos, Square target, Color attackers_color)
+{
+	return EMPTY;
 }
 
 void do_castling(Position *pos, Castling castling)
