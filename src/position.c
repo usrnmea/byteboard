@@ -131,7 +131,7 @@ static bool init_turn(Position *position, char *turn)
 	if(strlen(turn) != 1 || (*turn != 'b' && *turn != 'w'))
 		return false;
 
-	position->position_state->previous_move = (Move) {
+	position->state->previous_move = (Move) {
 		.color = !(*turn == 'b'),
 		.move_type = COMMON,
 		.source = SQ_NONE,
@@ -161,7 +161,7 @@ static bool init_castlings(Position *pos, char *castlings)
 	if(strlen(castlings) > 4)
 		return false;
 
-	pos->position_state->castling = NO_CASTLING;
+	pos->state->castling = NO_CASTLING;
 
 	if(castlings[0] == '-')
 		return true;
@@ -169,16 +169,16 @@ static bool init_castlings(Position *pos, char *castlings)
 	for(size_t i = 0; i < strlen(castlings); i++) {
 		switch(castlings[i]) {
 			case 'k':
-				pos->position_state->castling |= BLACK_OO;
+				pos->state->castling |= BLACK_OO;
 				break;
 			case 'q':
-				pos->position_state->castling |= BLACK_OOO;
+				pos->state->castling |= BLACK_OOO;
 				break;
 			case 'K':
-				pos->position_state->castling |= WHITE_OO;
+				pos->state->castling |= WHITE_OO;
 				break;
 			case 'Q':
-				pos->position_state->castling |= WHITE_OOO;
+				pos->state->castling |= WHITE_OOO;
 				break;
 			default:
 				return false;
@@ -214,9 +214,9 @@ static bool init_en_passant(Position *pos, char *en_passant)
 			(en_passant[1] - '1') * 8 + en_passant[0] - 'a'
 		);
 
-		Color color = pos->position_state->previous_move.color;
+		Color color = pos->state->previous_move.color;
 
-		pos->position_state->previous_move = (Move) {
+		pos->state->previous_move = (Move) {
 			.destination = target - 8 + (16 * !color),
 			.source = SQ_NONE,
 			.move_type = EN_PASSANT,
@@ -282,9 +282,9 @@ Position* init_position(const char *fen)
 	char *en_passant = strtok(NULL, " ");
 
 	Position *position = calloc(1, sizeof(Position));
-	position->position_state = calloc(1, sizeof(PositionState));
+	position->state = calloc(1, sizeof(PositionState));
 
-	PositionState *state = position->position_state;
+	PositionState *state = position->state;
 
 	Color color;
 
@@ -315,7 +315,7 @@ Position* init_position(const char *fen)
 	return position;
 
 err:
-	free(position->position_state);
+	free(position->state);
 	free(position);
 
 	return NULL;
@@ -374,7 +374,7 @@ Piece piece_on(const Position *pos, Square target)
 	const U64 bb = square_to_bitboard(target);
 
 	return (
-		!!(bb & ~pos->position_state->occupied)	* NO_PIECE
+		!!(bb & ~pos->state->occupied)		* NO_PIECE
 		| !!(pieces(pos, W_PAWN  ) & bb)	* W_PAWN
 		| !!(pieces(pos, W_KNIGHT) & bb)	* W_KNIGHT
 		| !!(pieces(pos, W_BISHOP) & bb)	* W_BISHOP
@@ -396,7 +396,7 @@ U64 attacked_by(const Position *pos, Square target, Color attackers_color)
 	assert(attackers_color < COLOR_NB);
 	assert(target < SQ_NB);
 
-	const U64 occupied = pos->position_state->occupied;
+	const U64 occupied = pos->state->occupied;
 
 	const U64 pawns = pieces(pos, make_piece(attackers_color, PAWN));
 	const U64 knights = pieces(pos, make_piece(attackers_color, KNIGHT));
@@ -450,7 +450,7 @@ void do_castling(Position *pos, Castling castling)
 
 void do_move(Position *pos, Move move)
 {
-	assert(pos->position_state->move_50_rule != 50);
+	assert(pos->state->move_50_rule != 50);
 }
 
 void undo_move(Position *pos)

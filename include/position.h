@@ -93,7 +93,7 @@ typedef struct PositionState {
 
 /// Position definition
 typedef struct Position {
-	PositionState *position_state;	///< Position state
+	PositionState *state;		///< Position state
 	Board board;			///< Board
 } Position;
 
