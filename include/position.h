@@ -208,6 +208,6 @@ void do_move(Position *position, Move move);
  *
  * \param position
  */
-void retract_move(Position *position);
+void undo_move(Position *position);
 
 #endif
