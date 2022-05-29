@@ -363,4 +363,7 @@ void test_do_move(void)
 
 	// Tests for promotion
 
+
+	free(pos->position_state);
+	free(pos);
 }
