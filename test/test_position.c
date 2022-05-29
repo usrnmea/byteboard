@@ -557,3 +557,18 @@ void test_do_move(void)
 	free(pos->position_state);
 	free(pos);
 }
+
+void test_do_castling(void)
+{
+	Position *pos = init_position(
+		"r3kbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQK2R w KQkq - 0 1"
+	);
+
+	do_castling(pos, WHITE_OO);
+	do_castling(pos, BLACK_OOO);
+
+	TEST_ASSERT_EQUAL_UINT64(0x40ULL, pieces(pos, W_KING));
+	TEST_ASSERT_EQUAL_UINT64(0x21ULL, pieces(pos, W_ROOK));
+	TEST_ASSERT_EQUAL_UINT64(0x400000000000000ULL, pieces(pos, B_KING));
+	TEST_ASSERT_EQUAL_UINT64(0x8800000000000000ULL, pieces(pos, B_ROOK));
+}
