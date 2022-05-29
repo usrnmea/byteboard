@@ -48,6 +48,12 @@ typedef enum Castling {
 	ALL_CASTLING = ALL_WHITE | ALL_BLACK,
 } Castling;
 
+/// When working with castling, it becomes necessary to determine Castling by
+/// the cells to which the king or rook has moved/stood. For more convenient
+/// work, this array was created. For king squares it returns #ALL_WHITE and
+/// #ALL_BLACK, and for rooks #WHITE_OO, #WHITE_OOO, #BLACK_OO and #BLACK_OOO.
+extern Castling castling_masks[SQ_NB];
+
 /// Board definition
 /// \see https://www.chessprogramming.org/Bitboard_Board-Definition
 typedef union Board {
