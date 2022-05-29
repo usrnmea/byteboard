@@ -400,6 +400,31 @@ U64 attacked_by(const Position *pos, Square target, Color attackers_color)
 
 void do_castling(Position *pos, Castling castling)
 {
+	assert(pos != NULL);
+	assert(
+		castling == WHITE_OO ^ castling == WHITE_OOO
+		^ castling == BLACK_OO ^ castling == BLACK_OOO
+	);
+
+	const Color color = !!(castling & (ALL_BLACK));
+
+	Square king_src = SQ_E1 + (56 * color);
+	Square rook_src;
+
+	Square king_dst = king_src + 2;
+	Square rook_dst = SQ_F1 + (56 * color);
+
+	if(castling & QUEEN_SIDE) {
+		king_dst -= 4;
+		rook_dst -= 2;
+
+		rook_src = SQ_A1 + (56 * color);
+	} else {
+		rook_src = SQ_H1 + (56 * color);
+	};
+
+	move_piece(pos, make_piece(color, KING), king_src, king_dst);
+	move_piece(pos, make_piece(color, ROOK), rook_src, rook_dst);
 }
 
 void do_move(Position *pos, Move move)
