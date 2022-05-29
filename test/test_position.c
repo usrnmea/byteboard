@@ -291,7 +291,7 @@ void test_do_move(void)
 	};
 	do_move(pos, move_2);
 
-	TEST_ASSERT_EQUAL_UINT64(0xFFEF00101000EFF, pos->state->occupied);
+	TEST_ASSERT_EQUAL_UINT64(0xFFEF00101000EFFF, pos->state->occupied);
 	TEST_ASSERT_EQUAL_UINT64(0xFFEF001000000000, pos->state->allies);
 	TEST_ASSERT_EQUAL_UINT64(0x1000EFFF, pos->state->enemies);
 
@@ -337,12 +337,12 @@ void test_do_move(void)
 	do_move(pos, move_5);
 
 	TEST_ASSERT_EQUAL_UINT64(0xEFFF00101000EFBF, pos->state->occupied);
-	TEST_ASSERT_EQUAL_UINT64(0x100000EFBF, pos->state->allies);
+	TEST_ASSERT_EQUAL_UINT64(0x101000EFBF, pos->state->allies);
 	TEST_ASSERT_EQUAL_UINT64(0xEFFF000000000000, pos->state->enemies);
 
 	TEST_ASSERT_EQUAL_UINT32(B_PAWN, pos->state->captured_piece);
 	TEST_ASSERT_EQUAL_UINT32(ALL_WHITE, pos->state->castling);
-	TEST_ASSERT_EQUAL_UINT32(3, pos->state->move_50_rule);
+	TEST_ASSERT_EQUAL_UINT32(0, pos->state->move_50_rule);
 
 	// Tests for previous_state
 	TEST_ASSERT_EQUAL_UINT64(0xEFFF00101020EFBF, pos->state->previous_state->occupied);
@@ -355,11 +355,11 @@ void test_do_move(void)
 
 	// Tests for previous_move
 	TEST_ASSERT_EQUAL_UINT32(COMMON, pos->state->previous_move.move_type);
-	TEST_ASSERT_EQUAL_UINT32(KING, pos->state->previous_move.moved_piece_type);
+	TEST_ASSERT_EQUAL_UINT32(KNIGHT, pos->state->previous_move.moved_piece_type);
 	TEST_ASSERT_EQUAL_UINT32(NO_PIECE_TYPE, pos->state->previous_move.promotion_piece_type);
-	TEST_ASSERT_EQUAL_UINT32(BLACK, pos->state->previous_move.color);
-	TEST_ASSERT_EQUAL_UINT32(SQ_E8, pos->state->previous_move.source);
-	TEST_ASSERT_EQUAL_UINT32(SQ_E7, pos->state->previous_move.destination);
+	TEST_ASSERT_EQUAL_UINT32(WHITE, pos->state->previous_move.color);
+	TEST_ASSERT_EQUAL_UINT32(SQ_F3, pos->state->previous_move.source);
+	TEST_ASSERT_EQUAL_UINT32(SQ_E5, pos->state->previous_move.destination);
 
 	free(pos->state);
 	free(pos);
@@ -374,9 +374,9 @@ void test_do_move(void)
 	};
 	do_move(pos, move_promotion);
 
-	TEST_ASSERT_EQUAL_UINT64(0x8001000000000100, pos->state->occupied);
+	TEST_ASSERT_EQUAL_UINT64(0x8000010000000100, pos->state->occupied);
 	TEST_ASSERT_EQUAL_UINT64(0x8000000000000100, pos->state->allies);
-	TEST_ASSERT_EQUAL_UINT64(0x1000000000000, pos->state->enemies);
+	TEST_ASSERT_EQUAL_UINT64(0x10000000000, pos->state->enemies);
 
 	TEST_ASSERT_EQUAL_UINT64(0x00ULL, pos->board.WhitePawns);
 	TEST_ASSERT_EQUAL_UINT64(0x00ULL, pos->board.WhiteKnights);
@@ -389,7 +389,7 @@ void test_do_move(void)
 	TEST_ASSERT_EQUAL_UINT64(0x00ULL, pos->board.BlackBishops);
 
 	TEST_ASSERT_EQUAL_UINT64(0x100ULL, pos->board.WhiteKing);
-	TEST_ASSERT_EQUAL_UINT64(0x1000000000000ULL, pos->board.BlackKing);
+	TEST_ASSERT_EQUAL_UINT64(0x10000000000ULL, pos->board.BlackKing);
 	TEST_ASSERT_EQUAL_UINT64(0x8000000000000000ULL, pos->board.WhiteQueens);
 
 	free(pos->state);
@@ -438,7 +438,7 @@ void test_do_move(void)
 	do_move(pos, move_castling_white_000);
 
 	TEST_ASSERT_EQUAL_UINT64(0x91F700000000F78c, pos->state->occupied);
-	TEST_ASSERT_EQUAL_UINT64(0x810000000000F78C, pos->state->allies);
+	TEST_ASSERT_EQUAL_UINT64(0xF78CULL, pos->state->allies);
 	TEST_ASSERT_EQUAL_UINT64(0x91F7000000000000, pos->state->enemies);
 
 	TEST_ASSERT_EQUAL_UINT64(0x00ULL, pos->board.WhiteKnights);
@@ -497,7 +497,7 @@ void test_do_move(void)
 	Move move_castling_black_000 = {
 		.move_type = CASTLING, .moved_piece_type = KING,
 		.promotion_piece_type = NO_PIECE_TYPE, .color = BLACK,
-		.source = SQ_E8, .destination = SQ_D8
+		.source = SQ_E8, .destination = SQ_C8
 	};
 	do_move(pos, move_castling_black_000);
 

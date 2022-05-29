@@ -450,7 +450,98 @@ void do_castling(Position *pos, Castling castling)
 
 void do_move(Position *pos, Move move)
 {
+	assert(pos != NULL);
+	assert(move.destination != SQ_NONE && move.source != SQ_NONE);
+	assert(move.moved_piece_type != NO_PIECE_TYPE);
 	assert(pos->state->move_50_rule != 50);
+
+	PositionState *state = malloc(sizeof(PositionState));
+
+	assert(state != NULL);
+
+	Color color = move.color;
+
+	state->captured_piece = (
+		move.move_type == EN_PASSANT
+		? make_piece(!color, PAWN) : piece_on(pos, move.destination)
+	);
+
+	state->move_50_rule = pos->state->move_50_rule + 1;
+
+	if(state->captured_piece) {
+		remove_piece(
+			pos,
+			state->captured_piece,
+			move.destination
+		);
+
+		state->move_50_rule = 0;
+	}
+
+	if(move.move_type == CASTLING) {
+		Castling castling = WHITE_OO << (2 * color);
+
+		do_castling(
+			pos,
+			castling << !!(
+				square_to_bitboard(move.destination) & FILE_C
+			)
+		);
+	} else {
+		move_piece(
+			pos,
+			make_piece(color, move.moved_piece_type),
+			move.source,
+			move.destination
+		);
+	}
+
+	if(move.moved_piece_type == PAWN) {
+		if(move.move_type == EN_PASSANT) {
+			remove_piece(
+				pos,
+				make_piece(!color, PAWN),
+				move.destination - 8 + (color * 16)
+			);
+		} else if(move.move_type == PROMOTION) {
+			set_piece(
+				pos,
+				make_piece(
+					color,
+					move.promotion_piece_type
+				),
+				move.destination
+			);
+
+			remove_piece(
+				pos,
+				make_piece(color, PAWN),
+				move.destination
+			);
+		}
+
+		state->move_50_rule = 0;
+	}
+
+	state->previous_move = move;
+	state->previous_state = pos->state;
+
+	state->castling = pos->state->castling;
+	state->castling &= ~(
+		castling_masks[move.source] | castling_masks[move.destination]
+	);
+
+	pos->state = state;
+
+	state->allies = EMPTY;
+	state->enemies = EMPTY;
+
+	for(PieceType pt = PAWN; pt <= PIECE_TYPE_NB; pt++) {
+		state->allies |= pieces(pos, make_piece(color, pt));
+		state->enemies |= pieces(pos, make_piece(!color, pt));
+	}
+
+	state->occupied = state->allies | state->enemies;
 }
 
 void undo_move(Position *pos)
