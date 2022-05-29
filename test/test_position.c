@@ -261,3 +261,106 @@ void test_attaked_by(void)
 	free(pos->position_state);
 	free(pos);
 }
+
+void test_do_move(void)
+{
+	Position *pos = init_position(
+		"rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1"
+	);
+
+	Move move = {
+		.move_type = COMMON, .moved_piece_type = PAWN,
+		.promotion_piece_type = NO_PIECE_TYPE, .color = WHITE,
+		.source = SQ_E2, .destination = SQ_E4
+	};
+	do_move(pos, move);
+
+	TEST_ASSERT_EQUAL_UINT64(0xFFFF00001000EFFF, pos->position_state->occupied);
+	TEST_ASSERT_EQUAL_UINT64(0x1000EFFF, pos->position_state->allies);
+	TEST_ASSERT_EQUAL_UINT64(0xFFFF000000000000, pos->position_state->enemies);
+
+	TEST_ASSERT_EQUAL_UINT32(NO_PIECE, pos->position_state->captured_piece);
+	TEST_ASSERT_EQUAL_UINT32(ALL_CASTLING, pos->position_state->castling);
+	TEST_ASSERT_EQUAL_UINT32(0, pos->position_state->move_50_rule);
+
+
+	Move move_2 = {
+		.move_type = COMMON, .moved_piece_type = PAWN,
+		.promotion_piece_type = NO_PIECE_TYPE, .color = BLACK,
+		.source = SQ_E7, .destination = SQ_E5
+	};
+	do_move(pos, move_2);
+
+	TEST_ASSERT_EQUAL_UINT64(0xFFEF00101000EFF, pos->position_state->occupied);
+	TEST_ASSERT_EQUAL_UINT64(0xFFEF001000000000, pos->position_state->allies);
+	TEST_ASSERT_EQUAL_UINT64(0x1000EFFF, pos->position_state->enemies);
+
+	TEST_ASSERT_EQUAL_UINT32(NO_PIECE, pos->position_state->captured_piece);
+	TEST_ASSERT_EQUAL_UINT32(ALL_CASTLING, pos->position_state->castling);
+	TEST_ASSERT_EQUAL_UINT32(0, pos->position_state->move_50_rule);
+
+	Move move_3 = {
+		.move_type = COMMON, .moved_piece_type = KNIGHT,
+		.promotion_piece_type = NO_PIECE_TYPE, .color = WHITE,
+		.source = SQ_G1, .destination = SQ_F3
+	};
+	do_move(pos, move_3);
+
+	TEST_ASSERT_EQUAL_UINT64(0xFFEF00101020EFBF, pos->position_state->occupied);
+	TEST_ASSERT_EQUAL_UINT64(0x1020EFBF, pos->position_state->allies);
+	TEST_ASSERT_EQUAL_UINT64(0xFFEF001000000000, pos->position_state->enemies);
+
+	TEST_ASSERT_EQUAL_UINT32(NO_PIECE, pos->position_state->captured_piece);
+	TEST_ASSERT_EQUAL_UINT32(ALL_CASTLING, pos->position_state->castling);
+	TEST_ASSERT_EQUAL_UINT32(1, pos->position_state->move_50_rule);
+
+	Move move_4 = {
+		.move_type = COMMON, .moved_piece_type = KING,
+		.promotion_piece_type = NO_PIECE_TYPE, .color = BLACK,
+		.source = SQ_E8, .destination = SQ_E7
+	};
+	do_move(pos, move_4);
+
+	TEST_ASSERT_EQUAL_UINT64(0xEFFF00101020EFBF, pos->position_state->occupied);
+	TEST_ASSERT_EQUAL_UINT64(0xEFFF001000000000, pos->position_state->allies);
+	TEST_ASSERT_EQUAL_UINT64(0x1020EFBF, pos->position_state->enemies);
+
+	TEST_ASSERT_EQUAL_UINT32(NO_PIECE, pos->position_state->captured_piece);
+	TEST_ASSERT_EQUAL_UINT32(ALL_WHITE, pos->position_state->castling);
+	TEST_ASSERT_EQUAL_UINT32(2, pos->position_state->move_50_rule);
+
+	Move move_5 = {
+		.move_type = COMMON, .moved_piece_type = KNIGHT,
+		.promotion_piece_type = NO_PIECE_TYPE, .color = WHITE,
+		.source = SQ_F3, .destination = SQ_E5
+	};
+	do_move(pos, move_5);
+
+	TEST_ASSERT_EQUAL_UINT64(0xEFFF00101000EFBF, pos->position_state->occupied);
+	TEST_ASSERT_EQUAL_UINT64(0x100000EFBF, pos->position_state->allies);
+	TEST_ASSERT_EQUAL_UINT64(0xEFFF000000000000, pos->position_state->enemies);
+
+	TEST_ASSERT_EQUAL_UINT32(B_PAWN, pos->position_state->captured_piece);
+	TEST_ASSERT_EQUAL_UINT32(ALL_WHITE, pos->position_state->castling);
+	TEST_ASSERT_EQUAL_UINT32(3, pos->position_state->move_50_rule);
+
+	// Tests for previous_state
+	TEST_ASSERT_EQUAL_UINT64(0xEFFF00101020EFBF, pos->position_state->previous_state->occupied);
+	TEST_ASSERT_EQUAL_UINT64(0xEFFF001000000000, pos->position_state->previous_state->allies);
+	TEST_ASSERT_EQUAL_UINT64(0x1020EFBF, pos->position_state->previous_state->enemies);
+
+	TEST_ASSERT_EQUAL_UINT32(NO_PIECE, pos->position_state->previous_state->captured_piece);
+	TEST_ASSERT_EQUAL_UINT32(ALL_WHITE, pos->position_state->previous_state->castling);
+	TEST_ASSERT_EQUAL_UINT32(2, pos->position_state->previous_state->move_50_rule);
+
+	// Tests for previous_move
+	TEST_ASSERT_EQUAL_UINT32(COMMON, pos->position_state->previous_move.move_type);
+	TEST_ASSERT_EQUAL_UINT32(KING, pos->position_state->previous_move.moved_piece_type);
+	TEST_ASSERT_EQUAL_UINT32(NO_PIECE_TYPE, pos->position_state->previous_move.promotion_piece_type);
+	TEST_ASSERT_EQUAL_UINT32(BLACK, pos->position_state->previous_move.color);
+	TEST_ASSERT_EQUAL_UINT32(SQ_E8, pos->position_state->previous_move.source);
+	TEST_ASSERT_EQUAL_UINT32(SQ_E7, pos->position_state->previous_move.destination);
+
+	// Tests for promotion
+
+}

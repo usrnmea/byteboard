@@ -404,6 +404,7 @@ void do_castling(Position *pos, Castling castling)
 
 void do_move(Position *pos, Move move)
 {
+	assert(pos->position_state->move_50_rule != 50);
 }
 
 void retract_move(Position *pos)
