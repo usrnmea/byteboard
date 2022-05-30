@@ -97,6 +97,13 @@ typedef struct Position {
 	Board board;			///< Board
 } Position;
 
+/// An enumeration indicating the type of check.
+typedef enum CheckType {
+	NO_CHECK,	///< No check
+	SINGLE_CHECK,	///< \see https://www.chessprogramming.org/Check
+	DOUBLE_CHECK,	///< \see https://www.chessprogramming.org/Double_Check
+} CheckType;
+
 /**
  * \brief Initialize #position from fen
  *
