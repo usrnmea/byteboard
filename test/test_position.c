@@ -872,3 +872,28 @@ void test_undo_move(void)
 	free(pos->state);
 	free(pos);
 }
+
+void test_get_check_type(void)
+{
+	Position *pos = init_position("8/8/3n1N2/8/4K3/8/pp6/k6q w - - 0 1");
+
+	TEST_ASSERT_EQUAL(DOUBLE_CHECK, get_check_type(pos));
+
+	free(pos->state);
+	free(pos);
+
+	pos = init_position("8/1b6/8/8/4K3/8/pp6/k7 w - - 0 1");
+
+	TEST_ASSERT_EQUAL(SINGLE_CHECK, get_check_type(pos));
+
+	free(pos->state);
+	free(pos);
+
+	pos = init_position("8/8/8/8/2R1K3/8/pp6/k7 w - - 0 1");
+
+	TEST_ASSERT_EQUAL(NO_CHECK, get_check_type(pos));
+
+	free(pos->state);
+	free(pos);
+}
+

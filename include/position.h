@@ -111,7 +111,7 @@ typedef enum CheckType {
  *
  * \return One of the three types of check
  */
-CheckType get_check_type(const Position position);
+CheckType get_check_type(const Position *position);
 
 /**
  * \brief Initialize #position from fen
