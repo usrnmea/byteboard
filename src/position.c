@@ -546,5 +546,76 @@ void do_move(Position *pos, Move move)
 
 void undo_move(Position *pos)
 {
+	assert(pos != NULL);
+
+	Move last_move = pos->state->previous_move;
+
+	Color allies_color = last_move.color;
+
+	Square source = last_move.source;
+	Square destination = last_move.destination;
+
+	Piece piece = make_piece(allies_color, last_move.moved_piece_type);
+	Piece captured = pos->state->captured_piece;
+
+	if (last_move.move_type == CASTLING) {
+		bool king_side = destination > source;
+
+		Square rook_destination = destination + 1 - 2 * king_side;
+
+		move_piece(
+			pos,
+			make_piece(allies_color, KING),
+			destination,
+			source
+		);
+
+		move_piece(
+			pos,
+			make_piece(allies_color, ROOK),
+			rook_destination,
+			rook_destination + 2 - 5 * !king_side
+		);
+
+		remove_piece(
+			pos,
+			make_piece(allies_color, KING),
+			destination
+		);
+
+		remove_piece(
+			pos,
+			make_piece(allies_color, ROOK),
+			rook_destination
+		);
+	}
+
+	if (last_move.move_type == COMMON) {
+		move_piece(pos, piece, destination, source);
+		if (captured) {
+			set_piece(pos, captured, destination);
+		}
+	}
+
+	if (last_move.move_type == EN_PASSANT) {
+		move_piece(pos, piece, destination, source);
+		set_piece(pos, captured, destination - 8 + (16 * allies_color));
+	}
+
+	if (last_move.move_type == PROMOTION) {
+		set_piece(pos, piece, source);
+		remove_piece(
+			pos,
+			make_piece(allies_color, last_move.promotion_piece_type),
+			destination
+		);
+		if (captured) {
+			set_piece(pos, piece, destination);
+		}
+	}
+
+	PositionState *temp = pos->state;
+	pos->state = pos->state->previous_state;
+	free(temp);
 }
 
