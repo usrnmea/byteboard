@@ -45,3 +45,21 @@ void test_ml_add(void)
 
 	free(move_list);
 }
+
+void test_ml_len(void)
+{
+
+	MoveList *move_list = init_move_list();
+
+	TEST_ASSERT_EQUAL(0, ml_len(move_list));
+
+	move_list->last += 10;
+
+	TEST_ASSERT_EQUAL(10, ml_len(move_list));
+
+	move_list->last -= 8;
+
+	TEST_ASSERT_EQUAL(2, ml_len(move_list));
+
+	free(move_list);
+}

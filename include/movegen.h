@@ -5,11 +5,11 @@
 #include "position.h"
 #include "evaluate.h"
 
-/// Macro to get move_list len
-#define ml_len(move_list) ((move_list)->last - (move_list)->move_list)
-
 /// Macro to add a move to move_list.
 #define ml_add(move_list, move) (*(move_list)->last++ = (move))
+
+/// Macro to get move_list len
+#define ml_len(move_list) ((move_list)->last - (move_list)->move_list)
 
 /// Macro to remove a last move in move_list.
 #define ml_remove(move_list) --move_list->last;
