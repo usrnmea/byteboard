@@ -419,6 +419,11 @@ U64 attacked_by(const Position *pos, Square target, Color attackers_color)
 	);
 }
 
+CheckType get_check_type(const Position pos)
+{
+	return NO_CHECK;
+}
+
 void do_castling(Position *pos, Castling castling)
 {
 	assert(pos != NULL);

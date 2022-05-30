@@ -105,6 +105,15 @@ typedef enum CheckType {
 } CheckType;
 
 /**
+ * \brief Function to get check type
+ *
+ * \param position
+ *
+ * \return One of the three types of check
+ */
+CheckType get_check_type(const Position position);
+
+/**
  * \brief Initialize #position from fen
  *
  * \param fen fen string
