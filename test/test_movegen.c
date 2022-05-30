@@ -98,3 +98,53 @@ void test_ml_remove(void)
 
 	free(move_list);
 }
+
+void test_ml_pop(void)
+{
+	MoveList *move_list = init_move_list();
+
+	ExtMove move_1 = {
+		.move = {
+			.move_type = COMMON,
+
+			.moved_piece_type = PAWN,
+			.promotion_piece_type = NO_PIECE_TYPE,
+
+			.color = WHITE,
+
+			.source = SQ_E4,
+			.destination = SQ_E5,
+		},
+
+		.eval = NO_EVAL,
+	};
+
+	ExtMove move_2 = {
+		.move = {
+			.move_type = COMMON,
+
+			.moved_piece_type = ROOK,
+			.promotion_piece_type = NO_PIECE_TYPE,
+
+			.color = BLACK,
+
+			.source = SQ_E6,
+			.destination = SQ_E5,
+		},
+
+		.eval = NO_EVAL,
+	};
+
+	ml_add(move_list, move_1);
+	ml_add(move_list, move_2);
+
+	ExtMove popped_move = ml_pop(move_list);
+
+	TEST_ASSERT_EQUAL_MEMORY(&move_2, &popped_move, sizeof(ExtMove));
+
+	popped_move = ml_pop(move_list);
+
+	TEST_ASSERT_EQUAL_MEMORY(&move_1, &popped_move, sizeof(ExtMove));
+
+	free(move_list);
+}
