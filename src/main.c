@@ -5,6 +5,7 @@
 #include "rays.h"
 #include "patterns.h"
 #include "masks.h"
+#include "position.h"
 
 int main(void)
 {

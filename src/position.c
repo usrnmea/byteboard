@@ -45,7 +45,7 @@ Castling castling_masks[SQ_NB] = {
  */
 static bool init_board(Position *position, char* board)
 {
-	if(board == NULL | position == NULL)
+	if(board == NULL || position == NULL)
 		return false;
 
 	char *rank = strtok(board, "/");
@@ -423,8 +423,8 @@ void do_castling(Position *pos, Castling castling)
 {
 	assert(pos != NULL);
 	assert(
-		castling == WHITE_OO ^ castling == WHITE_OOO
-		^ castling == BLACK_OO ^ castling == BLACK_OOO
+		castling == WHITE_OO || castling == WHITE_OOO
+		|| castling == BLACK_OO || castling == BLACK_OOO
 	);
 
 	const Color color = !!(castling & (ALL_BLACK));
