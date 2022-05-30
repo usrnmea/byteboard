@@ -63,3 +63,38 @@ void test_ml_len(void)
 
 	free(move_list);
 }
+
+void test_ml_remove(void)
+{
+	MoveList *move_list = init_move_list();
+
+	ExtMove move = {
+		.move = {
+			.move_type = COMMON,
+
+			.moved_piece_type = PAWN,
+			.promotion_piece_type = NO_PIECE_TYPE,
+
+			.color = WHITE,
+
+			.source = SQ_E4,
+			.destination = SQ_E5,
+		},
+
+		.eval = NO_EVAL,
+	};
+
+	ml_add(move_list, move);
+	ml_add(move_list, move);
+
+	ml_remove_last(move_list);
+
+	TEST_ASSERT_EQUAL(1, ml_len(move_list));
+	TEST_ASSERT_EQUAL_MEMORY(&move, &move_list->last[-1], sizeof(ExtMove));
+
+	ml_remove_last(move_list);
+
+	TEST_ASSERT_EQUAL(0, ml_len(move_list));
+
+	free(move_list);
+}

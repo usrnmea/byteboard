@@ -12,7 +12,7 @@
 #define ml_len(move_list) ((move_list)->last - (move_list)->move_list)
 
 /// Macro to remove a last move in move_list.
-#define ml_remove(move_list) --move_list->last;
+#define ml_remove_last(move_list) (--(move_list)->last)
 
 /// Macro to remove a last move in move_list and return this move.
 #define ml_pop(move_list) *--move_list->last;
