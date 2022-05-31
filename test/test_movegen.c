@@ -148,3 +148,111 @@ void test_ml_pop(void)
 
 	free(move_list);
 }
+
+void test_add_common_moves(void)
+{
+	MoveList *move_list = init_move_list();
+
+	add_common_moves(move_list, W_PAWN, SQ_E2, 0x10100000ULL);
+	add_common_moves(move_list, W_KNIGHT, SQ_G1, 0xA00000ULL);
+	add_common_moves(move_list, W_KNIGHT, SQ_B1, 0x50000ULL);
+	add_common_moves(move_list, W_PAWN, SQ_D2, 0x8080000ULL);
+
+	Move move_1 = {
+		.move_type = COMMON, .moved_piece_type = PAWN,
+		.promotion_piece_type = NO_PIECE_TYPE, .color = WHITE,
+		.source = SQ_E2, .destination = SQ_E3
+	};
+
+	Move move_2 = {
+		.move_type = COMMON, .moved_piece_type = PAWN,
+		.promotion_piece_type = NO_PIECE_TYPE, .color = WHITE,
+		.source = SQ_E2, .destination = SQ_E4
+	};
+
+	Move move_3 = {
+		.move_type = COMMON, .moved_piece_type = KNIGHT,
+		.promotion_piece_type = NO_PIECE_TYPE, .color = WHITE,
+		.source = SQ_G1, .destination = SQ_F3
+	};
+
+	Move move_4 = {
+		.move_type = COMMON, .moved_piece_type = KNIGHT,
+		.promotion_piece_type = NO_PIECE_TYPE, .color = WHITE,
+		.source = SQ_G1, .destination = SQ_H3
+	};
+
+	Move move_5 = {
+		.move_type = COMMON, .moved_piece_type = KNIGHT,
+		.promotion_piece_type = NO_PIECE_TYPE, .color = WHITE,
+		.source = SQ_B1, .destination = SQ_A3
+	};
+
+	Move move_6 = {
+		.move_type = COMMON, .moved_piece_type = KNIGHT,
+		.promotion_piece_type = NO_PIECE_TYPE, .color = WHITE,
+		.source = SQ_B1, .destination = SQ_C3
+	};
+
+	Move move_7 = {
+		.move_type = COMMON, .moved_piece_type = PAWN,
+		.promotion_piece_type = NO_PIECE_TYPE, .color = WHITE,
+		.source = SQ_D2, .destination = SQ_D3
+	};
+
+	Move move_8 = {
+		.move_type = COMMON, .moved_piece_type = PAWN,
+		.promotion_piece_type = NO_PIECE_TYPE, .color = WHITE,
+		.source = SQ_D2, .destination = SQ_D4
+	};
+
+	TEST_ASSERT_EQUAL_MEMORY(&move_1, &move_list->move_list[0], sizeof(move_1));
+	TEST_ASSERT_EQUAL_MEMORY(&move_2, &move_list->move_list[1], sizeof(move_2));
+	TEST_ASSERT_EQUAL_MEMORY(&move_3, &move_list->move_list[2], sizeof(move_3));
+	TEST_ASSERT_EQUAL_MEMORY(&move_4, &move_list->move_list[3], sizeof(move_4));
+	TEST_ASSERT_EQUAL_MEMORY(&move_5, &move_list->move_list[4], sizeof(move_5));
+	TEST_ASSERT_EQUAL_MEMORY(&move_6, &move_list->move_list[5], sizeof(move_6));
+	TEST_ASSERT_EQUAL_MEMORY(&move_7, &move_list->move_list[6], sizeof(move_7));
+	TEST_ASSERT_EQUAL_MEMORY(&move_8, &move_list->move_list[7], sizeof(move_8));
+
+	free(move_list);
+}
+
+void test_add_castlings(void)
+{
+	MoveList *move_list = init_move_list();
+
+	add_castlings(move_list, SQ_E1, 0x44ULL);
+	add_castlings(move_list, SQ_E8, 0x4400000000000000ULL);
+	
+	Move move_1 = {
+		.move_type = CASTLING, .moved_piece_type = KING,
+		.promotion_piece_type = NO_PIECE_TYPE, .color = WHITE,
+		.source = SQ_E1, .destination = SQ_C1
+	};
+
+	Move move_2 = {
+		.move_type = CASTLING, .moved_piece_type = KING,
+		.promotion_piece_type = NO_PIECE_TYPE, .color = WHITE,
+		.source = SQ_E1, .destination = SQ_G1
+	};
+
+	Move move_3 = {
+		.move_type = CASTLING, .moved_piece_type = KING,
+		.promotion_piece_type = NO_PIECE_TYPE, .color = BLACK,
+		.source = SQ_E8, .destination = SQ_C8
+	};
+
+	Move move_4 = {
+		.move_type = CASTLING, .moved_piece_type = KING,
+		.promotion_piece_type = NO_PIECE_TYPE, .color = BLACK,
+		.source = SQ_E8, .destination = SQ_G8
+	};
+
+	TEST_ASSERT_EQUAL_MEMORY(&move_1, &move_list->move_list[0], sizeof(move_1));
+	TEST_ASSERT_EQUAL_MEMORY(&move_2, &move_list->move_list[1], sizeof(move_2));
+	TEST_ASSERT_EQUAL_MEMORY(&move_3, &move_list->move_list[2], sizeof(move_3));
+	TEST_ASSERT_EQUAL_MEMORY(&move_4, &move_list->move_list[3], sizeof(move_4));
+	
+	free(move_list);
+}
