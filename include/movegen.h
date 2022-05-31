@@ -23,8 +23,8 @@
 
 /// The list of all available moves in the position.
 typedef struct MoveList {
-    ExtMove move_list[MOVE_MAX];	///< Array with all available moves.
-    ExtMove *last;			///< Pointer to the last element in array.
+	ExtMove move_list[MOVE_MAX];	///< Array with all available moves.
+	ExtMove *last;			///< Pointer to the last element in array.
 } MoveList;
 
 /**
@@ -33,5 +33,44 @@ typedef struct MoveList {
  * \return pointer to #MoveList
  */
 MoveList *init_move_list(void);
+
+/**
+ * \brief Adds to the move_list all moves from the Square source
+ * for each destination from the destinations bitboard.
+ *
+ * \param move_list the list of all moves
+ *
+ * \param piece given piece
+ *
+ * \param source source square
+ *
+ * \param destinations bitboard with all destinations
+ *
+ * \see https://www.chessprogramming.org/Moves
+ */
+void add_common_moves(
+	MoveList *move_list,
+	const Piece piece,
+	const Square source,
+	U64 destinations
+);
+
+/**
+ * \brief Adds to the move_list all castlings from the Square source
+ * for each destination from the destinations bitboard.
+ *
+ * \param move_list the list of all moves
+ *
+ * \param source source square
+ *
+ * \param destinations bitboard with all destinations
+ *
+ * \see https://www.chessprogramming.org/Castling
+ */
+void add_castlings(
+	MoveList *move_list,
+	const Square source,
+	U64 destinations
+);
 
 #endif
