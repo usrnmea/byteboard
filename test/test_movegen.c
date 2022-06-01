@@ -256,3 +256,70 @@ void test_add_castlings(void)
 	
 	free(move_list);
 }
+
+void test_add_promotions(void)
+{
+	MoveList *move_list = init_move_list();
+
+	add_promotions(move_list, WHITE, SQ_B7, 0x200000000000000ULL);
+	add_promotions(move_list, BLACK, SQ_H2, 0x80ULL);
+
+	Move move_1 = {
+		.move_type = PROMOTION, .moved_piece_type = PAWN,
+		.promotion_piece_type = KNIGHT, .color = WHITE,
+		.source = SQ_B7, .destination = SQ_B8
+	};
+
+	Move move_2 = {
+		.move_type = PROMOTION, .moved_piece_type = PAWN,
+		.promotion_piece_type = BISHOP, .color = WHITE,
+		.source = SQ_B7, .destination = SQ_B8
+	};
+
+	Move move_3 = {
+		.move_type = PROMOTION, .moved_piece_type = PAWN,
+		.promotion_piece_type = ROOK, .color = WHITE,
+		.source = SQ_B7, .destination = SQ_B8
+	};
+
+	Move move_4 = {
+		.move_type = PROMOTION, .moved_piece_type = PAWN,
+		.promotion_piece_type = QUEEN, .color = WHITE,
+		.source = SQ_B7, .destination = SQ_B8
+	};
+
+	Move move_5 = {
+		.move_type = PROMOTION, .moved_piece_type = PAWN,
+		.promotion_piece_type = KNIGHT, .color = BLACK,
+		.source = SQ_H2, .destination = SQ_H1
+	};
+
+	Move move_6 = {
+		.move_type = PROMOTION, .moved_piece_type = PAWN,
+		.promotion_piece_type = BISHOP, .color = BLACK,
+		.source = SQ_H2, .destination = SQ_H1
+	};
+
+	Move move_7 = {
+		.move_type = PROMOTION, .moved_piece_type = PAWN,
+		.promotion_piece_type = ROOK, .color = BLACK,
+		.source = SQ_H2, .destination = SQ_H1
+	};
+
+	Move move_8 = {
+		.move_type = PROMOTION, .moved_piece_type = PAWN,
+		.promotion_piece_type = QUEEN, .color = BLACK,
+		.source = SQ_H2, .destination = SQ_H1
+	};
+
+	TEST_ASSERT_EQUAL_MEMORY(&move_1, &move_list->move_list[0], sizeof(move_1));
+	TEST_ASSERT_EQUAL_MEMORY(&move_2, &move_list->move_list[1], sizeof(move_2));
+	TEST_ASSERT_EQUAL_MEMORY(&move_3, &move_list->move_list[2], sizeof(move_3));
+	TEST_ASSERT_EQUAL_MEMORY(&move_4, &move_list->move_list[3], sizeof(move_4));
+	TEST_ASSERT_EQUAL_MEMORY(&move_5, &move_list->move_list[4], sizeof(move_5));
+	TEST_ASSERT_EQUAL_MEMORY(&move_6, &move_list->move_list[5], sizeof(move_6));
+	TEST_ASSERT_EQUAL_MEMORY(&move_7, &move_list->move_list[6], sizeof(move_7));
+	TEST_ASSERT_EQUAL_MEMORY(&move_8, &move_list->move_list[7], sizeof(move_8));
+
+	free(move_list);
+}
