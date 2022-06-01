@@ -122,4 +122,22 @@ void add_en_passant(
 	assert(destination < SQ_NB);
 	assert(population_count(sources) <= 2);
 	assert(color < COLOR_NB);
+
+	Move move = {
+		.move_type = EN_PASSANT, .moved_piece_type = PAWN,
+		.promotion_piece_type = NO_PIECE_TYPE,
+		.color = color, .destination = destination
+	};
+
+	ExtMove ext_move = {
+		.move = move, .eval = NO_EVAL
+	};
+
+	while (sources) {
+		ext_move.move.source = bit_scan_forward(sources);
+
+		ml_add(move_list, ext_move);
+
+		remove_lsb(sources);
+	}
 }
