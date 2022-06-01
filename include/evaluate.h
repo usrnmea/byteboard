@@ -33,6 +33,6 @@ extern Evaluation piece_type_value[PIECE_TYPE_NB];
  *
  * \brief value
  */
-Evaluation evaluate_material(const Position position);
+Evaluation evaluate_material(const Position *position);
 
 #endif
