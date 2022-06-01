@@ -78,3 +78,48 @@ void add_castlings(
 		remove_lsb(destinations);
 	}
 }
+
+void add_promotions(
+    MoveList *move_list,
+    Color color,
+    Square source,
+    U64 destinations
+)
+{
+	assert(move_list != NULL);
+	assert(source < SQ_NB);
+	assert(color < COLOR_NB);
+
+	Move move = {
+		.move_type = PROMOTION, .moved_piece_type = PAWN,
+		.color = color, .source = source
+	};
+
+	ExtMove ext_move = {
+		.move = move, .eval = NO_EVAL
+	};
+
+	while (destinations) {
+		ext_move.move.destination = bit_scan_forward(destinations);
+
+		for(PieceType pc_type = KNIGHT; pc_type < KING; pc_type++) {
+			ext_move.move.promotion_piece_type = pc_type;
+			ml_add(move_list, ext_move);
+		}
+
+		remove_lsb(destinations);
+	}
+}
+
+void add_en_passant(
+	MoveList *move_list,
+	Color color,
+	U64 sources,
+	Square destination
+)
+{
+	assert(move_list != NULL);
+	assert(destination < SQ_NB);
+	assert(population_count(sources) <= 2);
+	assert(color < COLOR_NB);
+}
