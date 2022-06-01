@@ -1,4 +1,9 @@
+#include "bitboard.h"
+#include "piece.h"
+#include "position.h"
 #include "evaluate.h"
+
+#include <assert.h>
 
 Evaluation piece_type_value[PIECE_TYPE_NB] = {
 	10, 35, 35, 52, 100, 0
@@ -6,5 +11,21 @@ Evaluation piece_type_value[PIECE_TYPE_NB] = {
 
 Evaluation evaluate_material(const Position *pos)
 {
-	return DRAW;
+	Evaluation value = DRAW;
+
+	for(PieceType pt = PAWN; pt < PIECE_TYPE_NB; pt++) {
+		uint32_t piece_count = population_count(
+			pieces(pos, make_piece(WHITE, pt))
+		);
+
+		value += piece_count * piece_type_value[pt];
+
+		piece_count = population_count(
+			pieces(pos, make_piece(BLACK, pt))
+		);
+
+		value -= piece_count * piece_type_value[pt];
+	}
+
+	return value;
 }
