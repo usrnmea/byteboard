@@ -26,4 +26,13 @@ typedef struct ExtMove {
 /// Returns the value of the #PieceType
 extern Evaluation piece_type_value[PIECE_TYPE_NB];
 
+/**
+ * \brief Evaluates the position on the material on both sides
+ *
+ * \param position
+ *
+ * \brief value
+ */
+Evaluation evaluate_material(const Position position);
+
 #endif
