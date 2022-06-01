@@ -73,4 +73,46 @@ void add_castlings(
 	U64 destinations
 );
 
+/**
+ * \brief Adds to the move_list all promotions from the Square source
+ * for each destination from the destinations bitboard.
+ *
+ * \param move_list the list of all moves
+ *
+ * \param color pawn color
+ *
+ * \param source source square
+ *
+ * \param destinations bitboard with all destinations
+ *
+ * \see https://www.chessprogramming.org/Promotions
+ */
+void add_promotions(
+	MoveList *move_list,
+	Color color,
+	Square source,
+	U64 destinations
+);
+
+/**
+ * \brief Adds to the move_list all en passant moves from the source squares
+ * for given destination square.
+ *
+ * \param move_list the list of all moves
+ *
+ * \param color pawn color
+ *
+ * \param sources bitboard with all source squares
+ *
+ * \param destination destination square
+ *
+ * \see https://www.chessprogramming.org/En_passant
+ */
+void add_en_passant(
+	MoveList *move_list,
+	Color color,
+	U64 sources,
+	Square destination
+);
+
 #endif
