@@ -323,3 +323,45 @@ void test_add_promotions(void)
 
 	free(move_list);
 }
+
+void test_add_en_passant(void)
+{
+	MoveList *move_list = init_move_list();
+
+	add_en_passant(move_list, WHITE, 0x2000ULL, SQ_G3);
+	add_en_passant(move_list, WHITE, 0x2000ULL, SQ_E3);
+
+	add_en_passant(move_list, BLACK, 0x80000000000ULL, SQ_C5);
+	add_en_passant(move_list, BLACK, 0x80000000000ULL, SQ_E5);
+
+	Move move_1 = {
+		.move_type = EN_PASSANT, .moved_piece_type = PAWN,
+		.promotion_piece_type = NO_PIECE_TYPE, .color = WHITE,
+		.source = SQ_F2, .destination = SQ_G3
+	};
+
+	Move move_2 = {
+		.move_type = EN_PASSANT, .moved_piece_type = PAWN,
+		.promotion_piece_type = NO_PIECE_TYPE, .color = WHITE,
+		.source = SQ_F2, .destination = SQ_E3
+	};
+
+	Move move_3 = {
+		.move_type = EN_PASSANT, .moved_piece_type = PAWN,
+		.promotion_piece_type = NO_PIECE_TYPE, .color = BLACK,
+		.source = SQ_D6, .destination = SQ_C5
+	};
+
+	Move move_4 = {
+		.move_type = EN_PASSANT, .moved_piece_type = PAWN,
+		.promotion_piece_type = NO_PIECE_TYPE, .color = BLACK,
+		.source = SQ_D6, .destination = SQ_E5
+	};
+
+	TEST_ASSERT_EQUAL_MEMORY(&move_1, &move_list->move_list[0], sizeof(move_1));
+	TEST_ASSERT_EQUAL_MEMORY(&move_2, &move_list->move_list[1], sizeof(move_2));
+	TEST_ASSERT_EQUAL_MEMORY(&move_3, &move_list->move_list[2], sizeof(move_3));
+	TEST_ASSERT_EQUAL_MEMORY(&move_4, &move_list->move_list[3], sizeof(move_4));
+
+	free(move_list);
+}
