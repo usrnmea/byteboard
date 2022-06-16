@@ -1,9 +1,13 @@
+/**
+ * \file
+ */
 #ifndef __MOVEGEN_H__
 #define __MOVEGEN_H__
 
 #include "bitboard.h"
 #include "position.h"
 #include "evaluate.h"
+#include "masks.h"
 
 /// Macro to add a move to move_list.
 #define ml_add(move_list, move) (*(move_list)->last++ = (move))
@@ -33,6 +37,17 @@ typedef struct MoveList {
  * \return pointer to #MoveList
  */
 MoveList *init_move_list(void);
+
+/**
+ * \brief Generates all possible moves at the given position.
+ *
+ * \param pos current position
+ *
+ * \return pointer to #MoveList
+ *
+ * \see https://www.chessprogramming.org/Moves
+ */
+MoveList *generate_all_moves(Position pos);
 
 /**
  * \brief Adds to the move_list all moves from the Square source
