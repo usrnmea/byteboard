@@ -872,3 +872,44 @@ void test_undo_move(void)
 	free(pos->state);
 	free(pos);
 }
+
+void test_get_check_type(void)
+{
+	Position *pos = init_position("8/k7/8/8/8/2n1n3/8/3K4 w - - 0 1");
+	Move move = {
+		.move_type = COMMON, .moved_piece_type = KING,
+		.promotion_piece_type = NO_PIECE_TYPE, .color = BLACK,
+		.source = SQ_A7, .destination = SQ_A8
+	};
+
+	do_move(pos, move);
+
+	TEST_ASSERT_EQUAL_UINT32(DOUBLE_CHECK, get_check_type(pos));
+
+	free(pos->state);
+	free(pos);
+
+	pos = init_position("8/k7/8/8/b5b1/8/2P1P3/3K4 w - - 0 1");
+	do_move(pos, move);
+
+	TEST_ASSERT_EQUAL_UINT32(NO_CHECK, get_check_type(pos));
+
+	free(pos->state);
+	free(pos);
+
+	pos = init_position("8/k7/8/8/8/8/2P1P3/3K2nq w - - 0 1");
+	do_move(pos, move);
+
+	TEST_ASSERT_EQUAL_UINT32(NO_CHECK, get_check_type(pos));
+
+	free(pos->state);
+	free(pos);
+
+	pos = init_position("8/k7/8/8/6b1/8/2P1P3/3K3q w - - 0 1");
+	do_move(pos, move);
+
+	TEST_ASSERT_EQUAL_UINT32(SINGLE_CHECK, get_check_type(pos));
+
+	free(pos->state);
+	free(pos);
+}
