@@ -130,4 +130,55 @@ void add_en_passant(
 	Square destination
 );
 
+/**
+ * \brief Generates all legal castling.
+ * Should be called only whether king is not checked.
+ *
+ * \param pos current position
+ *
+ * \param move_list the list with all moves
+ *
+ * \see https://www.chessprogramming.org/Castling
+ */
+void generate_castlings(Position *pos, MoveList *move_list);
+
+/**
+ * \brief A function that returns a mask with flags indicating which
+ * castings are available for a given position. WARNING! This function should only
+ * be used when there is no check
+ *
+ * \param color
+ *
+ * \param castling castling mask
+ *
+ * \param target target square
+ *
+ * \param occupied occupied bitboard
+ *
+ * \see https://www.chessprogramming.org/Castling
+ */
+Castling possible_castlings(
+        Position *pos,
+        Color color,
+        Castling castling,
+        Square target
+);
+
+/**
+ * \brief A function that returns a mask with flags indicating which
+ * castings are available for a given position. WARNING! This function should only
+ * be used when there is no check
+ *
+ * \param target target square
+ *
+ * \param occupied occupied bitboard
+ *
+ * \param color
+ */
+U64 king_safe_moves_mask(
+        Position *pos,
+        Square target,
+        Color color
+);
+
 #endif

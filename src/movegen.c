@@ -141,3 +141,153 @@ void add_en_passant(
 		remove_lsb(sources);
 	}
 }
+
+U64 king_safe_moves_mask(
+        Position *pos,
+        Square target,
+        Color color
+)
+{
+        U64 king_moves = king_move_pattern(target);
+
+        U64 linear = pieces(pos, make_piece(!color, ROOK)) | pieces(pos, make_piece(!color, QUEEN));
+        U64 diagonal = pieces(pos, make_piece(!color, BISHOP)) | pieces(pos, make_piece(!color, QUEEN));
+
+        U64 knights = pieces(pos, make_piece(!color, KNIGHT));
+        U64 pawns = pieces(pos, make_piece(!color, PAWN));
+        U64 king = pieces(pos, make_piece(!color, KING));
+
+        U64 occupied = pos->state->occupied;
+
+        U64 tmp = rook_attacks_mask(target, occupied) & linear;
+        while (tmp) {
+                Square sq = bit_scan_forward(tmp);
+
+                king_moves &= ~(rook_move_pattern(sq));
+
+                remove_lsb(sq);
+        }
+
+        tmp = bishop_attacks_mask(target, occupied) & diagonal;
+        while (tmp) {
+                Square sq = bit_scan_forward(tmp);
+
+                king_moves &= ~(bishop_move_pattern(sq));
+
+                remove_lsb(sq);
+        }
+
+        tmp = knight_move_pattern(target) & knights;
+        while(tmp) {
+                Square sq = bit_scan_forward(tmp);
+
+                king_moves &= ~(knight_move_pattern(sq));
+
+                remove_lsb(sq);
+        }
+
+        tmp = pawn_attack_pattern[color](target) & pawns;
+        while (tmp) {
+                Square sq = bit_scan_forward(tmp);
+
+                king_moves &= ~(pawn_attack_pattern[color](sq));
+
+                remove_lsb(sq);
+        }
+
+        tmp = king_move_pattern(target) & king;
+        while(tmp) {
+                Square sq = bit_scan_forward(tmp);
+
+                king_moves &= ~(king_move_pattern(sq));
+
+                remove_lsb(sq);
+        }
+
+        return king_moves;
+}
+
+Castling possible_castlings(
+        Position *pos,
+        Color color,
+        Castling castling,
+        Square target
+)
+{
+        U64 occupied = pos->state->occupied;
+        switch (color) {
+                case WHITE: ;
+                        Castling white_00 = (
+                                king_safe_moves_mask(
+                                        pos, target, color
+                                ) & 0x0000000000000060LL) | (
+                                occupied & 0x0000000000000060LL
+                        );
+
+                        Castling white_000 = (
+                                king_safe_moves_mask(
+                                        pos, target, color
+                                ) & 0x000000000000000CULL) | (
+                                occupied & 0x000000000000000CULL
+                        );
+
+                        white_00 = !white_00;
+                        white_000 = !white_000 << 1;
+
+                        return (white_00 | white_000) & castling;
+
+                case BLACK: ;
+                        Castling black_00 = (
+                                king_safe_moves_mask(
+                                        pos, target, color
+                                ) & 0x6000000000000000ULL) | (
+                                occupied & 0x6000000000000000ULL
+                        );
+
+                        Castling black_000 = (
+                                king_safe_moves_mask(
+                                        pos, target, color
+                                ) & 0x0C00000000000000ULL) | (
+                                occupied & 0x0C00000000000000ULL
+                        );
+
+                        black_00 = !black_00 << 2;
+                        black_000 = !black_000 << 3;
+
+                return (black_00 | black_000) & castling;
+        }
+}
+
+void generate_castlings(Position *pos, MoveList *move_list)
+{
+        Castling castlings = pos->state->castling;
+        Color color = !pos->state->previous_move.color;
+        U64 occupied = pos->state->occupied;
+
+        U64 rooks = pieces(pos, make_piece(color, ROOK));
+
+        castlings &= possible_castlings(
+                pos,
+                color,
+                castlings,
+                pieces(pos, make_piece(color, KING))
+        );
+
+        U64 destinations = 0x00ULL;
+
+        while (rooks)
+        {
+                Square rook = bit_scan_forward(rooks);
+
+                if (castling_masks[rook] & castlings)
+                        destinations |= rook;
+
+                remove_lsb(rooks);
+        }
+
+        add_castlings(
+                move_list,
+                pieces(pos, make_piece(color, KING)),
+                destinations
+        );
+}
