@@ -6,6 +6,7 @@
 #include "patterns.h"
 #include "masks.h"
 #include "position.h"
+#include "movegen.h"
 
 int main(void)
 {
