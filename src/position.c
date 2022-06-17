@@ -419,9 +419,17 @@ U64 attacked_by(const Position *pos, Square target, Color attackers_color)
 	);
 }
 
-CheckType get_check_type(const Position pos)
+CheckType get_check_type(const Position *pos)
 {
-	return NO_CHECK;
+	Color color = pos->state->previous_move.color;
+
+	U64 king_checkers = attacked_by(
+                pos,
+                bit_scan_forward(pieces(pos, make_piece(!color, KING))),
+                color
+        );
+
+        return population_count(king_checkers);
 }
 
 void do_castling(Position *pos, Castling castling)
