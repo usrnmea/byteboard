@@ -159,49 +159,56 @@ U64 king_safe_moves_mask(
 
         U64 occupied = pos->state->occupied;
 
-        U64 tmp = rook_attacks_mask(target, occupied) & linear;
-        while (tmp) {
-                Square sq = bit_scan_forward(tmp);
+        while (linear) {
+                U64 crossing_moves = rook_attacks_mask(
+                                                bit_scan_forward(linear),
+                                                occupied ^ (0x01ULL << target)
+                                        ) & king_moves;
 
-                king_moves &= ~(rook_move_pattern(sq));
+                king_moves &= ~(crossing_moves);
 
-                remove_lsb(tmp);
+                remove_lsb(linear);
         }
 
-        tmp = bishop_attacks_mask(target, occupied) & diagonal;
-        while (tmp) {
-                Square sq = bit_scan_forward(tmp);
+        while (diagonal) {
+                U64 crossing_moves = bishop_attacks_mask(
+                                                bit_scan_forward(diagonal),
+                                                occupied ^ (0x01ULL << target)
+                                        ) & king_moves;
 
-                king_moves &= ~(bishop_move_pattern(sq));
+                king_moves &= ~(crossing_moves);
 
-                remove_lsb(tmp);
+                remove_lsb(diagonal);
         }
 
-        tmp = knight_move_pattern(target) & knights;
-        while(tmp) {
-                Square sq = bit_scan_forward(tmp);
+        while (knights) {
+                U64 crossing_moves = knight_move_pattern(
+                                                bit_scan_forward(knights)
+                                        ) & king_moves;
 
-                king_moves &= ~(knight_move_pattern(sq));
+                king_moves &= ~(crossing_moves);
 
-                remove_lsb(tmp);
+                remove_lsb(knights);
         }
 
-        tmp = pawn_attack_pattern[color](target) & pawns;
-        while (tmp) {
-                Square sq = bit_scan_forward(tmp);
+        while (pawns) {
+                U64 crossing_moves = pawn_move_pattern[color](
+                                                bit_scan_forward(pawns)
+                                        ) & king_moves;
 
-                king_moves &= ~(pawn_attack_pattern[color](sq));
+                king_moves &= ~(crossing_moves);
 
-                remove_lsb(tmp);
+                remove_lsb(pawns);
         }
 
-        tmp = king_move_pattern(target) & king;
-        while(tmp) {
-                Square sq = bit_scan_forward(tmp);
+        while (king) {
+                U64 crossing_moves = king_move_pattern(
+                                                bit_scan_forward(king)
+                                        ) & king_moves;
 
-                king_moves &= ~(king_move_pattern(sq));
+                king_moves &= ~(crossing_moves);
 
-                remove_lsb(tmp);
+                remove_lsb(king);
         }
 
         return (king_moves ^ pieces(pos, make_piece(color, PAWN))
@@ -222,44 +229,62 @@ Castling possible_castlings(
 
         switch (color) {
                 case WHITE: ;
-                        Castling white_00 = (
-                                king_safe_moves_mask(
+                        Castling white_oo =
+                                !(king_safe_moves_mask(
                                         pos, target, color
-                                ) & 0x0000000000000060LL) | (
+                                ) & 0x0000000000000020ULL) |
+                                !(king_safe_moves_mask(
+                                        pos, target + 1, color
+                                ) & 0x0000000000000040ULL) | (
                                 occupied & 0x0000000000000060LL
                         );
 
-                        Castling white_000 = (
-                                king_safe_moves_mask(
+                        Castling white_ooo =
+                                !(king_safe_moves_mask(
                                         pos, target, color
-                                ) & 0x000000000000000CULL) | (
-                                occupied & 0x000000000000000CULL
+                                ) & 0x0000000000000008ULL) |
+                                !(king_safe_moves_mask(
+                                        pos, target - 1, color
+                                ) & 0x0000000000000004ULL) |
+                                !(king_safe_moves_mask(
+                                        pos, target - 2, color
+                                ) & 0x0000000000000002ULL) | (
+                                occupied & 0xEULL
                         );
 
-                        white_00 = !white_00;
-                        white_000 = !white_000 << 1;
+                        white_oo = !white_oo;
+                        white_ooo = !white_ooo << 1;
 
-                        return (white_00 | white_000) & castling;
+                        return (white_oo | white_ooo) & castling;
 
                 case BLACK: ;
-                        Castling black_00 = (
-                                king_safe_moves_mask(
+                        Castling black_oo =
+                                !(king_safe_moves_mask(
                                         pos, target, color
-                                ) & 0x6000000000000000ULL) | (
+                                ) & 0x2000000000000000ULL) |
+                                !(king_safe_moves_mask(
+                                        pos, target + 1, color
+                                ) & 0x4000000000000000ULL) | (
                                 occupied & 0x6000000000000000ULL
                         );
 
-                        Castling black_000 = (
-                                king_safe_moves_mask(
+                        Castling black_ooo =
+                                !(king_safe_moves_mask(
                                         pos, target, color
-                                ) & 0x0C00000000000000ULL) | (
-                                occupied & 0x0C00000000000000ULL
+                                ) & 0x800000000000000ULL) |
+                                !(king_safe_moves_mask(
+                                        pos, target - 1, color
+                                ) & 0x400000000000000ULL) |
+                                !(king_safe_moves_mask(
+                                        pos, target - 2, color
+                                ) & 0x200000000000000ULL) | (
+                                occupied & 0xE00000000000000ULL
                         );
 
-                        black_00 = !black_00 << 2;
-                        black_000 = !black_000 << 3;
+                        black_oo = !black_oo << 2;
+                        black_ooo = !black_ooo << 3;
 
-                return (black_00 | black_000) & castling;
+                return (black_oo | black_ooo) & castling;
         }
 }
 
