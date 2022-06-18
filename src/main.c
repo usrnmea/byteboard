@@ -7,6 +7,7 @@
 #include "masks.h"
 #include "position.h"
 #include "evaluate.h"
+#include "movegen.h"
 
 int main(void)
 {

@@ -896,4 +896,3 @@ void test_get_check_type(void)
 	free(pos->state);
 	free(pos);
 }
-
