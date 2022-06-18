@@ -158,9 +158,9 @@ void generate_castlings(Position *pos, MoveList *move_list);
  * \see https://www.chessprogramming.org/Castling
  */
 Castling possible_castlings(
-        Position *pos,
-        Color color,
-        Square target
+	Position *pos,
+	Color color,
+	Square target
 );
 
 /**
@@ -175,9 +175,9 @@ Castling possible_castlings(
  * \param color
  */
 U64 king_safe_moves_mask(
-        Position *pos,
-        Square target,
-        Color color
+	Position *pos,
+	Square target,
+	Color color
 );
 
 #endif
