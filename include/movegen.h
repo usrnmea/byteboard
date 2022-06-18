@@ -168,9 +168,9 @@ Castling possible_castlings(
  * castings are available for a given position. WARNING! This function should only
  * be used when there is no check
  *
- * \param target target square
+ * \param pos current position
  *
- * \param occupied occupied bitboard
+ * \param target target square
  *
  * \param color
  */

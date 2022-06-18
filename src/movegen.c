@@ -165,7 +165,7 @@ U64 king_safe_moves_mask(
 
                 king_moves &= ~(rook_move_pattern(sq));
 
-                remove_lsb(sq);
+                remove_lsb(tmp);
         }
 
         tmp = bishop_attacks_mask(target, occupied) & diagonal;
@@ -174,7 +174,7 @@ U64 king_safe_moves_mask(
 
                 king_moves &= ~(bishop_move_pattern(sq));
 
-                remove_lsb(sq);
+                remove_lsb(tmp);
         }
 
         tmp = knight_move_pattern(target) & knights;
@@ -183,7 +183,7 @@ U64 king_safe_moves_mask(
 
                 king_moves &= ~(knight_move_pattern(sq));
 
-                remove_lsb(sq);
+                remove_lsb(tmp);
         }
 
         tmp = pawn_attack_pattern[color](target) & pawns;
@@ -192,7 +192,7 @@ U64 king_safe_moves_mask(
 
                 king_moves &= ~(pawn_attack_pattern[color](sq));
 
-                remove_lsb(sq);
+                remove_lsb(tmp);
         }
 
         tmp = king_move_pattern(target) & king;
@@ -201,10 +201,14 @@ U64 king_safe_moves_mask(
 
                 king_moves &= ~(king_move_pattern(sq));
 
-                remove_lsb(sq);
+                remove_lsb(tmp);
         }
 
-        return king_moves;
+        return (king_moves ^ pieces(pos, make_piece(color, PAWN))
+        ^ pieces(pos, make_piece(color, KNIGHT))
+        ^ pieces(pos, make_piece(color, BISHOP))
+        ^ pieces(pos, make_piece(color, ROOK))
+        ^ pieces(pos, make_piece(color, QUEEN))) & king_moves;
 }
 
 Castling possible_castlings(
