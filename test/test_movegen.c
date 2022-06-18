@@ -383,6 +383,7 @@ void test_king_safe_moves_mask(void)
 	Position *pos_2 = init_position("q5k1/8/5b2/8/8/8/5P2/KN6 w - - 0 1");
 	Position *pos_3 = init_position("rkn5/8/8/8/8/7n/q3RK2/8 w - - 0 1");
 	Position *pos_4 = init_position("7r/8/8/k7/q6K/8/8/4B3 w - - 0 1");
+	Position *pos_5 = init_position("rr6/7k/8/8/8/8/8/K7 w - - 0 1");
 
 	TEST_ASSERT_EQUAL_UINT64(0x00ULL, king_safe_moves_mask(pos_2, SQ_A1, WHITE));
 	TEST_ASSERT_EQUAL_UINT64(0x28ULL, king_safe_moves_mask(pos_1, SQ_E1, WHITE));
@@ -392,6 +393,36 @@ void test_king_safe_moves_mask(void)
 	TEST_ASSERT_EQUAL_UINT64(0x7000000000000ULL, king_safe_moves_mask(pos_3, SQ_B8, BLACK));
 	TEST_ASSERT_EQUAL_UINT64(0x4000400000ULL, king_safe_moves_mask(pos_4, SQ_H4, WHITE));
 	TEST_ASSERT_EQUAL_UINT64(0x30200000000ULL, king_safe_moves_mask(pos_4, SQ_A5, BLACK));
+	TEST_ASSERT_EQUAL_UINT64(0x00ULL, king_safe_moves_mask(pos_5, SQ_A1, WHITE));
+
+	free(pos_1->state);
+	free(pos_2->state);
+	free(pos_3->state);
+	free(pos_4->state);
+	free(pos_5->state);
+
+	free(pos_1);
+	free(pos_2);
+	free(pos_3);
+	free(pos_4);
+	free(pos_5);
+}
+
+void test_possible_castlings(void)
+{
+	Position *pos_1 = init_position("r3kbnr/pppppppp/8/8/8/8/PPPPPPPP/R3K2R w KQkq - 0 1");
+	Position *pos_2 = init_position("4k2r/2q5/8/8/8/B7/PP1PPPPP/R3K2R w KQk - 0 1");
+	Position *pos_3 = init_position("r3k2r/2q5/8/8/8/B6B/PP1PP2P/R3K1QR w KQkq - 0 1");
+	Position *pos_4 = init_position("r3k1r1/8/8/8/8/8/8/R3K2R w Kq - 0 1");
+
+	TEST_ASSERT_EQUAL_UINT32(NO_CASTLING, possible_castlings(pos_4, WHITE, SQ_E1));
+	TEST_ASSERT_EQUAL_UINT32(BLACK_OOO, possible_castlings(pos_4, BLACK, SQ_E8));
+	TEST_ASSERT_EQUAL_UINT32(ALL_WHITE, possible_castlings(pos_1, WHITE, SQ_E1));
+	TEST_ASSERT_EQUAL_UINT32(BLACK_OOO, possible_castlings(pos_1, BLACK, SQ_E8));
+	TEST_ASSERT_EQUAL_UINT32(WHITE_OO, possible_castlings(pos_2, WHITE, SQ_E1));
+	TEST_ASSERT_EQUAL_UINT32(NO_CASTLING, possible_castlings(pos_2, BLACK, SQ_E8));
+	TEST_ASSERT_EQUAL_UINT32(NO_CASTLING, possible_castlings(pos_3, WHITE, SQ_E1));
+	TEST_ASSERT_EQUAL_UINT32(NO_CASTLING, possible_castlings(pos_3, BLACK, SQ_E8));
 
 	free(pos_1->state);
 	free(pos_2->state);
