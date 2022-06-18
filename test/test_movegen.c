@@ -3,8 +3,19 @@
 #include "bitboard_mapping.h"
 #include "evaluate.h"
 #include "movegen.h"
+#include "position.h"
+#include "piece.h"
+#include "rays.h"
+#include "patterns.h"
+#include "masks.h"
 
 #include <stdlib.h>
+
+// Initializing everything needed for tests
+void test_init(void)
+{
+	init_rays();
+}
 
 void test_init_move_list(void)
 {
@@ -364,4 +375,31 @@ void test_add_en_passant(void)
 	TEST_ASSERT_EQUAL_MEMORY(&move_4, &move_list->move_list[3], sizeof(move_4));
 
 	free(move_list);
+}
+
+void test_king_safe_moves_mask(void)
+{
+	Position *pos_1 = init_position("r3k2r/pppppppp/8/8/8/8/PPPPPPPP/R3K2R w KQkq - 0 1");
+	Position *pos_2 = init_position("q5k1/8/5b2/8/8/8/5P2/KN6 w - - 0 1");
+	Position *pos_3 = init_position("rkn5/8/8/8/8/7n/q3RK2/8 w - - 0 1");
+	Position *pos_4 = init_position("7r/8/8/k7/q6K/8/8/4B3 w - - 0 1");
+
+	TEST_ASSERT_EQUAL_UINT64(0x00ULL, king_safe_moves_mask(pos_2, SQ_A1, WHITE));
+	TEST_ASSERT_EQUAL_UINT64(0x28ULL, king_safe_moves_mask(pos_1, SQ_E1, WHITE));
+	TEST_ASSERT_EQUAL_UINT64(0x2800000000000000ULL, king_safe_moves_mask(pos_1, SQ_E8, BLACK));
+	TEST_ASSERT_EQUAL_UINT64(0xA0E0000000000000ULL, king_safe_moves_mask(pos_2, SQ_G8, BLACK));
+	TEST_ASSERT_EQUAL_UINT64(0x704030ULL, king_safe_moves_mask(pos_3, SQ_F2, WHITE));
+	TEST_ASSERT_EQUAL_UINT64(0x7000000000000ULL, king_safe_moves_mask(pos_3, SQ_B8, BLACK));
+	TEST_ASSERT_EQUAL_UINT64(0x4000400000ULL, king_safe_moves_mask(pos_4, SQ_H4, WHITE));
+	TEST_ASSERT_EQUAL_UINT64(0x30200000000ULL, king_safe_moves_mask(pos_4, SQ_A5, BLACK));
+
+	free(pos_1->state);
+	free(pos_2->state);
+	free(pos_3->state);
+	free(pos_4->state);
+
+	free(pos_1);
+	free(pos_2);
+	free(pos_3);
+	free(pos_4);
 }
