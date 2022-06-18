@@ -210,11 +210,12 @@ U64 king_safe_moves_mask(
 Castling possible_castlings(
         Position *pos,
         Color color,
-        Castling castling,
         Square target
 )
 {
         U64 occupied = pos->state->occupied;
+        Castling castling = pos->state->castling;
+
         switch (color) {
                 case WHITE: ;
                         Castling white_00 = (
@@ -269,7 +270,6 @@ void generate_castlings(Position *pos, MoveList *move_list)
         castlings &= possible_castlings(
                 pos,
                 color,
-                castlings,
                 pieces(pos, make_piece(color, KING))
         );
 

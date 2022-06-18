@@ -160,7 +160,6 @@ void generate_castlings(Position *pos, MoveList *move_list);
 Castling possible_castlings(
         Position *pos,
         Color color,
-        Castling castling,
         Square target
 );
 
