@@ -144,14 +144,12 @@ void generate_castlings(Position *pos, MoveList *move_list);
 
 /**
  * \brief A function that returns a mask with flags indicating which
- * castings are available for a given position. WARNING! This function should only
- * be used when there is no check
+ * castings are available for a given position. WARNING! This function should
+ * only be used when there is no check
  *
  * \param color
  *
  * \param castling castling mask
- *
- * \param target target square
  *
  * \param occupied occupied bitboard
  *
@@ -159,14 +157,13 @@ void generate_castlings(Position *pos, MoveList *move_list);
  */
 Castling possible_castlings(
 	Position *pos,
-	Color color,
-	Square target
+	Color color
 );
 
 /**
  * \brief A function that returns a mask with flags indicating which
- * castings are available for a given position. WARNING! This function should only
- * be used when there is no check
+ * castings are available for a given position. WARNING! This function should
+ * only be used when there is no check
  *
  * \param pos current position
  *

@@ -235,15 +235,45 @@ U64 king_safe_moves_mask(
 
 Castling possible_castlings(
 	Position *pos,
-	Color color,
-	Square target
+	Color color
 )
 {
 	assert(pos != NULL);
 	assert(color < COLOR_NB);
-	assert(target < SQ_NB);
 
-	return NO_CASTLING;
+	Castling cast = NO_CASTLING;
+
+	if(color == WHITE) {
+		bool oo = !(
+			pos->state->occupied & 0x60ULL
+			|| attacked_by(pos, SQ_F1, BLACK)
+			|| attacked_by(pos, SQ_G1, BLACK)
+		);
+
+		bool ooo = !(
+			pos->state->occupied & 0x0CULL
+			|| attacked_by(pos, SQ_D1, BLACK)
+			|| attacked_by(pos, SQ_C1, BLACK)
+		);
+
+		cast = (oo * WHITE_OO) | (ooo * WHITE_OOO);
+	} else {
+		bool oo = !(
+			pos->state->occupied & 0x6000000000000000ULL
+			|| attacked_by(pos, SQ_F8, WHITE)
+			|| attacked_by(pos, SQ_G8, WHITE)
+		);
+
+		bool ooo = !(
+			pos->state->occupied & 0x0C00000000000000ULL
+			|| attacked_by(pos, SQ_D8, WHITE)
+			|| attacked_by(pos, SQ_C8, WHITE)
+		);
+
+		cast = (oo * BLACK_OO) | (ooo * BLACK_OOO);
+	}
+
+	return cast & pos->state->castling;
 }
 
 void generate_castlings(Position *pos, MoveList *move_list)
@@ -255,8 +285,7 @@ void generate_castlings(Position *pos, MoveList *move_list)
 
 	castlings &= possible_castlings(
 		pos,
-		color,
-		bit_scan_forward(pieces(pos, make_piece(color, KING)))
+		color
 	);
 
 	U64 destinations = 0x00ULL;
