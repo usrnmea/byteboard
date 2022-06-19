@@ -416,16 +416,16 @@ void test_possible_castlings(void)
 	Position *pos_4 = init_position("r3k1r1/8/8/8/8/8/8/R3K2R w Kq - 0 1");
 	Position *pos_5 = init_position("1q3rk1/8/8/6p1/8/8/8/R3K3 w Q - 0 1");
 
-	TEST_ASSERT_EQUAL_UINT32(NO_CASTLING, possible_castlings(pos_4, WHITE, SQ_E1));
-	TEST_ASSERT_EQUAL_UINT32(BLACK_OOO, possible_castlings(pos_4, BLACK, SQ_E8));
-	TEST_ASSERT_EQUAL_UINT32(ALL_WHITE, possible_castlings(pos_1, WHITE, SQ_E1));
-	TEST_ASSERT_EQUAL_UINT32(BLACK_OOO, possible_castlings(pos_1, BLACK, SQ_E8));
-	TEST_ASSERT_EQUAL_UINT32(WHITE_OO, possible_castlings(pos_2, WHITE, SQ_E1));
-	TEST_ASSERT_EQUAL_UINT32(NO_CASTLING, possible_castlings(pos_2, BLACK, SQ_E8));
-	TEST_ASSERT_EQUAL_UINT32(NO_CASTLING, possible_castlings(pos_3, WHITE, SQ_E1));
-	TEST_ASSERT_EQUAL_UINT32(NO_CASTLING, possible_castlings(pos_3, BLACK, SQ_E8));
-	TEST_ASSERT_EQUAL_UINT32(WHITE_OOO, possible_castlings(pos_5, WHITE, SQ_E1));
-	TEST_ASSERT_EQUAL_UINT32(NO_CASTLING, possible_castlings(pos_5, BLACK, SQ_G8));
+	TEST_ASSERT_EQUAL_UINT32(NO_CASTLING, possible_castlings(pos_4, WHITE));
+	TEST_ASSERT_EQUAL_UINT32(BLACK_OOO, possible_castlings(pos_4, BLACK));
+	TEST_ASSERT_EQUAL_UINT32(ALL_WHITE, possible_castlings(pos_1, WHITE));
+	TEST_ASSERT_EQUAL_UINT32(BLACK_OOO, possible_castlings(pos_1, BLACK));
+	TEST_ASSERT_EQUAL_UINT32(WHITE_OO, possible_castlings(pos_2, WHITE));
+	TEST_ASSERT_EQUAL_UINT32(NO_CASTLING, possible_castlings(pos_2, BLACK));
+	TEST_ASSERT_EQUAL_UINT32(NO_CASTLING, possible_castlings(pos_3, WHITE));
+	TEST_ASSERT_EQUAL_UINT32(NO_CASTLING, possible_castlings(pos_3, BLACK));
+	TEST_ASSERT_EQUAL_UINT32(WHITE_OOO, possible_castlings(pos_5, WHITE));
+	TEST_ASSERT_EQUAL_UINT32(NO_CASTLING, possible_castlings(pos_5, BLACK));
 
 	free(pos_1->state);
 	free(pos_2->state);
@@ -514,5 +514,4 @@ void test_generate_castlings(void)
 	free(pos_1);
 	free(pos_2);
 	free(pos_3);
-
 }
