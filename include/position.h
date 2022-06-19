@@ -232,4 +232,14 @@ void do_move(Position *position, Move move);
  */
 void undo_move(Position *position);
 
+/**
+ * \brief Returns bitboard with pinned pieces near the king.
+* Depends on the turn.
+ *
+ * \param pos position
+ *
+ * \return bitboard with pinned pieces
+ */
+U64 get_pinned(Position *pos);
+
 #endif

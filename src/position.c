@@ -426,7 +426,7 @@ CheckType get_check_type(const Position *pos)
 	Color color = pos->state->previous_move.color;
 
 	U64 attackers = attacked_by(
-		pos, 
+		pos,
 		bit_scan_forward(pieces(pos, make_piece(!color, KING))),
 		color
 	);
@@ -638,3 +638,31 @@ void undo_move(Position *pos)
 	free(temp);
 }
 
+U64 get_pinned(Position *pos)
+{
+        Color color = !pos->state->previous_move.color;
+        Square king_sq = bit_scan_forward(pieces(pos, make_piece(color, KING)));
+
+        U64 blockers = queen_attacks_mask(king_sq, pos->state->occupied);
+
+        U64 sliding = (
+                pieces(pos, make_piece(!color, ROOK))
+                | pieces(pos, make_piece(!color, BISHOP))
+                | pieces(pos, make_piece(!color, QUEEN))
+        );
+
+        U64 pinners = queen_attacks_mask(
+                king_sq,
+                pos->state->occupied ^ blockers
+        ) & sliding;
+
+        U64 pinned = EMPTY;
+
+        while (pinners) {
+                pinned |= blockers & ray_between[king_sq][bit_scan_forward(pinners)];
+
+                remove_lsb(pinners);
+        }
+
+        return pinned;
+}
