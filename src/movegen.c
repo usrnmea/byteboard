@@ -223,7 +223,7 @@ U64 king_safe_moves_mask(
 	}
 
 	return (
-		king_moves 
+		king_moves
 		^ pieces(pos, make_piece(color, PAWN))
 		^ pieces(pos, make_piece(color, KNIGHT))
 		^ pieces(pos, make_piece(color, BISHOP))
@@ -255,7 +255,7 @@ void generate_castlings(Position *pos, MoveList *move_list)
 	castlings &= possible_castlings(
 		pos,
 		color,
-		pieces(pos, make_piece(color, KING))
+		bit_scan_forward(pieces(pos, make_piece(color, KING)))
 	);
 
 	U64 destinations = 0x00ULL;
@@ -265,14 +265,14 @@ void generate_castlings(Position *pos, MoveList *move_list)
 		Square rook = bit_scan_forward(rooks);
 
 		if (castling_masks[rook] & castlings)
-			destinations |= rook;
+			destinations |= (0x01ULL << rook);
 
 		remove_lsb(rooks);
 	}
 
-	add_castlings(
-		move_list,
-		pieces(pos, make_piece(color, KING)),
-		destinations
-	);
+        add_castlings(
+                move_list,
+                bit_scan_forward(pieces(pos, make_piece(color, KING))),
+                destinations
+        );
 }
