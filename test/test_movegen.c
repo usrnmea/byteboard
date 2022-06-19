@@ -414,6 +414,7 @@ void test_possible_castlings(void)
 	Position *pos_2 = init_position("4k2r/2q5/8/8/8/B7/PP1PPPPP/R3K2R w KQk - 0 1");
 	Position *pos_3 = init_position("r3k2r/2q5/8/8/8/B6B/PP1PP2P/R3K1QR w KQkq - 0 1");
 	Position *pos_4 = init_position("r3k1r1/8/8/8/8/8/8/R3K2R w Kq - 0 1");
+	Position *pos_5 = init_position("1q3rk1/8/8/6p1/8/8/8/R3K3 w Q - 0 1");
 
 	TEST_ASSERT_EQUAL_UINT32(NO_CASTLING, possible_castlings(pos_4, WHITE, SQ_E1));
 	TEST_ASSERT_EQUAL_UINT32(BLACK_OOO, possible_castlings(pos_4, BLACK, SQ_E8));
@@ -423,14 +424,95 @@ void test_possible_castlings(void)
 	TEST_ASSERT_EQUAL_UINT32(NO_CASTLING, possible_castlings(pos_2, BLACK, SQ_E8));
 	TEST_ASSERT_EQUAL_UINT32(NO_CASTLING, possible_castlings(pos_3, WHITE, SQ_E1));
 	TEST_ASSERT_EQUAL_UINT32(NO_CASTLING, possible_castlings(pos_3, BLACK, SQ_E8));
+	TEST_ASSERT_EQUAL_UINT32(WHITE_OOO, possible_castlings(pos_5, WHITE, SQ_E1));
+	TEST_ASSERT_EQUAL_UINT32(NO_CASTLING, possible_castlings(pos_5, BLACK, SQ_G8));
 
 	free(pos_1->state);
 	free(pos_2->state);
 	free(pos_3->state);
 	free(pos_4->state);
+	free(pos_5->state);
 
 	free(pos_1);
 	free(pos_2);
 	free(pos_3);
 	free(pos_4);
+	free(pos_5);
+}
+
+void test_generate_castlings(void)
+{
+	Position *pos_1 = init_position("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1");
+	Position *pos_2 = init_position("r3k2r/p1ppbp1p/bp3qpB/8/4Q3/2N5/PPP2PPP/R3K2R w KQkq - 0 1");
+	Position *pos_3 = init_position("1r1k3r/8/8/8/6n1/8/5PP1/R3K2Q w Q - 0 1");
+
+	MoveList *move_list = init_move_list();
+
+	Move move_1 = {
+		.move_type = CASTLING, .moved_piece_type = KING,
+		.promotion_piece_type = NO_PIECE_TYPE, .color = WHITE,
+		.source = SQ_E1, .destination = SQ_A1
+	};
+
+	Move move_2 = {
+		.move_type = CASTLING, .moved_piece_type = KING,
+		.promotion_piece_type = NO_PIECE_TYPE, .color = BLACK,
+		.source = SQ_E8, .destination = SQ_A8
+	};
+
+	pos_1->state->previous_move.color = BLACK;
+	generate_castlings(pos_1, move_list);
+
+	TEST_ASSERT_EQUAL_UINT32(0, ml_len(move_list));
+
+	free(move_list);
+	move_list = init_move_list();
+
+	pos_1->state->previous_move.color = WHITE;
+	generate_castlings(pos_1, move_list);
+
+	TEST_ASSERT_EQUAL_UINT32(0, ml_len(move_list));
+
+	free(move_list);
+	move_list = init_move_list();
+
+	pos_2->state->previous_move.color = BLACK;
+	generate_castlings(pos_2, move_list);
+
+	TEST_ASSERT_EQUAL_MEMORY(&move_1, &move_list->move_list[0], sizeof(move_1));
+
+	free(move_list);
+	move_list = init_move_list();
+	
+	pos_2->state->previous_move.color = WHITE;
+	generate_castlings(pos_2, move_list);
+
+	TEST_ASSERT_EQUAL_MEMORY(&move_2, &move_list->move_list[0], sizeof(move_1));
+
+	free(move_list);
+	move_list = init_move_list();
+	
+	pos_3->state->previous_move.color = BLACK;
+	generate_castlings(pos_3, move_list);
+
+	TEST_ASSERT_EQUAL_MEMORY(&move_1, &move_list->move_list[0], sizeof(move_1));
+
+	free(move_list);
+	move_list = init_move_list();
+	
+	pos_3->state->previous_move.color = WHITE;
+	generate_castlings(pos_3, move_list);
+
+	TEST_ASSERT_EQUAL_UINT32(0, ml_len(move_list));
+
+	free(move_list);
+
+	free(pos_1->state);
+	free(pos_2->state);
+	free(pos_3->state);
+
+	free(pos_1);
+	free(pos_2);
+	free(pos_3);
+
 }
