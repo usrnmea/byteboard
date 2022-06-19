@@ -38,7 +38,8 @@ void add_common_moves(
 
 	Move move = {
 		.move_type = COMMON, .moved_piece_type = type_of_piece(piece),
-		.promotion_piece_type = NO_PIECE_TYPE, .color = color_of_piece(piece),
+		.promotion_piece_type = NO_PIECE_TYPE,
+		.color = color_of_piece(piece),
 		.source = source
 	};
 

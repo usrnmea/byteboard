@@ -899,9 +899,15 @@ void test_get_check_type(void)
 
 void test_get_pinned(void)
 {
-	Position *pos_1 = init_position("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1");
-	Position *pos_2 = init_position("8/4n1n1/Q3rk2/q7/8/8/P2PP2P/R2NK2R w Q - 0 1");
-	Position *pos_3 = init_position("3Q4/4n1n1/4rk2/8/7B/8/4P2P/1q1NK2R w - - 0 1");
+	Position *pos_1 = init_position(
+		"rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1"
+	);
+	Position *pos_2 = init_position(
+		"8/4n1n1/Q3rk2/q7/8/8/P2PP2P/R2NK2R w Q - 0 1"
+	);
+	Position *pos_3 = init_position(
+		"3Q4/4n1n1/4rk2/8/7B/8/4P2P/1q1NK2R w - - 0 1"
+	);
 
 	pos_1->state->previous_move.color = BLACK;
 	TEST_ASSERT_EQUAL_UINT64(0x00ULL, get_pinned(pos_1));
