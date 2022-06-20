@@ -355,3 +355,27 @@ U64 filter_legal_moves(
 
 	return destinations;
 }
+
+void generate_knight_moves(
+	MoveList *move_list, Position *pos, U64 check_ray
+)
+{
+	Color color = !pos->state->previous_move.color;
+	U64 knights = pieces(pos, make_piece(color, KNIGHT));
+	U64 allies = pos->state->allies;
+
+	knights &= ~(get_pinned(pos));
+
+	while (knights) {
+		Square knight_sq = bit_scan_forward(knights);
+
+		add_common_moves(
+			move_list,
+			make_piece(color, KNIGHT),
+			knight_sq,
+			knight_move_pattern(knight_sq) & ~(allies) & check_ray
+		);
+
+		remove_lsb(knights);
+	}
+}

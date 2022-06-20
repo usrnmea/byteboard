@@ -201,4 +201,18 @@ U64 filter_legal_moves(
 	U64 check_ray
 );
 
+/**
+ * \brief Generates all possible moves for the knight and adds them into the
+ * move list.
+ *
+ * \param move_list the list with all moves
+ *
+ * \param pos current position
+ *
+ * \param check_ray check ray
+ */
+void generate_knight_moves(
+	MoveList *move_list, Position *pos, U64 check_ray
+);
+
 #endif
