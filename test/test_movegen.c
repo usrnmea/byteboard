@@ -547,3 +547,100 @@ void test_filter_legal_moves(void)
 	free(pos->state);
 	free(pos);
 }
+
+void test_generate_knight_moves(void)
+{
+	Position *pos = init_position("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1");
+	MoveList *move_list = init_move_list();
+
+	Move move_1 = {
+		.move_type = COMMON, .moved_piece_type = KNIGHT,
+		.promotion_piece_type = NO_PIECE_TYPE, .color = WHITE,
+		.source = SQ_B1, .destination = SQ_A3
+	};
+
+	Move move_2 = {
+		.move_type = COMMON, .moved_piece_type = KNIGHT,
+		.promotion_piece_type = NO_PIECE_TYPE, .color = WHITE,
+		.source = SQ_B1, .destination = SQ_C3
+	};
+
+	Move move_3 = {
+		.move_type = COMMON, .moved_piece_type = KNIGHT,
+		.promotion_piece_type = NO_PIECE_TYPE, .color = WHITE,
+		.source = SQ_G1, .destination = SQ_F3
+	};
+
+	Move move_4 = {
+		.move_type = COMMON, .moved_piece_type = KNIGHT,
+		.promotion_piece_type = NO_PIECE_TYPE, .color = WHITE,
+		.source = SQ_G1, .destination = SQ_H3
+	};
+
+	generate_knight_moves(move_list, pos, UNIVERSE);
+
+	TEST_ASSERT_EQUAL_MEMORY(&move_1, &move_list->move_list[0], sizeof(move_1));
+	TEST_ASSERT_EQUAL_MEMORY(&move_2, &move_list->move_list[1], sizeof(move_2));
+	TEST_ASSERT_EQUAL_MEMORY(&move_3, &move_list->move_list[2], sizeof(move_3));
+	TEST_ASSERT_EQUAL_MEMORY(&move_4, &move_list->move_list[3], sizeof(move_4));
+	TEST_ASSERT_EQUAL_UINT32(4, ml_len(move_list));
+
+	do_move(pos, move_1);
+
+	move_1 = (Move){
+		.move_type = COMMON, .moved_piece_type = KNIGHT,
+		.promotion_piece_type = NO_PIECE_TYPE, .color = BLACK,
+		.source = SQ_B8, .destination = SQ_A6
+	};
+
+	move_2 = (Move){
+		.move_type = COMMON, .moved_piece_type = KNIGHT,
+		.promotion_piece_type = NO_PIECE_TYPE, .color = BLACK,
+		.source = SQ_B8, .destination = SQ_C6
+	};
+
+	move_3 = (Move){
+		.move_type = COMMON, .moved_piece_type = KNIGHT,
+		.promotion_piece_type = NO_PIECE_TYPE, .color = BLACK,
+		.source = SQ_G8, .destination = SQ_F6
+	};
+
+	move_4 = (Move){
+		.move_type = COMMON, .moved_piece_type = KNIGHT,
+		.promotion_piece_type = NO_PIECE_TYPE, .color = BLACK,
+		.source = SQ_G8, .destination = SQ_H6
+	};
+
+	free(move_list);
+	move_list = init_move_list();
+
+	generate_knight_moves(move_list, pos, UNIVERSE);
+
+	TEST_ASSERT_EQUAL_MEMORY(&move_1, &move_list->move_list[0], sizeof(move_1));
+	TEST_ASSERT_EQUAL_MEMORY(&move_2, &move_list->move_list[1], sizeof(move_2));
+	TEST_ASSERT_EQUAL_MEMORY(&move_3, &move_list->move_list[2], sizeof(move_3));
+	TEST_ASSERT_EQUAL_MEMORY(&move_4, &move_list->move_list[3], sizeof(move_4));
+	TEST_ASSERT_EQUAL_UINT32(4, ml_len(move_list));
+
+	free(move_list);
+	free(pos->state);
+	free(pos);
+
+	pos = init_position("8/7k/8/5b2/8/8/1N6/1KN4r w - - 0 1");
+	move_list = init_move_list();
+
+	move_1 = (Move){
+		.move_type = COMMON, .moved_piece_type = KNIGHT,
+		.promotion_piece_type = NO_PIECE_TYPE, .color = WHITE,
+		.source = SQ_B2, .destination = SQ_D3
+	};
+
+	generate_knight_moves(move_list, pos, 0x2010080400);
+
+	TEST_ASSERT_EQUAL_MEMORY(&move_1, &move_list->move_list[0], sizeof(move_1));
+	TEST_ASSERT_EQUAL_UINT32(1, ml_len(move_list));
+
+	free(move_list);
+	free(pos->state);
+	free(pos);
+}
