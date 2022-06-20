@@ -306,3 +306,52 @@ void generate_castlings(Position *pos, MoveList *move_list)
                 destinations
         );
 }
+
+U64 filter_legal_moves(
+	Position *pos,
+	Square source,
+	U64 destinations,
+	U64 king_checkers,
+	U64 check_ray
+)
+{
+	U64 source_bitboard = 0x01ULL << source;
+	U64 occupied = pos->state->occupied;
+	U64 allies = pos->state->allies;
+	U64 pinned = get_pinned(pos);
+
+	Color color = !pos->state->previous_move.color;
+
+	destinations &= check_ray;
+	destinations &= ~(allies);
+
+	if (source_bitboard & pinned) {
+		U64 king_bitboard = pieces(pos, make_piece(color, KING));
+		Square king = bit_scan_forward(king_bitboard);
+
+		U64 blockers = queen_attacks_mask(king, pos->state->occupied);
+
+		U64 sliding = (
+			pieces(pos, make_piece(!color, ROOK))
+			| pieces(pos, make_piece(!color, BISHOP))
+			| pieces(pos, make_piece(!color, QUEEN))
+		);
+
+		U64 pinners = queen_attacks_mask(
+			king,
+			pos->state->occupied ^ blockers
+		) & sliding;
+
+		Square pinner = bit_scan_forward(attacked_by(
+			pos,
+			source,
+			!color
+		) & pinners);
+
+		U64 pin_ray = ray_between[king][pinner];
+
+		destinations &= pin_ray | 0x01ULL << pinner;
+	}
+
+	return destinations;
+}
