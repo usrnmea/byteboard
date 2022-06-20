@@ -556,8 +556,8 @@ void do_move(Position *pos, Move move)
 	state->enemies = EMPTY;
 
 	for(PieceType pt = PAWN; pt <= PIECE_TYPE_NB; pt++) {
-		state->allies |= pieces(pos, make_piece(color, pt));
-		state->enemies |= pieces(pos, make_piece(!color, pt));
+		state->allies |= pieces(pos, make_piece(!color, pt));
+		state->enemies |= pieces(pos, make_piece(color, pt));
 	}
 
 	state->occupied = state->allies | state->enemies;
