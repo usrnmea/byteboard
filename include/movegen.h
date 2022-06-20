@@ -177,4 +177,28 @@ U64 king_safe_moves_mask(
 	Color color
 );
 
+/**
+ * \brief Takes bitboard with destinations and filter moves by check ray and
+ * pin ray for the given square.
+ *
+ * \param pos current position
+ *
+ * \param source source square
+ *
+ * \param destinations bitboard with all destinations
+ *
+ * \param king_checkers pieces that check the king
+ *
+ * \param check_ray check ray
+ *
+ * \return bitboard with legal moves
+ */
+U64 filter_legal_moves(
+	Position *pos,
+	Square source,
+	U64 destinations,
+	U64 king_checkers,
+	U64 check_ray
+);
+
 #endif

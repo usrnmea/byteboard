@@ -515,3 +515,35 @@ void test_generate_castlings(void)
 	free(pos_2);
 	free(pos_3);
 }
+
+void test_filter_legal_moves(void)
+{
+	Position *pos = init_position("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1");
+
+	TEST_ASSERT_EQUAL_UINT64(0x00ULL, filter_legal_moves(pos, SQ_E1, 0x3828ULL, 0x00ULL, UNIVERSE));
+	TEST_ASSERT_EQUAL_UINT64(0x00ULL, filter_legal_moves(pos, SQ_D1, 0x00ULL, 0x00ULL, UNIVERSE));
+
+	free(pos->state);
+	free(pos);
+	
+	pos = init_position("1k6/8/8/7B/7b/8/2n5/R3K3 w - - 0 1");
+	TEST_ASSERT_EQUAL_UINT64(0x00ULL, filter_legal_moves(pos, SQ_A1, 0x10101010101010EULL, 0x80000400ULL, EMPTY));
+	TEST_ASSERT_EQUAL_UINT64(0x00ULL, filter_legal_moves(pos, SQ_H5, 0x1020400040201008ULL, 0x80000400ULL, EMPTY));
+
+	free(pos->state);
+	free(pos);
+
+	pos = init_position("1k6/8/8/8/7b/R7/8/R3K3 w - - 0 1");	
+	TEST_ASSERT_EQUAL_UINT64(0x00ULL, filter_legal_moves(pos, SQ_A1, 0x10EULL, 0x80000000ULL, 0x80402000ULL));
+	TEST_ASSERT_EQUAL_UINT64(0x400000ULL, filter_legal_moves(pos, SQ_A3, 0x101010101FE0100ULL, 0x80000000ULL, 0x80402000ULL));
+
+	free(pos->state);
+	free(pos);
+
+	pos = init_position("3k4/8/8/7b/3n4/5P2/3QK3/5B2 w - - 0 1");
+	TEST_ASSERT_EQUAL_UINT64(0x8000000ULL, filter_legal_moves(pos, SQ_D2, 0x8080708ULL, 0x8000000ULL, 0x8000000ULL));
+	TEST_ASSERT_EQUAL_UINT64(0x00ULL, filter_legal_moves(pos, SQ_F3, 0x20000000ULL, 0x8000000ULL, 0x8000000ULL));
+
+	free(pos->state);
+	free(pos);
+}
