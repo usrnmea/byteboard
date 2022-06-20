@@ -687,8 +687,8 @@ void test_undo_move(void)
 	undo_move(pos);
 
 	TEST_ASSERT_EQUAL_UINT64(0x91F700000000F791, pos->state->occupied);
-	TEST_ASSERT_EQUAL_UINT64(0x91F7000000000000, pos->state->allies);
-	TEST_ASSERT_EQUAL_UINT64(0xF791, pos->state->enemies);
+	TEST_ASSERT_EQUAL_UINT64(0xF791, pos->state->allies);
+	TEST_ASSERT_EQUAL_UINT64(0x91F7000000000000, pos->state->enemies);
 
 	TEST_ASSERT_EQUAL_UINT64(0x00ULL, pos->board.WhiteKnights);
 	TEST_ASSERT_EQUAL_UINT64(0x00ULL, pos->board.BlackKnights);
@@ -720,8 +720,8 @@ void test_undo_move(void)
 	undo_move(pos);
 
 	TEST_ASSERT_EQUAL_UINT64(0x91F700000000F791, pos->state->occupied);
-	TEST_ASSERT_EQUAL_UINT64(0x91F7000000000000, pos->state->allies);
-	TEST_ASSERT_EQUAL_UINT64(0xF791, pos->state->enemies);
+	TEST_ASSERT_EQUAL_UINT64(0xF791, pos->state->allies);
+	TEST_ASSERT_EQUAL_UINT64(0x91F7000000000000, pos->state->enemies);
 
 	TEST_ASSERT_EQUAL_UINT64(0x00ULL, pos->board.WhiteKnights);
 	TEST_ASSERT_EQUAL_UINT64(0x00ULL, pos->board.BlackKnights);
@@ -742,7 +742,7 @@ void test_undo_move(void)
 	free(pos->state);
 	free(pos);
 
-	pos = init_position("r3k2r/ppp1pppp/8/8/8/8/PPP1PPPP/R3K2R w KQkq - 0 1");
+	pos = init_position("r3k2r/ppp1pppp/8/8/8/8/PPP1PPPP/R3K2R b KQkq - 0 1");
 
 	Move move_castling_black_00 = {
 		.move_type = CASTLING, .moved_piece_type = KING,
@@ -775,7 +775,7 @@ void test_undo_move(void)
 	free(pos->state);
 	free(pos);
 
-	pos = init_position("r3k2r/ppp1pppp/8/8/8/8/PPP1PPPP/R3K2R w KQkq - 0 1");
+	pos = init_position("r3k2r/ppp1pppp/8/8/8/8/PPP1PPPP/R3K2R b KQkq - 0 1");
 
 	Move move_castling_black_000 = {
 		.move_type = CASTLING, .moved_piece_type = KING,
@@ -820,8 +820,8 @@ void test_undo_move(void)
 	undo_move(pos);
 
 	TEST_ASSERT_EQUAL_UINT64(0x80010000000100, pos->state->occupied);
-	TEST_ASSERT_EQUAL_UINT64(0x10000000000, pos->state->allies);
-	TEST_ASSERT_EQUAL_UINT64(0x80000000000100, pos->state->enemies);
+	TEST_ASSERT_EQUAL_UINT64(0x80000000000100, pos->state->allies);
+	TEST_ASSERT_EQUAL_UINT64(0x10000000000, pos->state->enemies);
 
 	TEST_ASSERT_EQUAL_UINT64(0x00ULL, pos->board.WhiteKnights);
 	TEST_ASSERT_EQUAL_UINT64(0x00ULL, pos->board.WhiteRooks);
@@ -852,8 +852,8 @@ void test_undo_move(void)
 	undo_move(pos);
 
 	TEST_ASSERT_EQUAL_UINT64(0x8200000060040802, pos->state->occupied);
-	TEST_ASSERT_EQUAL_UINT64(0x8200000020000000, pos->state->allies);
-	TEST_ASSERT_EQUAL_UINT64(0x40040802, pos->state->enemies);
+	TEST_ASSERT_EQUAL_UINT64(0x40040802, pos->state->allies);
+	TEST_ASSERT_EQUAL_UINT64(0x8200000020000000, pos->state->enemies);
 
 	TEST_ASSERT_EQUAL_UINT64(0x00ULL, pos->board.WhiteKnights);
 	TEST_ASSERT_EQUAL_UINT64(0x00ULL, pos->board.BlackKnights);

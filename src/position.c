@@ -306,8 +306,8 @@ Position* init_position(const char *fen)
 	state->enemies = EMPTY;
 
 	for(PieceType pt = PAWN; pt <= PIECE_TYPE_NB; pt++) {
-		state->allies |= pieces(position, make_piece(!color, pt));
-		state->enemies |= pieces(position, make_piece(color, pt));
+		state->allies |= pieces(position, make_piece(color, pt));
+		state->enemies |= pieces(position, make_piece(!color, pt));
 	}
 
 	state->occupied = state->allies | state->enemies;
