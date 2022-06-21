@@ -908,6 +908,9 @@ void test_get_pinned(void)
 	Position *pos_3 = init_position(
 		"3Q4/4n1n1/4rk2/8/7B/8/4P2P/1q1NK2R w - - 0 1"
 	);
+	Position *pos_4 = init_position(
+		"1k1r4/8/8/6b1/8/8/8/q1BRK3 w - - 0 1"
+	);
 
 	pos_1->state->previous_move.color = BLACK;
 	TEST_ASSERT_EQUAL_UINT64(0x00ULL, get_pinned(pos_1));
@@ -927,11 +930,19 @@ void test_get_pinned(void)
 	pos_3->state->previous_move.color = WHITE;
 	TEST_ASSERT_EQUAL_UINT64(0x10000000000000ULL, get_pinned(pos_3));
 
+	pos_4->state->previous_move.color = WHITE;
+	TEST_ASSERT_EQUAL_UINT64(0x00ULL, get_pinned(pos_4));
+
+	pos_4->state->previous_move.color = BLACK;
+	TEST_ASSERT_EQUAL_UINT64(0x00ULL, get_pinned(pos_4));
+
 	free(pos_1->state);
 	free(pos_2->state);
 	free(pos_3->state);
+	free(pos_4->state);
 
 	free(pos_1);
 	free(pos_2);
 	free(pos_3);
+	free(pos_4);
 }
