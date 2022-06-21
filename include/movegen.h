@@ -215,4 +215,31 @@ void generate_knight_moves(
 	MoveList *move_list, Position *pos, U64 check_ray
 );
 
+/**
+ * \brief Generates bitboard with all available moves for the pawn.
+ *
+ * \param pos current position
+ *
+ * \param target target square
+ *
+ * \return bitboard with all available moves for the pawn.
+ */
+U64 get_pawn_moves(Position *pos, Square target);
+
+/**
+ * \brief Generates all possible moves for the pawns and adds them into the
+ * move list.
+ *
+ * \param move_list the list with all moves
+ *
+ * \param pos current position
+ *
+ * \param check_ray check ray
+ *
+ * \param king_checkers pieces that check the king
+ */
+void generate_pawn_moves(
+	MoveList *move_list, Position *pos, U64 check_ray, U64 king_checkers
+);
+
 #endif
