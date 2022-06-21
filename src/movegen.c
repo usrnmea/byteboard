@@ -379,3 +379,82 @@ void generate_knight_moves(
 		remove_lsb(knights);
 	}
 }
+
+U64 get_pawn_moves(Position *pos, Square target)
+{
+	U64 occupied = pos->state->occupied;
+	U64 color = !pos->state->previous_move.color;
+
+	U64 moves = pawn_move_mask(target, occupied, color);
+	U64 attacks = pawn_attack_pattern[color](target) & pos->state->enemies;
+
+	return moves | attacks;
+}
+
+void generate_pawn_moves(
+	MoveList *move_list, Position *pos, U64 check_ray, U64 king_checkers
+)
+{
+	U64 occupied = pos->state->occupied;
+	U64 allies = pos->state->allies;
+	U64 enemies = pos->state->enemies;
+	U64 pinned = get_pinned(pos);
+
+	Color color = !pos->state->previous_move.color;
+
+	U64 pawns = pieces(pos, make_piece(color, PAWN));
+
+	// Promotions
+	U64 pawns_on_last_rank = pawns & (color ? RANK_2 : RANK_7);
+	pawns ^= pawns_on_last_rank;
+
+	while (pawns_on_last_rank) {
+		Square pawn_sq = bit_scan_forward(pawns_on_last_rank);
+
+		U64 pawn_moves = get_pawn_moves(pos, pawn_sq);
+
+		pawn_moves = filter_legal_moves(
+			pos,
+			pawn_sq,
+			pawn_moves,
+			king_checkers,
+			check_ray
+		);
+
+		add_promotions(
+			move_list,
+			color,
+			pawn_sq,
+			pawn_moves
+		);
+
+		remove_lsb(pawns_on_last_rank);
+	}
+
+	// Common moves
+	U64 tmp = pawns;
+	while (tmp) {
+		Square pawn_sq = bit_scan_forward(tmp);
+
+		U64 pawn_moves = get_pawn_moves(pos, pawn_sq);
+
+		pawn_moves = filter_legal_moves(
+			pos,
+			pawn_sq,
+			pawn_moves,
+			king_checkers,
+			check_ray
+		);
+
+		add_common_moves(
+			move_list,
+			make_piece(color, PAWN),
+			pawn_sq,
+			pawn_moves
+		);
+
+		remove_lsb(tmp);
+	}
+
+	// TODO: En passant
+}
