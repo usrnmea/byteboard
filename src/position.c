@@ -218,7 +218,7 @@ static bool init_en_passant(Position *pos, char *en_passant)
 
 		pos->state->previous_move = (Move) {
 			.destination = target - 8 + (16 * !color),
-			.source = SQ_NONE,
+			.source = target + 8 - (16 * !color),
 			.color = color,
 			.move_type = EN_PASSANT,
 			.moved_piece_type = PAWN,

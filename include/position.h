@@ -234,7 +234,7 @@ void undo_move(Position *position);
 
 /**
  * \brief Returns bitboard with pinned pieces near the king.
-* Depends on the turn.
+ * Depends on the turn.
  *
  * \param pos position
  *

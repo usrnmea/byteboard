@@ -836,4 +836,26 @@ void test_generate_pawn_moves(void)
 	free(move_list);
 	free(pos->state);
 	free(pos);
+
+	pos = init_position(
+		"k7/2K2rb1/8/4pP2/8/8/8/8 w - e6 0 1"
+	);
+
+	move_list = init_move_list();
+
+	PositionState state = *pos->state;
+
+	generate_pawn_moves(
+		move_list,
+		pos,
+		0x38000000000000ULL,
+		0x20000000000000ULL
+	);
+
+	TEST_ASSERT_EQUAL_MEMORY(&state, pos->state, sizeof(PositionState));
+	TEST_ASSERT_EQUAL_UINT32(0, ml_len(move_list));
+
+	free(move_list);
+	free(pos->state);
+	free(pos);
 }

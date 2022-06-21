@@ -456,5 +456,44 @@ void generate_pawn_moves(
 		remove_lsb(tmp);
 	}
 
-	// TODO: En passant
+	Move prev_mv = pos->state->previous_move;
+	Square dst = prev_mv.destination;
+	Square src = prev_mv.source;
+
+	U64 dst_bb = square_to_bitboard(dst);
+
+	if(
+		prev_mv.moved_piece_type == PAWN
+		&& (dst > src ? dst - src : src - dst) == 16
+	) {
+		U64 sources = (dst_bb << 1 | dst_bb >> 1) & pawns;
+
+		Square target = dst - 8 + (16 * color);
+
+		remove_piece(pos, make_piece(color, PAWN), target);
+		remove_piece(pos, make_piece(!color, PAWN), dst);
+
+		pos->state->occupied ^= dst_bb | sources;
+		pos->state->allies ^= sources;
+		pos->state->enemies ^= dst_bb;
+
+		CheckType check_type = get_check_type(pos);
+
+		set_piece(pos, make_piece(color, PAWN), target);
+		set_piece(pos, make_piece(!color, PAWN), dst);
+
+		pos->state->occupied ^= dst_bb | sources;
+		pos->state->allies ^= sources;
+		pos->state->enemies ^= dst_bb;
+
+		if(!check_type) {
+			add_en_passant(
+				move_list,
+				color,
+				sources,
+				target
+			);
+		}
+
+	}
 }
