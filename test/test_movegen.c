@@ -822,4 +822,18 @@ void test_generate_pawn_moves(void)
 	free(move_list);
 	free(pos->state);
 	free(pos);
+
+	Position *pos = init_position(
+		"rnbqkbnr/pppp1ppp/8/3PpP2/8/8/PPP1P1PP/RNBQKBNR w KQkq e6 0 1"
+	);
+
+	MoveList *move_list = init_move_list();
+
+	generate_pawn_moves(move_list, pos, UNIVERSE, EMPTY);
+
+	TEST_ASSERT_EQUAL_UINT32(16, ml_len(move_list));
+
+	free(move_list);
+	free(pos->state);
+	free(pos);
 }
