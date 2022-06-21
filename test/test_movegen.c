@@ -823,11 +823,11 @@ void test_generate_pawn_moves(void)
 	free(pos->state);
 	free(pos);
 
-	Position *pos = init_position(
+	pos = init_position(
 		"rnbqkbnr/pppp1ppp/8/3PpP2/8/8/PPP1P1PP/RNBQKBNR w KQkq e6 0 1"
 	);
 
-	MoveList *move_list = init_move_list();
+	move_list = init_move_list();
 
 	generate_pawn_moves(move_list, pos, UNIVERSE, EMPTY);
 
