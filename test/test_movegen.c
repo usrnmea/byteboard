@@ -645,34 +645,6 @@ void test_generate_knight_moves(void)
 	free(pos);
 }
 
-void test_get_pawn_moves(void)
-{
-	// Tests for promotion
-	Position *pos = init_position("4k3/6P1/5K2/8/8/8/8/8 w - - 0 1");
-	TEST_ASSERT_EQUAL_UINT64(0x4000000000000000, get_pawn_moves(pos, SQ_G7));
-
-	free(pos->state);
-	free(pos);
-
-	pos = init_position("2k2r2/6P1/4KP2/8/8/8/8/8 w - - 0 1");
-	TEST_ASSERT_EQUAL_UINT64(0x6000000000000000, get_pawn_moves(pos, SQ_G7));
-	
-	free(pos->state);
-	free(pos);
-
-	// Tests for common moves
-	pos = init_position("2k1r3/1p6/8/8/8/6P1/4KP2/2B5 w - - 0 1");
-
-	TEST_ASSERT_EQUAL_UINT64(0x20200000, get_pawn_moves(pos, SQ_F2));
-	TEST_ASSERT_EQUAL_UINT64(0x40000000, get_pawn_moves(pos, SQ_G3));
-
-	pos->state->previous_move.color = WHITE;
-	TEST_ASSERT_EQUAL_UINT64(0x20200000000, get_pawn_moves(pos, SQ_B7));
-
-	free(pos->state);
-	free(pos);
-}
-
 void test_generate_pawn_moves(void)
 {
 	// Tests for promotion

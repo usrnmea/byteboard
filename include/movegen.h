@@ -213,17 +213,6 @@ void generate_knight_moves(
 );
 
 /**
- * \brief Generates bitboard with all available moves for the pawn.
- *
- * \param pos current position
- *
- * \param target target square
- *
- * \return bitboard with all available moves for the pawn.
- */
-U64 get_pawn_moves(Position *pos, Square target);
-
-/**
  * \brief Generates all possible moves for the pawns and adds them into the
  * move list.
  *

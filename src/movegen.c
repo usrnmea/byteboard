@@ -378,17 +378,6 @@ void generate_knight_moves(
 	}
 }
 
-U64 get_pawn_moves(Position *pos, Square target)
-{
-	U64 occupied = pos->state->occupied;
-	U64 color = !pos->state->previous_move.color;
-
-	U64 moves = pawn_move_mask(target, occupied, color);
-	U64 attacks = pawn_attack_pattern[color](target) & pos->state->enemies;
-
-	return moves | attacks;
-}
-
 void generate_pawn_moves(
 	MoveList *move_list, Position *pos, U64 check_ray
 )
