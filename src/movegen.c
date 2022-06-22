@@ -404,7 +404,9 @@ void generate_pawn_moves(
 	while (pawns_on_last_rank) {
 		Square pawn_sq = bit_scan_forward(pawns_on_last_rank);
 
-		U64 pawn_moves = get_pawn_moves(pos, pawn_sq);
+		U64 pawn_moves = pawn_mask(
+			pawn_sq, pos->state->occupied, color
+		);
 
 		pawn_moves = filter_legal_moves(
 			pos,
@@ -428,7 +430,10 @@ void generate_pawn_moves(
 	while (tmp) {
 		Square pawn_sq = bit_scan_forward(tmp);
 
-		U64 pawn_moves = get_pawn_moves(pos, pawn_sq);
+		U64 pawn_moves = pawn_mask(
+			pawn_sq, pos->state->occupied, color
+		);
+
 
 		pawn_moves = filter_legal_moves(
 			pos,
