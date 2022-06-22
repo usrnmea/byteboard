@@ -327,7 +327,9 @@ U64 filter_legal_moves(
 		U64 king_bitboard = pieces(pos, make_piece(color, KING));
 		Square king = bit_scan_forward(king_bitboard);
 
-		U64 blockers = queen_attacks_mask(king, pos->state->occupied);
+		U64 blockers = queen_attacks_mask(
+			king, pos->state->occupied
+		) & pos->state->occupied;
 
 		U64 sliding = (
 			pieces(pos, make_piece(!color, ROOK))

@@ -642,9 +642,14 @@ void undo_move(Position *pos)
 U64 get_pinned(Position *pos)
 {
 	Color color = !pos->state->previous_move.color;
-	Square king_sq = bit_scan_forward(pieces(pos, make_piece(color, KING)));
+	Square king_sq = bit_scan_forward(
+		pieces(pos, make_piece(color, KING))
+	);
 
-	U64 blockers = queen_attacks_mask(king_sq, pos->state->occupied);
+	U64 blockers = (
+		queen_attacks_mask(king_sq, pos->state->occupied)
+		& pos->state->occupied
+	);
 
 	U64 sliding = (
 		pieces(pos, make_piece(!color, ROOK))
