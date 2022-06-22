@@ -826,3 +826,91 @@ void test_generate_pawn_moves(void)
 	free(pos->state);
 	free(pos);
 }
+
+void test_generate_pawn_promotions(void)
+{
+	Position *pos = init_position(
+		"8/1K2P2r/8/8/8/8/8/4k3 w - - 0 1"
+	);
+
+	MoveList *move_list = init_move_list();
+
+	generate_pawn_promotions(move_list, pos, EMPTY, pieces(pos, W_PAWN));
+
+	TEST_ASSERT_EQUAL(0, ml_len(move_list));
+
+	free(move_list);
+	free(pos->state);
+	free(pos);
+
+	pos = init_position(
+		"8/1K2P3/8/8/8/8/8/k7 w - - 0 1"
+	);
+
+	move_list = init_move_list();
+
+	generate_pawn_promotions(move_list, pos, EMPTY, pieces(pos, W_PAWN));
+
+	TEST_ASSERT_EQUAL(4, ml_len(move_list));
+
+	while(ml_len(move_list)) {
+		Move move = ml_pop(move_list).move;
+
+		TEST_ASSERT_EQUAL(SQ_E8, move.destination);
+		TEST_ASSERT_EQUAL(SQ_E7, move.source);
+
+		TEST_ASSERT_EQUAL(PROMOTION, move.move_type);
+
+		TEST_ASSERT_EQUAL(WHITE, move.color);
+
+		TEST_ASSERT_NOT_EQUAL(
+			NO_PIECE_TYPE,
+			move.promotion_piece_type
+		);
+
+		TEST_ASSERT_EQUAL(PAWN, move.moved_piece_type);
+	}
+
+	free(move_list);
+	free(pos->state);
+	free(pos);
+
+	pos = init_position(
+		"8/8/6K1/8/8/8/3p4/k3N2R b - - 0 1"
+	);
+
+	move_list = init_move_list();
+
+	generate_pawn_promotions(move_list, pos, EMPTY, pieces(pos, B_PAWN));
+
+	TEST_ASSERT_EQUAL(8, ml_len(move_list));
+
+	while(ml_len(move_list)) {
+		Move move = ml_pop(move_list).move;
+
+		TEST_ASSERT_TRUE(
+			move.destination
+			& (
+				square_to_bitboard(SQ_D1)
+				| square_to_bitboard(SQ_E1)
+			)
+		);
+		TEST_ASSERT_EQUAL(SQ_D2, move.source);
+
+		TEST_ASSERT_EQUAL(PROMOTION, move.move_type);
+
+		TEST_ASSERT_EQUAL(BLACK, move.color);
+
+		TEST_ASSERT_NOT_EQUAL(
+			NO_PIECE_TYPE,
+			move.promotion_piece_type
+		);
+
+		TEST_ASSERT_EQUAL(PAWN, move.moved_piece_type);
+	}
+
+	free(move_list);
+	free(pos->state);
+	free(pos);
+
+}
