@@ -520,29 +520,29 @@ void test_filter_legal_moves(void)
 {
 	Position *pos = init_position("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1");
 
-	TEST_ASSERT_EQUAL_UINT64(0x00ULL, filter_legal_moves(pos, SQ_E1, 0x3828ULL, 0x00ULL, UNIVERSE));
-	TEST_ASSERT_EQUAL_UINT64(0x00ULL, filter_legal_moves(pos, SQ_D1, 0x00ULL, 0x00ULL, UNIVERSE));
+	TEST_ASSERT_EQUAL_UINT64(0x00ULL, filter_legal_moves(pos, SQ_E1, 0x3828ULL, UNIVERSE));
+	TEST_ASSERT_EQUAL_UINT64(0x00ULL, filter_legal_moves(pos, SQ_D1, 0x00ULL, UNIVERSE));
 
 	free(pos->state);
 	free(pos);
 	
 	pos = init_position("1k6/8/8/7B/7b/8/2n5/R3K3 w - - 0 1");
-	TEST_ASSERT_EQUAL_UINT64(0x00ULL, filter_legal_moves(pos, SQ_A1, 0x10101010101010EULL, 0x80000400ULL, EMPTY));
-	TEST_ASSERT_EQUAL_UINT64(0x00ULL, filter_legal_moves(pos, SQ_H5, 0x1020400040201008ULL, 0x80000400ULL, EMPTY));
+	TEST_ASSERT_EQUAL_UINT64(0x00ULL, filter_legal_moves(pos, SQ_A1, 0x10101010101010EULL, EMPTY));
+	TEST_ASSERT_EQUAL_UINT64(0x00ULL, filter_legal_moves(pos, SQ_H5, 0x1020400040201008ULL, EMPTY));
 
 	free(pos->state);
 	free(pos);
 
 	pos = init_position("1k6/8/8/8/7b/R7/8/R3K3 w - - 0 1");	
-	TEST_ASSERT_EQUAL_UINT64(0x00ULL, filter_legal_moves(pos, SQ_A1, 0x10EULL, 0x80000000ULL, 0x80402000ULL));
-	TEST_ASSERT_EQUAL_UINT64(0x400000ULL, filter_legal_moves(pos, SQ_A3, 0x101010101FE0100ULL, 0x80000000ULL, 0x80402000ULL));
+	TEST_ASSERT_EQUAL_UINT64(0x00ULL, filter_legal_moves(pos, SQ_A1, 0x10EULL, 0x80402000ULL));
+	TEST_ASSERT_EQUAL_UINT64(0x400000ULL, filter_legal_moves(pos, SQ_A3, 0x101010101FE0100ULL, 0x80402000ULL));
 
 	free(pos->state);
 	free(pos);
 
 	pos = init_position("3k4/8/8/7b/3n4/5P2/3QK3/5B2 w - - 0 1");
-	TEST_ASSERT_EQUAL_UINT64(0x8000000ULL, filter_legal_moves(pos, SQ_D2, 0x8080708ULL, 0x8000000ULL, 0x8000000ULL));
-	TEST_ASSERT_EQUAL_UINT64(0x00ULL, filter_legal_moves(pos, SQ_F3, 0x20000000ULL, 0x8000000ULL, 0x8000000ULL));
+	TEST_ASSERT_EQUAL_UINT64(0x8000000ULL, filter_legal_moves(pos, SQ_D2, 0x8080708ULL, 0x8000000ULL));
+	TEST_ASSERT_EQUAL_UINT64(0x00ULL, filter_legal_moves(pos, SQ_F3, 0x20000000ULL, 0x8000000ULL));
 
 	free(pos->state);
 	free(pos);
@@ -703,7 +703,7 @@ void test_generate_pawn_moves(void)
 		.source = SQ_G7, .destination = SQ_G8
 	};
 
-	generate_pawn_moves(move_list, pos, UNIVERSE, 0x00ULL);
+	generate_pawn_moves(move_list, pos, UNIVERSE);
 
 	TEST_ASSERT_EQUAL_MEMORY(&move_1, &move_list->move_list[0], sizeof(move_1));
 	TEST_ASSERT_EQUAL_MEMORY(&move_2, &move_list->move_list[1], sizeof(move_2));
@@ -766,7 +766,7 @@ void test_generate_pawn_moves(void)
 		.source = SQ_G7, .destination = SQ_G8
 	};
 
-	generate_pawn_moves(move_list, pos, UNIVERSE, 0x00ULL);
+	generate_pawn_moves(move_list, pos, UNIVERSE);
 
 	TEST_ASSERT_EQUAL_MEMORY(&move_1, &move_list->move_list[0], sizeof(move_1));
 	TEST_ASSERT_EQUAL_MEMORY(&move_2, &move_list->move_list[1], sizeof(move_2));
@@ -786,7 +786,7 @@ void test_generate_pawn_moves(void)
 	pos = init_position("2k1r3/1p6/8/8/8/6P1/4KP2/2B5 w - - 0 1");
 	move_list = init_move_list();
 
-	generate_pawn_moves(move_list, pos, 0x1010101010100000ULL, 0x1000000000000000ULL);
+	generate_pawn_moves(move_list, pos, 0x1010101010100000ULL);
 
 	TEST_ASSERT_EQUAL_UINT32(0, ml_len(move_list));
 
@@ -797,7 +797,7 @@ void test_generate_pawn_moves(void)
 	pos = init_position("2kr4/8/7q/8/p7/3P4/3KP3/8 w - - 0 1");
 	move_list = init_move_list();
 
-	generate_pawn_moves(move_list, pos, 0x804020100000ULL, 0x800000000000ULL);
+	generate_pawn_moves(move_list, pos, 0x804020100000ULL);
 
 	move_1 = (Move){
 		.move_type = COMMON, .moved_piece_type = PAWN,
@@ -815,7 +815,7 @@ void test_generate_pawn_moves(void)
 	pos = init_position("2kr4/8/7q/8/p7/3P4/3KP2r/8 w - - 0 1");
 	move_list = init_move_list();
 
-	generate_pawn_moves(move_list, pos, 0x804020100000ULL, 0x800000000000ULL);
+	generate_pawn_moves(move_list, pos, 0x804020100000ULL);
 
 	TEST_ASSERT_EQUAL_UINT32(0, ml_len(move_list));
 
@@ -829,7 +829,7 @@ void test_generate_pawn_moves(void)
 
 	move_list = init_move_list();
 
-	generate_pawn_moves(move_list, pos, UNIVERSE, EMPTY);
+	generate_pawn_moves(move_list, pos, UNIVERSE);
 
 	TEST_ASSERT_EQUAL_UINT32(16, ml_len(move_list));
 
@@ -845,12 +845,7 @@ void test_generate_pawn_moves(void)
 
 	PositionState state = *pos->state;
 
-	generate_pawn_moves(
-		move_list,
-		pos,
-		0x38000000000000ULL,
-		0x20000000000000ULL
-	);
+	generate_pawn_moves(move_list, pos, 0x38000000000000ULL);
 
 	TEST_ASSERT_EQUAL_MEMORY(&state, pos->state, sizeof(PositionState));
 	TEST_ASSERT_EQUAL_UINT32(0, ml_len(move_list));

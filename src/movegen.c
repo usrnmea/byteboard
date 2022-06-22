@@ -311,12 +311,10 @@ U64 filter_legal_moves(
 	Position *pos,
 	Square source,
 	U64 destinations,
-	U64 king_checkers,
 	U64 check_ray
 )
 {
 	U64 source_bitboard = 0x01ULL << source;
-	U64 occupied = pos->state->occupied;
 	U64 allies = pos->state->allies;
 	U64 pinned = get_pinned(pos);
 
@@ -392,14 +390,9 @@ U64 get_pawn_moves(Position *pos, Square target)
 }
 
 void generate_pawn_moves(
-	MoveList *move_list, Position *pos, U64 check_ray, U64 king_checkers
+	MoveList *move_list, Position *pos, U64 check_ray
 )
 {
-	U64 occupied = pos->state->occupied;
-	U64 allies = pos->state->allies;
-	U64 enemies = pos->state->enemies;
-	U64 pinned = get_pinned(pos);
-
 	Color color = !pos->state->previous_move.color;
 
 	U64 pawns = pieces(pos, make_piece(color, PAWN));
@@ -417,7 +410,6 @@ void generate_pawn_moves(
 			pos,
 			pawn_sq,
 			pawn_moves,
-			king_checkers,
 			check_ray
 		);
 
@@ -442,7 +434,6 @@ void generate_pawn_moves(
 			pos,
 			pawn_sq,
 			pawn_moves,
-			king_checkers,
 			check_ray
 		);
 

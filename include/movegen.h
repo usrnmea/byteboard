@@ -187,8 +187,6 @@ U64 king_safe_moves_mask(
  *
  * \param destinations bitboard with all destinations
  *
- * \param king_checkers pieces that check the king
- *
  * \param check_ray check ray
  *
  * \return bitboard with legal moves
@@ -197,7 +195,6 @@ U64 filter_legal_moves(
 	Position *pos,
 	Square source,
 	U64 destinations,
-	U64 king_checkers,
 	U64 check_ray
 );
 
@@ -235,11 +232,9 @@ U64 get_pawn_moves(Position *pos, Square target);
  * \param pos current position
  *
  * \param check_ray check ray
- *
- * \param king_checkers pieces that check the king
  */
 void generate_pawn_moves(
-	MoveList *move_list, Position *pos, U64 check_ray, U64 king_checkers
+	MoveList *move_list, Position *pos, U64 check_ray
 );
 
 #endif
