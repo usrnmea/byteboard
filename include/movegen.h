@@ -226,4 +226,23 @@ void generate_pawn_moves(
 	MoveList *move_list, Position *pos, U64 check_ray
 );
 
+/**
+ * \brief Adds all possible moves of the #PROMOTION type to the #MoveList
+ *
+ * \param move_list the list with all moves
+ *
+ * \param position current position
+ *
+ * \param check_ray check ray
+ *
+ * \param pawns_on_last_rank pawns on the #RANK_2 (for #BLACK) or #RANK_7 (for
+ * #WHITE)
+ */
+void generate_pawn_promotions(
+	MoveList *move_list,
+	Position *position,
+	U64 check_ray,
+	U64 pawns_on_last_rank
+);
+
 #endif

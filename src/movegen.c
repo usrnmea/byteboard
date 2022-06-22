@@ -482,3 +482,14 @@ void generate_pawn_moves(
 
 	}
 }
+
+void generate_pawn_promotions(
+	MoveList *move_list,
+	Position *pos,
+	U64 check_ray,
+	U64 pawns_on_last_rank
+)
+{
+	assert(move_list != NULL);
+	assert(pos != NULL);
+}
