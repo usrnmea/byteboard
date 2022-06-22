@@ -174,7 +174,7 @@ U64 king_safe_moves_mask(
 	while (linear) {
 		U64 crossing_moves = rook_attacks_mask(
 			bit_scan_forward(linear),
-			occupied ^ (0x01ULL << target)
+			occupied ^ square_to_bitboard(target)
 		) & king_moves;
 
 		king_moves &= ~(crossing_moves);
@@ -185,7 +185,7 @@ U64 king_safe_moves_mask(
 	while (diagonal) {
 		U64 crossing_moves = bishop_attacks_mask(
 			bit_scan_forward(diagonal),
-			occupied ^ (0x01ULL << target)
+			occupied ^ square_to_bitboard(target)
 		) & king_moves;
 
 		king_moves &= ~(crossing_moves);
@@ -295,7 +295,7 @@ void generate_castlings(Position *pos, MoveList *move_list)
 		Square rook = bit_scan_forward(rooks);
 
 		if (castling_masks[rook] & castlings)
-			destinations |= (0x01ULL << rook);
+			destinations |= square_to_bitboard(rook);
 
 		remove_lsb(rooks);
 	}
@@ -314,7 +314,7 @@ U64 filter_legal_moves(
 	U64 check_ray
 )
 {
-	U64 source_bitboard = 0x01ULL << source;
+	U64 source_bitboard = square_to_bitboard(source);
 	U64 allies = pos->state->allies;
 	U64 pinned = get_pinned(pos);
 
@@ -348,7 +348,7 @@ U64 filter_legal_moves(
 
 		U64 pin_ray = ray_between[king][pinner];
 
-		destinations &= pin_ray | 0x01ULL << pinner;
+		destinations &= pin_ray | square_to_bitboard(pinner);
 	}
 
 	return destinations;
