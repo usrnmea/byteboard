@@ -494,4 +494,30 @@ void generate_pawn_promotions(
 {
 	assert(move_list != NULL);
 	assert(pos != NULL);
+
+	Color color = !pos->state->previous_move.color;
+
+	while(pawns_on_last_rank) {
+		Square target = bit_scan_forward(pawns_on_last_rank);
+
+		U64 destinations = pawn_mask(
+			target, pos->state->occupied, color
+		);
+
+		destinations = filter_legal_moves(
+			pos,
+			target,
+			destinations,
+			check_ray
+		);
+
+		add_promotions(
+			move_list,
+			color,
+			target,
+			destinations
+		);
+
+		remove_lsb(pawns_on_last_rank);
+	}
 }
