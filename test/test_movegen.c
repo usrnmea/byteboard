@@ -835,7 +835,7 @@ void test_generate_pawn_promotions(void)
 
 	MoveList *move_list = init_move_list();
 
-	generate_pawn_promotions(move_list, pos, EMPTY, pieces(pos, W_PAWN));
+	generate_pawn_promotions(move_list, pos, UNIVERSE, pieces(pos, W_PAWN));
 
 	TEST_ASSERT_EQUAL(0, ml_len(move_list));
 
@@ -849,7 +849,7 @@ void test_generate_pawn_promotions(void)
 
 	move_list = init_move_list();
 
-	generate_pawn_promotions(move_list, pos, EMPTY, pieces(pos, W_PAWN));
+	generate_pawn_promotions(move_list, pos, UNIVERSE, pieces(pos, W_PAWN));
 
 	TEST_ASSERT_EQUAL(4, ml_len(move_list));
 
@@ -881,7 +881,7 @@ void test_generate_pawn_promotions(void)
 
 	move_list = init_move_list();
 
-	generate_pawn_promotions(move_list, pos, EMPTY, pieces(pos, B_PAWN));
+	generate_pawn_promotions(move_list, pos, UNIVERSE, pieces(pos, B_PAWN));
 
 	TEST_ASSERT_EQUAL(8, ml_len(move_list));
 
@@ -889,7 +889,7 @@ void test_generate_pawn_promotions(void)
 		Move move = ml_pop(move_list).move;
 
 		TEST_ASSERT_TRUE(
-			move.destination
+			square_to_bitboard(move.destination)
 			& (
 				square_to_bitboard(SQ_D1)
 				| square_to_bitboard(SQ_E1)
@@ -912,5 +912,4 @@ void test_generate_pawn_promotions(void)
 	free(move_list);
 	free(pos->state);
 	free(pos);
-
 }
