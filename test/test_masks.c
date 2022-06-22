@@ -60,7 +60,7 @@ void test_pawn_attack_mask(void)
 	);
 
 	TEST_ASSERT_EQUAL_UINT64(
-		0x40a00000000000ULL,
+		0xa00000000000ULL,
 		pawn_attack_mask(SQ_G7, 0x40a04000040000ULL, BLACK)
 	);
 
