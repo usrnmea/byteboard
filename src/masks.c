@@ -27,7 +27,7 @@ U64 pawn_attack_mask(Square target, U64 occupied, Color color)
 	assert(occupied != EMPTY);
 	assert(color < COLOR_NB);
 
-	return EMPTY;
+	return pawn_attack_pattern[color](target) & occupied;
 }
 
 U64 pawn_mask(Square target, U64 occupied, Color color)
@@ -36,7 +36,10 @@ U64 pawn_mask(Square target, U64 occupied, Color color)
 	assert(occupied != EMPTY);
 	assert(color < COLOR_NB);
 
-	return EMPTY;
+	return (
+		pawn_move_mask(target, occupied, color)
+		| pawn_attack_mask(target, occupied, color)
+	);
 }
 
 U64 rook_attacks_mask(Square target, U64 occupied)
