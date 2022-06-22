@@ -40,6 +40,35 @@ void test_pawn_move_mask(void)
 	);
 }
 
+void test_pawn_attack_mask(void)
+{
+	TEST_ASSERT_EQUAL_UINT64(
+		EMPTY, pawn_attack_mask(SQ_C2, 0x400ULL, WHITE)
+	);
+
+	TEST_ASSERT_EQUAL_UINT64(
+		0x500000000000ULL,
+		pawn_attack_mask(SQ_F7, 0x20500000000000ULL, BLACK)
+	);
+
+	TEST_ASSERT_EQUAL_UINT64(
+		0x20000ULL, pawn_attack_mask(SQ_C2, 0x20400ULL, WHITE)
+	);
+
+	TEST_ASSERT_EQUAL_UINT64(
+		EMPTY, pawn_attack_mask(SQ_C2, 0x40400ULL, WHITE)
+	);
+
+	TEST_ASSERT_EQUAL_UINT64(
+		0x40a00000000000ULL,
+		pawn_attack_mask(SQ_G7, 0x40a04000040000ULL, BLACK)
+	);
+
+	TEST_ASSERT_EQUAL_UINT64(
+		EMPTY, pawn_attack_mask(SQ_G7, 0x40400000000000ULL, BLACK)
+	);
+}
+
 void test_rook_attacks_mask(void)
 {
 	TEST_ASSERT_EQUAL_UINT64(
