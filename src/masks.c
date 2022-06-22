@@ -21,6 +21,24 @@ U64 pawn_move_mask(Square target, U64 occupied, Color color)
 	return bitboard;
 }
 
+U64 pawn_attack_mask(Square target, U64 occupied, Color color)
+{
+	assert(target < SQ_NB);
+	assert(occupied != EMPTY);
+	assert(color < COLOR_NB);
+
+	return EMPTY;
+}
+
+U64 pawn_mask(Square target, U64 occupied, Color color)
+{
+	assert(target < SQ_NB);
+	assert(occupied != EMPTY);
+	assert(color < COLOR_NB);
+
+	return EMPTY;
+}
+
 U64 rook_attacks_mask(Square target, U64 occupied)
 {
 	assert(target < SQ_NB);

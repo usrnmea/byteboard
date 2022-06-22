@@ -25,6 +25,34 @@ U64 pawn_move_mask(Square target, U64 occupied, Color color);
 
 /**
  * \brief Returns the bit of the board, where bits equal to one indicate the
+ * squares which the pawn can attack, ignoring the color of the attacked piece
+ *
+ * \param target square with pawn
+ *
+ * \param occupied bitboard with chess pieces
+ *
+ * \param color pawn color
+ *
+ * \return bitboard with pawn attack mask
+ */
+U64 pawn_attack_mask(Square target, U64 occupied, Color color);
+
+/**
+ * \brief Returns a bitboard consisting of the results of the functions
+ * #pawn_move_mask and #pawn_attack_mask
+ *
+ * \param target square with pawn
+ *
+ * \param occupied bitboard with chess pieces
+ *
+ * \param color pawn color
+ *
+ * \return bitboard with pawn attack and move mask
+ */
+U64 pawn_mask(Square target, U64 occupied, Color color);
+
+/**
+ * \brief Returns the bit of the board, where bits equal to one indicate the
  * squares to which the rook can move, not ignoring enemy pieces.
  *
  * \param target square with rook
