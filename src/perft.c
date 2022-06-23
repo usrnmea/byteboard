@@ -25,5 +25,7 @@ U64 perft(Position *pos, int depth)
 		undo_move(pos);
 	}
 
+	free(move_list);
+
 	return nodes;
 }
