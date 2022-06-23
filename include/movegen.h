@@ -245,4 +245,31 @@ void generate_pawn_promotions(
 	U64 pawns_on_last_rank
 );
 
+/**
+ * \brief Adds all possible moves of the #COMMON type to the #MoveList for
+ * sliding pieces.
+ *
+ * \param move_list the list with all moves
+ *
+ * \param position current position
+ *
+ * \param pt piece type
+ *
+ * \param check_ray check ray
+ *
+ * \param king_checkers pieces that check the king
+ *
+ * \param get_attacks pointer to the mask function
+ *
+ * \see https://www.chessprogramming.org/Sliding_Pieces
+ */
+void generate_sliding_pieces(
+	MoveList *move_list,
+	Position *pos,
+	PieceType pt,
+	U64 check_ray,
+	U64 king_checkers,
+	U64 (*get_attacks)(Square target, U64 occupied)
+);
+
 #endif
