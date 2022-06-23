@@ -11,6 +11,7 @@
 #include "perft.h"
 
 #include <stdlib.h>
+#include <string.h>
 
 // Initializing everything needed for tests
 void test_init(void)
@@ -1161,6 +1162,119 @@ void test_generate_pawn_common(void)
 	}
 
 	free(move_list);	
+	free(pos->state);
+	free(pos);
+}
+
+void test_generate_pawn_en_passant(void)
+{
+	Position *pos = init_position(
+		"1k6/8/8/3PpP2/8/8/8/4K3 b - e6 0 1"
+	);
+
+	PositionState state = *pos->state;
+	Board board = {};
+
+	memcpy(&board, &pos->board, sizeof(Board));
+
+	MoveList *move_list = init_move_list();
+
+	generate_pawn_en_passant(move_list, pos, UNIVERSE);
+
+	TEST_ASSERT_EQUAL(2, ml_len(move_list));
+
+	while(ml_len(move_list)) {
+		Move move = ml_pop(move_list).move;
+
+		TEST_ASSERT_EQUAL(SQ_E6, move.destination);
+
+		TEST_ASSERT_EQUAL(EN_PASSANT, move.move_type);
+		TEST_ASSERT_EQUAL(PAWN, move.moved_piece_type);
+		TEST_ASSERT_EQUAL(NO_PIECE_TYPE, move.promotion_piece_type);
+
+		TEST_ASSERT_EQUAL(WHITE, move.color);
+	}
+
+	TEST_ASSERT_EQUAL_MEMORY(&board, &pos->board, sizeof(Board));
+	TEST_ASSERT_EQUAL_MEMORY(&state, pos->state, sizeof(PositionState));
+
+	free(move_list);
+	free(pos->state);
+	free(pos);
+
+	pos = init_position(
+		"8/4R3/8/8/4pPp1/6K1/8/4k3 b - f3 0 1"
+	);
+
+	state = *pos->state;
+
+	memcpy(&board, &pos->board, sizeof(Board));
+
+	move_list = init_move_list();
+
+	generate_pawn_en_passant(move_list, pos, UNIVERSE);
+
+	TEST_ASSERT_EQUAL(1, ml_len(move_list));
+
+	while(ml_len(move_list)) {
+		Move move = ml_pop(move_list).move;
+
+		TEST_ASSERT_EQUAL(SQ_F3, move.destination);
+		TEST_ASSERT_EQUAL(SQ_G4, move.source);
+
+		TEST_ASSERT_EQUAL(EN_PASSANT, move.move_type);
+		TEST_ASSERT_EQUAL(PAWN, move.moved_piece_type);
+		TEST_ASSERT_EQUAL(NO_PIECE_TYPE, move.promotion_piece_type);
+
+		TEST_ASSERT_EQUAL(BLACK, move.color);
+	}
+
+	TEST_ASSERT_EQUAL_MEMORY(&board, &pos->board, sizeof(Board));
+	TEST_ASSERT_EQUAL_MEMORY(&state, pos->state, sizeof(PositionState));
+
+	free(move_list);
+	free(pos->state);
+	free(pos);
+
+	pos = init_position(
+		"8/4b3/1k6/1Pp5/8/K7/8/8 b - c6 0 1"
+	);
+
+	state = *pos->state;
+
+	memcpy(&board, &pos->board, sizeof(Board));
+
+	move_list = init_move_list();
+
+	generate_pawn_en_passant(move_list, pos, UNIVERSE);
+
+	TEST_ASSERT_EQUAL(0, ml_len(move_list));
+
+	TEST_ASSERT_EQUAL_MEMORY(&board, &pos->board, sizeof(Board));
+	TEST_ASSERT_EQUAL_MEMORY(&state, pos->state, sizeof(PositionState));
+
+	free(move_list);
+	free(pos->state);
+	free(pos);
+
+	pos = init_position(
+		"8/8/8/pP4k1/8/4K3/8/3n2b1 b - a6 0 1"
+	);
+
+	state = *pos->state;
+
+	memcpy(&board, &pos->board, sizeof(Board));
+
+	move_list = init_move_list();
+
+	generate_pawn_en_passant(move_list, pos, EMPTY);
+
+	TEST_ASSERT_EQUAL(0, ml_len(move_list));
+
+	TEST_ASSERT_EQUAL_MEMORY(&board, &pos->board, sizeof(Board));
+	TEST_ASSERT_EQUAL_MEMORY(&state, pos->state, sizeof(PositionState));
+
+	free(move_list);
 	free(pos->state);
 	free(pos);
 }
