@@ -651,16 +651,25 @@ U64 get_pinned(Position *pos)
 		& pos->state->allies
 	);
 
-	U64 sliding = (
+	U64 linear = (
 		pieces(pos, make_piece(!color, ROOK))
-		| pieces(pos, make_piece(!color, BISHOP))
 		| pieces(pos, make_piece(!color, QUEEN))
 	);
 
-	U64 pinners = queen_attacks_mask(
+	U64 diagonal = (
+		pieces(pos, make_piece(!color, BISHOP))
+		| pieces(pos, make_piece(!color, QUEEN))
+	);
+
+	U64 pinners = rook_attacks_mask(
 		king_sq,
 		pos->state->occupied ^ blockers
-	) & sliding;
+	) & linear;
+
+	pinners |= bishop_attacks_mask(
+		king_sq,
+		pos->state->occupied ^ blockers
+	) & diagonal;
 
 	U64 pinned = EMPTY;
 
