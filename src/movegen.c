@@ -536,11 +536,36 @@ void generate_sliding_pieces(
 	Position *pos,
 	PieceType pt,
 	U64 check_ray,
-	U64 king_checkers,
 	U64 (*get_attacks)(Square target, U64 occupied)
 )
 {
 	assert(pt == ROOK || pt == BISHOP || pt == QUEEN);
 	assert(pos != NULL);
 	assert(move_list != NULL);
+
+	Color color = !pos->state->previous_move.color;
+
+	U64 sources = pieces(pos, make_piece(color, pt));
+
+	while (sources) {
+		Square source = bit_scan_forward(sources);
+
+		U64 moves = get_attacks(source, pos->state->occupied);
+
+		moves = filter_legal_moves(
+			pos,
+			source,
+			moves,
+			check_ray
+		);
+
+		add_common_moves(
+			move_list,
+			make_piece(color, pt),
+			source,
+			moves
+		);
+
+		remove_lsb(sources);
+	}
 }
