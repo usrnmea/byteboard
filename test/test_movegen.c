@@ -8,6 +8,7 @@
 #include "rays.h"
 #include "patterns.h"
 #include "masks.h"
+#include "perft.h"
 
 #include <stdlib.h>
 
@@ -1159,7 +1160,82 @@ void test_generate_pawn_common(void)
 		TEST_ASSERT_EQUAL(PAWN, move.moved_piece_type);
 	}
 
-	free(move_list);
+	free(move_list);	
+	free(pos->state);
+	free(pos);
+}
+
+void test_generate_all_moves(void)
+{
+	Position *pos = init_position(
+		"rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1"
+	);
+
+	TEST_ASSERT_EQUAL_UINT32(20, perft(pos, 1));
+	TEST_ASSERT_EQUAL_UINT32(400, perft(pos, 2));
+	TEST_ASSERT_EQUAL_UINT32(8902, perft(pos, 3));
+	TEST_ASSERT_EQUAL_UINT32(197281, perft(pos, 4));
+
+	free(pos->state);
+	free(pos);
+
+	pos = init_position(
+		"r3k2r/p1ppqpb1/bn2pnp1/3PN3/1p2P3/2N2Q1p/PPPBBPPP/R3K2R w KQkq -"
+	);
+
+	TEST_ASSERT_EQUAL_UINT32(48, perft(pos, 1));
+	TEST_ASSERT_EQUAL_UINT32(2039, perft(pos, 2));
+	TEST_ASSERT_EQUAL_UINT32(97862, perft(pos, 3));
+	TEST_ASSERT_EQUAL_UINT32(4085603, perft(pos, 4));
+
+	free(pos->state);
+	free(pos);
+
+	pos = init_position(
+		"8/2p5/3p4/KP5r/1R3p1k/8/4P1P1/8 w - -"
+	);
+
+	TEST_ASSERT_EQUAL_UINT32(14, perft(pos, 1));
+	TEST_ASSERT_EQUAL_UINT32(191, perft(pos, 2));
+	TEST_ASSERT_EQUAL_UINT32(2812, perft(pos, 3));
+	TEST_ASSERT_EQUAL_UINT32(43238, perft(pos, 4));
+
+	free(pos->state);
+	free(pos);
+
+	pos = init_position(
+		"r3k2r/Pppp1ppp/1b3nbN/nP6/BBP1P3/q4N2/Pp1P2PP/R2Q1RK1 w kq - 0 1"
+	);
+
+	TEST_ASSERT_EQUAL_UINT32(6, perft(pos, 1));
+	TEST_ASSERT_EQUAL_UINT32(264, perft(pos, 2));
+	TEST_ASSERT_EQUAL_UINT32(9467, perft(pos, 3));
+	TEST_ASSERT_EQUAL_UINT32(422333, perft(pos, 4));
+
+	free(pos->state);
+	free(pos);
+
+	pos = init_position(
+		"rnbq1k1r/pp1Pbppp/2p5/8/2B5/8/PPP1NnPP/RNBQK2R w KQ - 1 8"
+	);
+
+	TEST_ASSERT_EQUAL_UINT32(44, perft(pos, 1));
+	TEST_ASSERT_EQUAL_UINT32(1486, perft(pos, 2));
+	TEST_ASSERT_EQUAL_UINT32(62379, perft(pos, 3));
+	TEST_ASSERT_EQUAL_UINT32(2103487, perft(pos, 4));
+
+	free(pos->state);
+	free(pos);
+
+	pos = init_position(
+		"r4rk1/1pp1qppp/p1np1n2/2b1p1B1/2B1P1b1/P1NP1N2/1PP1QPPP/R4RK1 w - - 0 10"
+	);
+
+	TEST_ASSERT_EQUAL_UINT32(1, perft(pos, 1));
+	TEST_ASSERT_EQUAL_UINT32(46, perft(pos, 2));
+	TEST_ASSERT_EQUAL_UINT32(2079, perft(pos, 3));
+	TEST_ASSERT_EQUAL_UINT32(89890, perft(pos, 4));
+
 	free(pos->state);
 	free(pos);
 }
