@@ -578,9 +578,6 @@ MoveList *generate_all_moves(Position *pos)
 
 	Color color = !pos->state->previous_move.color;
 
-	U64 occupied = pos->state->occupied;
-	U64 allies = pos->state->allies;
-	U64 enemies = pos->state->enemies;
 	U64 check_ray = UNIVERSE;
 
 
