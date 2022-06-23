@@ -282,6 +282,9 @@ void generate_castlings(Position *pos, MoveList *move_list)
 	Color color = !pos->state->previous_move.color;
 
 	U64 rooks = pieces(pos, make_piece(color, ROOK));
+	U64 king = pieces(pos, make_piece(color, KING));
+
+	Square king_square = bit_scan_forward(king);
 
 	castlings &= possible_castlings(
 		pos,
@@ -294,17 +297,20 @@ void generate_castlings(Position *pos, MoveList *move_list)
 	{
 		Square rook = bit_scan_forward(rooks);
 
-		if (castling_masks[rook] & castlings)
-			destinations |= square_to_bitboard(rook);
+		if (castling_masks[rook] & castlings) {
+			destinations |= (
+				(king >> 2) << (4 * (rook > king_square))
+			);
+		}
 
 		remove_lsb(rooks);
 	}
 
-        add_castlings(
-                move_list,
-                bit_scan_forward(pieces(pos, make_piece(color, KING))),
-                destinations
-        );
+	add_castlings(
+		move_list,
+		king_square,
+		destinations
+	);
 }
 
 U64 filter_legal_moves(
