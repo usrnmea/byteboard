@@ -12,7 +12,7 @@ project(
 source_files = [
     'src/main.c', 'src/bitboard.c', 'src/rays.c',
     'src/patterns.c', 'src/masks.c', 'src/position.c',
-    'src/evaluate.c', 'src/movegen.c'
+    'src/evaluate.c', 'src/movegen.c', 'src/perft.c'
 ]
 
 incdir = include_directories('include')

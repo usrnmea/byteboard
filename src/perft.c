@@ -84,7 +84,7 @@ U64 perft_test(Position *pos, int depth)
 
 		printf("    move: %c%c", source_file, source_rank);
 		printf(
-			"%c%c    nodes: %llu\n",
+			"%c%c    nodes: %lu\n",
 			destination_file,
 			destination_rank,
 			old_nodes
