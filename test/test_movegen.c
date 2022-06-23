@@ -1169,7 +1169,7 @@ void test_generate_pawn_common(void)
 void test_generate_pawn_en_passant(void)
 {
 	Position *pos = init_position(
-		"1k6/8/8/3PpP2/8/8/8/4K3 b - e6 0 1"
+		"1k6/8/8/3PpP2/8/8/8/4K3 w - e6 0 1"
 	);
 
 	PositionState state = *pos->state;
