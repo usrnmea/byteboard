@@ -524,6 +524,16 @@ void generate_pawn_promotions(
 	}
 }
 
+void generate_pawn_en_passant(
+	MoveList *move_list,
+	Position *pos,
+	U64 check_ray
+)
+{
+	assert(move_list != NULL);
+	assert(pos != NULL);
+}
+
 void generate_sliding_pieces(
 	MoveList *move_list,
 	Position *pos,

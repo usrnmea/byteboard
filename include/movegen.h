@@ -267,6 +267,21 @@ void generate_pawn_common(
 );
 
 /**
+ * \brief Adds all possible moves of the #EN_PASSANT type to the #MoveList
+ *
+ * \param move_list the list with all moves
+ *
+ * \param position current position
+ *
+ * \param check_ray check ray
+ */
+void generate_pawn_en_passant(
+	MoveList *move_list,
+	Position *pos,
+	U64 check_ray
+);
+
+/**
  * \brief Adds all possible moves of the #COMMON type to the #MoveList for
  * sliding pieces.
  *
