@@ -44,8 +44,6 @@ U64 perft(Position *pos, int depth)
 	U64 nodes = 0;
 	MoveList *move_list = generate_all_moves(pos);
 
-	U64 n_moves = ml_len(move_list);
-
 	for (int i = 0; i < ml_len(move_list); i++) {
 		do_move(pos, move_list->move_list[i].move);
 		nodes += perft(pos, depth - 1);
