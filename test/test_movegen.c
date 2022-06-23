@@ -1056,3 +1056,110 @@ void test_generate_sliding_pieces(void)
 	free(pos);
 	free(move_list);
 }
+
+void test_generate_pawn_common(void)
+{
+	Position *pos = init_position(
+		"rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1"
+	);
+
+	MoveList *move_list = init_move_list();
+
+	generate_pawn_common(move_list, pos, UNIVERSE, pieces(pos, W_PAWN));
+
+	TEST_ASSERT_EQUAL(16, ml_len(move_list));
+
+	free(move_list);
+	free(pos->state);
+	free(pos);
+
+	pos = init_position(
+		"rkr5/ppp3P1/8/8/8/2P5/P2PPP2/RNBQKBNR w KQq - 0 1"
+	);
+
+	move_list = init_move_list();
+
+	generate_pawn_common(move_list, pos, UNIVERSE, 0x43900ULL);
+
+	TEST_ASSERT_EQUAL(9, ml_len(move_list));
+
+	while(ml_len(move_list)) {
+		Move move = ml_pop(move_list).move;
+
+		TEST_ASSERT_NOT_EQUAL(SQ_NONE, move.destination);
+		TEST_ASSERT_NOT_EQUAL(SQ_NONE, move.source);
+
+		TEST_ASSERT_EQUAL(COMMON, move.move_type);
+
+		TEST_ASSERT_EQUAL(WHITE, move.color);
+
+		TEST_ASSERT_EQUAL(
+			NO_PIECE_TYPE,
+			move.promotion_piece_type
+		);
+
+		TEST_ASSERT_EQUAL(PAWN, move.moved_piece_type);
+	}
+
+	free(move_list);
+	free(pos->state);
+	free(pos);
+
+	pos = init_position(
+		"1k6/2p5/2p5/2pP4/3P4/3P4/8/4K3 b - - 0 1"
+	);
+
+	move_list = init_move_list();
+
+	generate_pawn_common(move_list, pos, UNIVERSE, pieces(pos, B_PAWN));
+
+	TEST_ASSERT_EQUAL(2, ml_len(move_list));
+
+	while(ml_len(move_list)) {
+		Move move = ml_pop(move_list).move;
+
+		TEST_ASSERT_EQUAL(COMMON, move.move_type);
+
+		TEST_ASSERT_EQUAL(BLACK, move.color);
+
+		TEST_ASSERT_EQUAL(
+			NO_PIECE_TYPE,
+			move.promotion_piece_type
+		);
+
+		TEST_ASSERT_EQUAL(PAWN, move.moved_piece_type);
+	}
+
+	free(move_list);
+	free(pos->state);
+	free(pos);
+
+	pos = init_position(
+		"5k2/8/8/8/1p6/8/1PK1P2r/8 w - - 0 1"
+	);
+
+	move_list = init_move_list();
+
+	generate_pawn_common(move_list, pos, UNIVERSE, pieces(pos, W_PAWN));
+
+	TEST_ASSERT_EQUAL(1, ml_len(move_list));
+
+	while(ml_len(move_list)) {
+		Move move = ml_pop(move_list).move;
+
+		TEST_ASSERT_EQUAL(COMMON, move.move_type);
+
+		TEST_ASSERT_EQUAL(WHITE, move.color);
+
+		TEST_ASSERT_EQUAL(
+			NO_PIECE_TYPE,
+			move.promotion_piece_type
+		);
+
+		TEST_ASSERT_EQUAL(PAWN, move.moved_piece_type);
+	}
+
+	free(move_list);
+	free(pos->state);
+	free(pos);
+}
