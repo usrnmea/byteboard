@@ -19,4 +19,16 @@
  */
 U64 perft(Position *pos, int depth);
 
+/**
+ * \brief This function is the copy of perft function but prints some debug
+ * information
+ *
+ * \param pos current position
+ *
+ * \param depth given depth
+ *
+ * \return number of generated nodes
+ */
+U64 perft_test(Position *pos, int depth);
+
 #endif
