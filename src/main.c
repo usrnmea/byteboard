@@ -8,6 +8,7 @@
 #include "position.h"
 #include "evaluate.h"
 #include "movegen.h"
+#include "perft.h"
 
 int main(void)
 {
