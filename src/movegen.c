@@ -204,7 +204,7 @@ U64 king_safe_moves_mask(
 	}
 
 	while (pawns) {
-		U64 crossing_moves = pawn_move_pattern[color](
+		U64 crossing_moves = pawn_attack_pattern[!color](
 			bit_scan_forward(pawns)
 		) & king_moves;
 
