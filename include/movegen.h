@@ -257,8 +257,6 @@ void generate_pawn_promotions(
  *
  * \param check_ray check ray
  *
- * \param king_checkers pieces that check the king
- *
  * \param get_attacks pointer to the mask function
  *
  * \see https://www.chessprogramming.org/Sliding_Pieces
@@ -268,7 +266,6 @@ void generate_sliding_pieces(
 	Position *pos,
 	PieceType pt,
 	U64 check_ray,
-	U64 king_checkers,
 	U64 (*get_attacks)(Square target, U64 occupied)
 );
 
