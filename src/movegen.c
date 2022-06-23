@@ -614,7 +614,7 @@ MoveList *generate_all_moves(Position *pos)
 	else if (check_type == SINGLE_CHECK) {
 		U64 king_checker = attacked_by(pos, king_sq, !color);
 		check_ray = ray_between[king_sq][
-			king_checker
+			bit_scan_forward(king_checker)
 		] | king_checker;
 	}
 
