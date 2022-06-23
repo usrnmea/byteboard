@@ -911,38 +911,55 @@ void test_get_pinned(void)
 	Position *pos_4 = init_position(
 		"1k1r4/8/8/6b1/8/8/8/q1BRK3 w - - 0 1"
 	);
+	Position *pos_5 = init_position(
+		"1k6/8/8/8/8/8/r3pK2/8 w - - 0 1"
+	);
+	Position *pos_6 = init_position(
+		"rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR b KQkq - 0 1"
+	);
+	Position *pos_7 = init_position(
+		"8/4n1n1/Q3rk2/q7/8/8/P2PP2P/R2NK2R b Q - 0 1"
+	);
+	Position *pos_8 = init_position(
+		"3Q4/4n1n1/4rk2/8/7B/8/4P2P/1q1NK2R b - - 0 1"
+	);
+	Position *pos_9 = init_position(
+		"1k1r4/8/8/6b1/8/8/8/q1BRK3 b - - 0 1"
+	);
+	Position *pos_10 = init_position(
+		"1k6/8/8/8/8/8/r3pK2/8 b - - 0 1"
+	);
 
-	pos_1->state->previous_move.color = BLACK;
+	TEST_ASSERT_EQUAL_UINT64(0x00ULL, get_pinned(pos_6));
 	TEST_ASSERT_EQUAL_UINT64(0x00ULL, get_pinned(pos_1));
-
-	pos_1->state->previous_move.color = WHITE;
-	TEST_ASSERT_EQUAL_UINT64(0x00ULL, get_pinned(pos_1));
-
-	pos_2->state->previous_move.color = BLACK;
 	TEST_ASSERT_EQUAL_UINT64(0x1800ULL, get_pinned(pos_2));
-
-	pos_2->state->previous_move.color = WHITE;
-	TEST_ASSERT_EQUAL_UINT64(0x100000000000ULL, get_pinned(pos_2));
-
-	pos_3->state->previous_move.color = BLACK;
+	TEST_ASSERT_EQUAL_UINT64(0x100000000000ULL, get_pinned(pos_7));
 	TEST_ASSERT_EQUAL_UINT64(0x1008ULL, get_pinned(pos_3));
-
-	pos_3->state->previous_move.color = WHITE;
-	TEST_ASSERT_EQUAL_UINT64(0x10000000000000ULL, get_pinned(pos_3));
-
-	pos_4->state->previous_move.color = WHITE;
+	TEST_ASSERT_EQUAL_UINT64(0x10000000000000ULL, get_pinned(pos_8));
+	TEST_ASSERT_EQUAL_UINT64(0x00ULL, get_pinned(pos_9));
 	TEST_ASSERT_EQUAL_UINT64(0x00ULL, get_pinned(pos_4));
-
-	pos_4->state->previous_move.color = BLACK;
-	TEST_ASSERT_EQUAL_UINT64(0x00ULL, get_pinned(pos_4));
+	TEST_ASSERT_EQUAL_UINT64(0x00ULL, get_pinned(pos_5));
+	TEST_ASSERT_EQUAL_UINT64(0x00ULL, get_pinned(pos_10));
 
 	free(pos_1->state);
 	free(pos_2->state);
 	free(pos_3->state);
 	free(pos_4->state);
+	free(pos_5->state);
+	free(pos_6->state);
+	free(pos_7->state);
+	free(pos_8->state);
+	free(pos_9->state);
+	free(pos_10->state);
 
 	free(pos_1);
 	free(pos_2);
 	free(pos_3);
 	free(pos_4);
+	free(pos_5);
+	free(pos_6);
+	free(pos_7);
+	free(pos_8);
+	free(pos_9);
+	free(pos_10);
 }
