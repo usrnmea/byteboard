@@ -1,5 +1,3 @@
-#include <stdio.h>
-
 #include "bitboard.h"
 #include "bitboard_mapping.h"
 #include "piece.h"
@@ -11,6 +9,8 @@
 #include "movegen.h"
 #include "perft.h"
 
+#include <stdio.h>
+
 int main(void)
 {
 	init_rays();
@@ -21,7 +21,7 @@ int main(void)
 
 	printf(
 		"Hello, byteboard!\nNodes in the start position: %llu",
-		perft_test(pos, 2)
+		perft_test(pos, 3)
 	);
 
 	free(pos->state);
