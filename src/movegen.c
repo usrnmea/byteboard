@@ -314,6 +314,9 @@ U64 filter_legal_moves(
 	U64 check_ray
 )
 {
+	assert(source < SQ_NB);
+	assert(pos != NULL);
+
 	U64 source_bitboard = square_to_bitboard(source);
 	U64 allies = pos->state->allies;
 	U64 pinned = get_pinned(pos);
@@ -360,6 +363,9 @@ void generate_knight_moves(
 	MoveList *move_list, Position *pos, U64 check_ray
 )
 {
+	assert(move_list != NULL);
+	assert(pos != NULL);
+
 	Color color = !pos->state->previous_move.color;
 	U64 knights = pieces(pos, make_piece(color, KNIGHT));
 	U64 allies = pos->state->allies;
@@ -384,6 +390,9 @@ void generate_pawn_moves(
 	MoveList *move_list, Position *pos, U64 check_ray
 )
 {
+	assert(move_list != NULL);
+	assert(pos != NULL);
+
 	Color color = !pos->state->previous_move.color;
 
 	U64 pawns = pieces(pos, make_piece(color, PAWN));
@@ -520,4 +529,18 @@ void generate_pawn_promotions(
 
 		remove_lsb(pawns_on_last_rank);
 	}
+}
+
+void generate_sliding_pieces(
+	MoveList *move_list,
+	Position *pos,
+	PieceType pt,
+	U64 check_ray,
+	U64 king_checkers,
+	U64 (*get_attacks)(Square target, U64 occupied)
+)
+{
+	assert(pt == ROOK || pt == BISHOP || pt == QUEEN);
+	assert(pos != NULL);
+	assert(move_list != NULL);
 }
