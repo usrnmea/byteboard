@@ -962,4 +962,22 @@ void test_get_pinned(void)
 	free(pos_8);
 	free(pos_9);
 	free(pos_10);
+
+	Position *pos = init_position(
+		"7k/b5b1/8/8/8/Q7/1P6/K1R3rq w - - 0 1"
+	);
+
+	TEST_ASSERT_EQUAL(0x204ULL, get_pinned(pos));
+
+	free(pos->state);
+	free(pos);
+
+	pos = init_position(
+		"4R3/8/4b3/4k3/5n2/2bN4/7Q/1K6 b - - 0 1"
+	);
+
+	TEST_ASSERT_EQUAL(0x100020000000ULL, get_pinned(pos));
+
+	free(pos->state);
+	free(pos);
 }
