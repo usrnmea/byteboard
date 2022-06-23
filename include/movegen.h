@@ -248,6 +248,25 @@ void generate_pawn_promotions(
 );
 
 /**
+ * \brief Adds all possible moves of the #COMMON type to the #MoveList
+ *
+ * \param move_list the list with all moves
+ *
+ * \param position current position
+ *
+ * \param check_ray check ray
+ *
+ * \param pawns pawns without pawns on the #RANK_2 (for #BLACK) or #RANK_7 (
+ * for #WHITE)
+ */
+void generate_pawn_common(
+	MoveList *move_list,
+	Position *position,
+	U64 check_ray,
+	U64 pawns
+);
+
+/**
  * \brief Adds all possible moves of the #COMMON type to the #MoveList for
  * sliding pieces.
  *

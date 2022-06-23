@@ -494,6 +494,17 @@ void generate_pawn_moves(
 	}
 }
 
+void generate_pawn_common(
+	MoveList *move_list,
+	Position *position,
+	U64 check_ray,
+	U64 pawns
+)
+{
+	assert(move_list != NULL);
+	assert(position != NULL);
+}
+
 void generate_pawn_promotions(
 	MoveList *move_list,
 	Position *pos,
