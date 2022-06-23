@@ -532,6 +532,60 @@ void generate_pawn_en_passant(
 {
 	assert(move_list != NULL);
 	assert(pos != NULL);
+
+	if(check_ray == EMPTY)
+		return;
+
+	Color color = !pos->state->previous_move.color;
+
+	U64 pawns = pieces(pos, make_piece(color, PAWN));
+
+	Move prev_mv = pos->state->previous_move;
+	Square dst = prev_mv.destination;
+	Square src = prev_mv.source;
+
+	U64 dst_bb = square_to_bitboard(dst);
+
+	if(
+		prev_mv.moved_piece_type == PAWN
+		&& (dst > src ? dst - src : src - dst) == 16
+	) {
+		U64 sources = (dst_bb << 1 | dst_bb >> 1) & pawns;
+
+		Square target = dst + 8 - (16 * color);
+
+		U64 tmp = sources;
+
+		while(tmp) {
+			U64 source = square_to_bitboard(
+				bit_scan_forward(sources)
+			);
+
+			pos->state->occupied ^= dst_bb | source;
+			pos->state->allies ^= source;
+			pos->state->enemies ^= dst_bb;
+
+			CheckType check_type = get_check_type(pos);
+
+			pos->state->occupied ^= dst_bb | source;
+			pos->state->allies ^= source;
+			pos->state->enemies ^= dst_bb;
+
+			if(check_type) {
+				sources ^= source;
+			}
+
+			remove_lsb(tmp);
+		}
+
+		add_en_passant(
+			move_list,
+			color,
+			sources,
+			target
+		);
+
+	}
 }
 
 void generate_sliding_pieces(
