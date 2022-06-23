@@ -39,15 +39,17 @@ typedef struct MoveList {
 MoveList *init_move_list(void);
 
 /**
- * \brief Generates all possible moves at the given position.
+ * \brief Returns a special structure with an array of all
+ * legal moves available at the given position.
  *
  * \param pos current position
  *
- * \return pointer to #MoveList
+ * \return pointer to the #MoveList with all legal moves or NULL in case
+ * generation failed.
  *
- * \see https://www.chessprogramming.org/Moves
+ * \see https://www.chessprogramming.org/Move_Generation
  */
-MoveList *generate_all_moves(Position pos);
+MoveList *generate_all_moves(Position *pos);
 
 /**
  * \brief Adds to the move_list all moves from the Square source
@@ -251,7 +253,7 @@ void generate_pawn_promotions(
  *
  * \param move_list the list with all moves
  *
- * \param position current position
+ * \param pos current position
  *
  * \param pt piece type
  *
