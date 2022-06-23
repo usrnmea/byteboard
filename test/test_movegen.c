@@ -1113,7 +1113,7 @@ void test_generate_pawn_common(void)
 
 	generate_pawn_common(move_list, pos, UNIVERSE, pieces(pos, B_PAWN));
 
-	TEST_ASSERT_EQUAL(2, ml_len(move_list));
+	TEST_ASSERT_EQUAL(3, ml_len(move_list));
 
 	while(ml_len(move_list)) {
 		Move move = ml_pop(move_list).move;
