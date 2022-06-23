@@ -648,7 +648,7 @@ U64 get_pinned(Position *pos)
 
 	U64 blockers = (
 		queen_attacks_mask(king_sq, pos->state->occupied)
-		& pos->state->occupied
+		& pos->state->allies
 	);
 
 	U64 sliding = (

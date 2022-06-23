@@ -329,7 +329,7 @@ U64 filter_legal_moves(
 
 		U64 blockers = queen_attacks_mask(
 			king, pos->state->occupied
-		) & pos->state->occupied;
+		) & pos->state->allies;
 
 		U64 sliding = (
 			pieces(pos, make_piece(!color, ROOK))
