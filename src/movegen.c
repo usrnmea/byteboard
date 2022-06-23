@@ -511,7 +511,9 @@ void generate_pawn_en_passant(
 		prev_mv.moved_piece_type == PAWN
 		&& (dst > src ? dst - src : src - dst) == 16
 	) {
-		U64 sources = (dst_bb << 1 | dst_bb >> 1) & pawns;
+		U64 sources = (
+			(dst_bb & ~FILE_H) << 1 | (dst_bb & ~FILE_A) >> 1
+		) & pawns;
 
 		Square target = dst + 8 - (16 * color);
 
