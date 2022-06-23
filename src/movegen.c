@@ -583,7 +583,9 @@ MoveList *generate_all_moves(Position *pos)
 
 	CheckType check_type = get_check_type(pos);
 
-	Square king_sq = pieces(pos, make_piece(color, KING));
+	Square king_sq = bit_scan_forward(
+		pieces(pos, make_piece(color, KING))
+	);
 
 	if (check_type == NO_CHECK) {
 		check_ray = UNIVERSE;
