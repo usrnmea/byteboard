@@ -397,60 +397,17 @@ void generate_pawn_moves(
 
 	U64 pawns = pieces(pos, make_piece(color, PAWN));
 
-	// Promotions
 	U64 pawns_on_last_rank = pawns & (color ? RANK_2 : RANK_7);
 	pawns ^= pawns_on_last_rank;
 
-	while (pawns_on_last_rank) {
-		Square pawn_sq = bit_scan_forward(pawns_on_last_rank);
+	generate_pawn_promotions(
+		move_list,
+		pos,
+		check_ray,
+		pawns_on_last_rank
+	);
 
-		U64 pawn_moves = pawn_mask(
-			pawn_sq, pos->state->occupied, color
-		);
-
-		pawn_moves = filter_legal_moves(
-			pos,
-			pawn_sq,
-			pawn_moves,
-			check_ray
-		);
-
-		add_promotions(
-			move_list,
-			color,
-			pawn_sq,
-			pawn_moves
-		);
-
-		remove_lsb(pawns_on_last_rank);
-	}
-
-	// Common moves
-	U64 tmp = pawns;
-	while (tmp) {
-		Square pawn_sq = bit_scan_forward(tmp);
-
-		U64 pawn_moves = pawn_mask(
-			pawn_sq, pos->state->occupied, color
-		);
-
-
-		pawn_moves = filter_legal_moves(
-			pos,
-			pawn_sq,
-			pawn_moves,
-			check_ray
-		);
-
-		add_common_moves(
-			move_list,
-			make_piece(color, PAWN),
-			pawn_sq,
-			pawn_moves
-		);
-
-		remove_lsb(tmp);
-	}
+	generate_pawn_common(move_list, pos, check_ray, pawns);
 
 	Move prev_mv = pos->state->previous_move;
 	Square dst = prev_mv.destination;
