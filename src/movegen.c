@@ -503,6 +503,31 @@ void generate_pawn_common(
 {
 	assert(move_list != NULL);
 	assert(position != NULL);
+
+	Color color = !position->state->previous_move.color;
+	while(pawns) {
+		Square target = bit_scan_forward(pawns);
+
+		U64 pawn_moves = pawn_mask(
+			target, position->state->occupied, color
+		);
+
+		pawn_moves = filter_legal_moves(
+			position,
+			target,
+			pawn_moves,
+			check_ray
+		);
+
+		add_common_moves(
+			move_list,
+			make_piece(color, PAWN),
+			target,
+			pawn_moves
+		);
+
+		remove_lsb(pawns);
+	}
 }
 
 void generate_pawn_promotions(
