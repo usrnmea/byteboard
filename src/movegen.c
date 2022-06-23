@@ -569,3 +569,90 @@ void generate_sliding_pieces(
 		remove_lsb(sources);
 	}
 }
+
+MoveList *generate_all_moves(Position *pos)
+{
+	assert(pos != NULL);
+
+	MoveList *move_list = init_move_list();
+
+	Color color = !pos->state->previous_move.color;
+
+	U64 occupied = pos->state->occupied;
+	U64 allies = pos->state->allies;
+	U64 enemies = pos->state->enemies;
+	U64 check_ray = UNIVERSE;
+
+
+	CheckType check_type = get_check_type(pos);
+
+	Square king_sq = pieces(pos, make_piece(color, KING));
+
+	if (check_type == NO_CHECK) {
+		check_ray = UNIVERSE;
+
+		generate_castlings(pos, move_list);
+	}
+
+	else if (check_type == SINGLE_CHECK) {
+		U64 king_checker = attacked_by(pos, king_sq, !color);
+		check_ray = ray_between[king_sq][
+			king_checker
+		] | king_checker;
+	}
+
+	else if (check_type == DOUBLE_CHECK) {
+		check_ray = EMPTY;
+	}
+
+	else {
+		return NULL;
+	}
+
+	U64 king_legal_squares = king_safe_moves_mask(pos, king_sq, color);
+
+	add_common_moves(
+		move_list,
+		make_piece(color, KING),
+		king_sq,
+		king_legal_squares
+	);
+
+	generate_sliding_pieces(
+		move_list,
+		pos,
+		QUEEN,
+		check_ray,
+		queen_attacks_mask
+	);
+
+	generate_sliding_pieces(
+		move_list,
+		pos,
+		ROOK,
+		check_ray,
+		rook_attacks_mask
+	);
+
+	generate_sliding_pieces(
+		move_list,
+		pos,
+		BISHOP,
+		check_ray,
+		bishop_attacks_mask
+	);
+
+	generate_knight_moves(
+		move_list,
+		pos,
+		check_ray
+	);
+
+	generate_pawn_moves(
+		move_list,
+		pos,
+		check_ray
+	);
+
+	return move_list;
+}
