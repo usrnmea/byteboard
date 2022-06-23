@@ -10,6 +10,7 @@
 #include "perft.h"
 
 #include <stdio.h>
+#include <stdlib.h>
 
 int main(void)
 {
@@ -20,8 +21,9 @@ int main(void)
 	);
 
 	printf(
-		"Hello, byteboard!\nNodes in the start position: %llu",
-		perft_test(pos, 3)
+		"Hello, byteboard!\nNodes in the start position: %lu",
+		perft_test(pos, 2)
+>>>>>>> 34a0ee4cd72fc40be2c87c569a3bb61e96d2bdd7
 	);
 
 	free(pos->state);
