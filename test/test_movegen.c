@@ -913,3 +913,146 @@ void test_generate_pawn_promotions(void)
 	free(pos->state);
 	free(pos);
 }
+
+void test_generate_sliding_pieces(void)
+{
+	Position *pos = init_position(
+		"rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1"
+	);
+	MoveList *move_list = init_move_list();
+
+	generate_sliding_pieces(
+		move_list,
+		pos,
+		QUEEN,
+		UNIVERSE,
+		queen_attacks_mask
+	);
+
+	generate_sliding_pieces(
+		move_list,
+		pos,
+		ROOK,
+		UNIVERSE,
+		rook_attacks_mask
+	);
+
+	generate_sliding_pieces(
+		move_list,
+		pos,
+		BISHOP,
+		UNIVERSE,
+		bishop_attacks_mask
+	);
+
+	TEST_ASSERT_EQUAL_UINT32(0, ml_len(move_list));
+
+	free(pos->state);
+	free(pos);
+	free(move_list);
+
+	pos = init_position(
+		"r3k2r/p1ppqpb1/bn2pnp1/3PN3/1p2P3/2N2Q1p/PPPBBPPP/R3K2R w KQkq - 0 1"
+	);
+	move_list = init_move_list(); // 25 possible moves
+
+	generate_sliding_pieces(
+		move_list,
+		pos,
+		QUEEN,
+		UNIVERSE,
+		queen_attacks_mask
+	);
+
+	generate_sliding_pieces(
+		move_list,
+		pos,
+		ROOK,
+		UNIVERSE,
+		rook_attacks_mask
+	);
+
+	generate_sliding_pieces(
+		move_list,
+		pos,
+		BISHOP,
+		UNIVERSE,
+		bishop_attacks_mask
+	);
+
+	TEST_ASSERT_EQUAL_UINT32(25, ml_len(move_list));
+
+	free(pos->state);
+	free(pos);
+	free(move_list);
+
+	pos = init_position(
+		"r3k2r/p1ppqpb1/bn2pnp1/3PN3/1p2P3/2N2Q1p/PPPBBPPP/R3K2R b KQkq - 0 1"
+	);
+	move_list = init_move_list(); // 21 possible moves
+
+	generate_sliding_pieces(
+		move_list,
+		pos,
+		QUEEN,
+		UNIVERSE,
+		queen_attacks_mask
+	);
+
+	generate_sliding_pieces(
+		move_list,
+		pos,
+		ROOK,
+		UNIVERSE,
+		rook_attacks_mask
+	);
+
+	generate_sliding_pieces(
+		move_list,
+		pos,
+		BISHOP,
+		UNIVERSE,
+		bishop_attacks_mask
+	);
+
+	TEST_ASSERT_EQUAL_UINT32(21, ml_len(move_list));
+
+	free(pos->state);
+	free(pos);
+	free(move_list);
+
+	pos = init_position(
+		"4q2k/8/8/1Q6/5N2/8/r2RK3/6B1 w - - 0 1"
+	);
+	move_list = init_move_list(); // 3 possible moves
+
+	generate_sliding_pieces(
+		move_list,
+		pos,
+		QUEEN,
+		0x1010101010100000,
+		queen_attacks_mask
+	);
+
+	generate_sliding_pieces(
+		move_list,
+		pos,
+		ROOK,
+		0x1010101010100000,
+		rook_attacks_mask
+	);
+
+	generate_sliding_pieces(
+		move_list,
+		pos,
+		BISHOP,
+		0x1010101010100000,
+		bishop_attacks_mask
+	);
+
+	TEST_ASSERT_EQUAL_UINT32(3, ml_len(move_list));
+
+	free(pos->state);
+	free(pos);
+	free(move_list);
+}
