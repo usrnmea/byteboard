@@ -9,6 +9,10 @@
 
 Move str_to_move(Position *pos, char *str)
 {
+	assert(pos != NULL);
+	assert(str != NULL);
+	assert(strlen(str) == 4 || strlen(str) == 5);
+
 	size_t size = strlen(str);
 
 	assert(size == 4 || size == 5);
@@ -80,6 +84,13 @@ Move str_to_move(Position *pos, char *str)
 
 void move_to_str(Move move, char *str)
 {
+	assert(move.moved_piece_type != NO_PIECE_TYPE);
+	assert(move.color < COLOR_NB);
+	assert(move.destination < SQ_NB);
+	assert(move.source < SQ_NB);
+
+	assert(str != NULL);
+
 	Square source = move.source;
 	Square destination = move.destination;
 
