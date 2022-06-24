@@ -19,13 +19,10 @@ int main(void)
 	init_rays();
 
 	Position *pos = init_position(
-		"r3k2r/p1ppqpb1/bn2pnp1/3PN3/1p2P3/2N2Q1p/PPPBBPPP/R3K2R w KQkq -"
+		"r4rk1/1pp1qppp/p1np1n2/2b1p1B1/2B1P1b1/P1NP1N2/1PP1QPPP/R3K2R w KQ - 0 10"
 	);
 
-	printf(
-		"Hello, byteboard!\nNodes in the start position: %lu",
-		perft_test(pos, 3)
-	);
+	str_to_move(pos, "e1g1");
 
 	free(pos->state);
 	free(pos);
