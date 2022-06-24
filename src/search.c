@@ -2,6 +2,7 @@
 #include "position.h"
 #include "evaluate.h"
 #include "movegen.h"
+#include "search.h"
 
 #include <assert.h>
 #include <stdlib.h>
@@ -11,17 +12,23 @@ ExtMove find_best(Position *position)
 {
 	assert(position != NULL);
 
-	return (ExtMove) {
+	MoveList *move_list = generate_all_moves(position);
+
+	ExtMove random_move = {
 		.move = (Move) {
-			.move_type = COMMON,
-			.moved_piece_type = NO_PIECE_TYPE,
-			.promotion_piece_type = NO_PIECE_TYPE,
-			.color = COLOR_NB,
-			.destination = SQ_NONE,
 			.source = SQ_NONE,
+			.destination = SQ_NONE,
+			.color = COLOR_NB,
 		},
 		.eval = NO_EVAL,
 	};
+
+	if(ml_len(move_list))
+		random_move = get_random_move(move_list);
+
+	free(move_list);
+
+	return random_move;
 }
 
 ExtMove get_random_move(MoveList *move_list)
