@@ -251,7 +251,7 @@ Castling possible_castlings(
 		);
 
 		bool ooo = !(
-			pos->state->occupied & 0x0CULL
+			pos->state->occupied & 0xEULL
 			|| attacked_by(pos, SQ_D1, BLACK)
 			|| attacked_by(pos, SQ_C1, BLACK)
 		);
@@ -265,7 +265,7 @@ Castling possible_castlings(
 		);
 
 		bool ooo = !(
-			pos->state->occupied & 0x0C00000000000000ULL
+			pos->state->occupied & 0xE00000000000000ULL
 			|| attacked_by(pos, SQ_D8, WHITE)
 			|| attacked_by(pos, SQ_C8, WHITE)
 		);

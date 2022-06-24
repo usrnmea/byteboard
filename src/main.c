@@ -17,12 +17,12 @@ int main(void)
 	init_rays();
 
 	Position *pos = init_position(
-		"rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1"
+		"r3k2r/p1ppqpb1/bn2pnp1/3PN3/1p2P3/2N2Q1p/PPPBBPPP/R3K2R w KQkq -"
 	);
 
 	printf(
 		"Hello, byteboard!\nNodes in the start position: %lu",
-		perft_test(pos, 2)
+		perft_test(pos, 3)
 	);
 
 	free(pos->state);
