@@ -354,6 +354,10 @@ U64 filter_legal_moves(
 			king, pos->state->occupied ^ source_bitboard
 		) & diagonal;
 
+		pinners ^= queen_attacks_mask(
+			king, pos->state->occupied
+		) & pinners;
+
 		Square pinner = bit_scan_forward(attacked_by(
 			pos,
 			source,
