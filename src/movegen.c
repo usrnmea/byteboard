@@ -336,20 +336,23 @@ U64 filter_legal_moves(
 		U64 king_bitboard = pieces(pos, make_piece(color, KING));
 		Square king = bit_scan_forward(king_bitboard);
 
-		U64 blockers = queen_attacks_mask(
-			king, pos->state->occupied
-		) & pos->state->allies;
-
-		U64 sliding = (
+		U64 linear = (
 			pieces(pos, make_piece(!color, ROOK))
-			| pieces(pos, make_piece(!color, BISHOP))
 			| pieces(pos, make_piece(!color, QUEEN))
 		);
 
-		U64 pinners = queen_attacks_mask(
-			king,
-			pos->state->occupied ^ blockers
-		) & sliding;
+		U64 diagonal = (
+			pieces(pos, make_piece(!color, BISHOP))
+			| pieces(pos, make_piece(!color, QUEEN))
+		);
+
+		U64 pinners = rook_attacks_mask(
+			king, pos->state->occupied ^ source_bitboard
+		) & linear;
+
+		pinners |= bishop_attacks_mask(
+			king, pos->state->occupied ^ source_bitboard
+		) & diagonal;
 
 		Square pinner = bit_scan_forward(attacked_by(
 			pos,
