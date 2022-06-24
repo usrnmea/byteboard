@@ -1345,10 +1345,9 @@ void test_generate_all_moves(void)
 		"r4rk1/1pp1qppp/p1np1n2/2b1p1B1/2B1P1b1/P1NP1N2/1PP1QPPP/R4RK1 w - - 0 10"
 	);
 
-	TEST_ASSERT_EQUAL_UINT32(1, perft(pos, 1));
-	TEST_ASSERT_EQUAL_UINT32(46, perft(pos, 2));
-	TEST_ASSERT_EQUAL_UINT32(2079, perft(pos, 3));
-	TEST_ASSERT_EQUAL_UINT32(89890, perft(pos, 4));
+	TEST_ASSERT_EQUAL_UINT32(46, perft(pos, 1));
+	TEST_ASSERT_EQUAL_UINT32(2079, perft(pos, 2));
+	TEST_ASSERT_EQUAL_UINT32(89890, perft(pos, 3));
 
 	free(pos->state);
 	free(pos);
