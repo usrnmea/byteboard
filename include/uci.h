@@ -9,19 +9,21 @@
 /**
  * \brief Converts a given string to a move.
  *
+ * \param pos current position
+ *
  * \param str string
  *
  * \return Converted move #Move
  */
-Move str_to_move(char *str);
+Move str_to_move(Position *pos, char *str);
 
 /**
  * \brief Converts a given move to a string.
  *
  * \param move #Move
  *
- * \return Converted C string
+ * \param str out parameter, pointer to the converted string
  */
-char *move_to_str(Move move);
+void move_to_str(Move move, char *str);
 
 #endif
