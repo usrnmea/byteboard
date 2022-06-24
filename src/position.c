@@ -630,7 +630,7 @@ void undo_move(Position *pos)
 			destination
 		);
 		if (captured) {
-			set_piece(pos, piece, destination);
+			set_piece(pos, captured, destination);
 		}
 	}
 
