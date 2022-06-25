@@ -18,11 +18,9 @@ int main(void)
 {
 	init_rays();
 
-	Position *pos = init_position(
-		"r4rk1/1pp1qppp/p1np1n2/2b1p1B1/2B1P1b1/P1NP1N2/1PP1QPPP/R3K2R w KQ - 0 10"
+	Position *pos = get_position(
+		"position fen 5r2/k5P1/8/8/8/8/8/2K5 w - - 0 1 moves g7f8q"
 	);
-
-	str_to_move(pos, "e1g1");
 
 	free(pos->state);
 	free(pos);

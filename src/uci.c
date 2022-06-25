@@ -3,9 +3,11 @@
 #include "bitboard.h"
 #include "piece.h"
 #include "patterns.h"
+#include "uci.h"
 
 #include <assert.h>
 #include <string.h>
+#include <stdint.h>
 
 Move str_to_move(Position *pos, char *str)
 {
@@ -14,8 +16,6 @@ Move str_to_move(Position *pos, char *str)
 	assert(strlen(str) == 4 || strlen(str) == 5);
 
 	size_t size = strlen(str);
-
-	assert(size == 4 || size == 5);
 
 	Square source_sq = (str[0] - 'a') + (str[1] - '1') * 8;
 	Square target_sq = (str[2] - 'a') + (str[3] - '1') * 8;
@@ -117,4 +117,71 @@ void move_to_str(Move move, char *str)
 		else if (pt == ROOK)
 			str[4] = 'r';
 	}
+}
+
+Position *get_position(char *str)
+{
+	assert(strlen(str) > 8);
+
+	str += 9;
+
+	char *curr_char = str;
+	Position *pos = NULL;
+
+	if (strncmp("startpos", str, 8) == 0) {
+		pos = init_position(STARTPOS);
+	}
+
+	else {
+		curr_char = strstr(str, "fen");
+
+		if (curr_char != NULL) {
+			// Now pointer on the fen
+			curr_char += 4;
+
+			pos = init_position(curr_char);
+		}
+
+		else
+			pos = init_position(STARTPOS);
+	}
+
+	curr_char = strstr(str, "moves");
+
+	if (curr_char != NULL) {
+		curr_char += 6;
+
+	        while (*curr_char) {
+			Move move;
+
+			if (curr_char[4] == ' ' || strlen(curr_char) == 4) {
+				char command[5] = {
+					curr_char[0], curr_char[1],
+					curr_char[2], curr_char[3],
+					'\0'
+				};
+
+				move = str_to_move(pos, command);
+				do_move(pos, move);
+
+				curr_char += 5;
+
+			}
+
+			else {
+				char command[6] = {
+					curr_char[0], curr_char[1],
+					curr_char[2], curr_char[3],
+					curr_char[4], '\0'
+				};
+
+				move = str_to_move(pos, command);
+				do_move(pos, move);
+
+				curr_char += 6;
+			}
+	        }
+	}
+
+	return pos;
 }
