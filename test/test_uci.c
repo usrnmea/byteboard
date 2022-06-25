@@ -133,3 +133,38 @@ void test_move_to_str(void)
 	TEST_ASSERT_EQUAL_STRING("e2e4", str_3);
 	TEST_ASSERT_EQUAL_STRING("g7f8n", str_4);
 }
+
+void test_get_position(void) 
+{
+	Position *pos = get_position("position startpos");
+
+	TEST_ASSERT_EQUAL_UINT64(0xFFFF00000000FFFF, pos->state->occupied);
+
+	free(pos->state);
+	free(pos);
+
+	pos = get_position("position fen r3k2r/p1ppqpb1/bn2pnp1/3PN3/1p2P3/2N2Q1p/PPPBBPPP/R3K2R w KQkq -");
+	TEST_ASSERT_EQUAL_UINT64(0x917D731812A4FF91, pos->state->occupied);
+
+	free(pos->state);
+	free(pos);
+
+	pos = get_position("position startpos moves e2e4 e7e5");
+	TEST_ASSERT_EQUAL_UINT64(0xFFEF00101000EFFF, pos->state->occupied);
+
+	free(pos->state);
+	free(pos);
+
+	pos = get_position("position fen r3k2r/p1ppqpb1/bn2pnp1/3PN3/1p2P3/2N2Q1p/PPPBBPPP/R3K2R w KQkq - 0 1 moves e2a6");
+	TEST_ASSERT_EQUAL_UINT64(0x917D731812A4EF91, pos->state->occupied);
+
+	free(pos->state);
+	free(pos);
+
+	pos = get_position("position fen 5r2/k5P1/8/8/8/8/8/2K5 w - - 0 1 moves g7f8q");
+	TEST_ASSERT_EQUAL_UINT64(0x2001000000000004, pos->state->occupied);
+	TEST_ASSERT_EQUAL_UINT64(0x2000000000000000, pos->board.WhiteQueens);
+
+	free(pos->state);
+	free(pos);
+}
