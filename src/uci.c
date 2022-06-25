@@ -10,6 +10,7 @@
 #include <string.h>
 #include <stdint.h>
 #include <stdlib.h>
+#include <stdio.h>
 
 Move str_to_move(Position *pos, char *str)
 {
@@ -125,6 +126,9 @@ Position *get_position(char *str)
 {
 	assert(strlen(str) > 8);
 
+	if (str[strlen(str) - 1] == '\n')
+		str[strlen(str) - 1] = '\0';
+
 	str += 9;
 
 	char *curr_char = str;
@@ -168,6 +172,9 @@ Position *get_position(char *str)
 
 				curr_char += 4;
 
+				if (curr_char[0] == ' ')
+					curr_char += 1;
+
 			}
 
 			else {
@@ -181,6 +188,9 @@ Position *get_position(char *str)
 				do_move(pos, move);
 
 				curr_char += 5;
+
+				if (curr_char[0] == ' ')
+					curr_char += 1;
 			}
 	        }
 	}
@@ -192,6 +202,9 @@ ExtMove get_go(Position *pos, char *str)
 {
 	assert(pos != NULL);
 	assert(strlen(str) > 2);
+
+	if (str[strlen(str) - 1] == '\n')
+		str[strlen(str) - 1] = '\0';
 
 	uint32_t depth = 0;
 
@@ -209,4 +222,63 @@ ExtMove get_go(Position *pos, char *str)
 	ExtMove best_move = find_best(pos);
 
 	return best_move;
+}
+
+void uci_loop()
+{
+	setbuf(stdin, NULL);
+	setbuf(stdout, NULL);
+
+	char input[2000];
+
+	Position *pos = NULL;
+	ExtMove best_move;
+
+	while (1) {
+		memset(input, 0, sizeof(input));
+		fflush(stdout);
+
+		if (!fgets(input, 2000, stdin))
+			continue;
+
+		else if (input[0] == '\n')
+			continue;
+
+		else if (strncmp(input, "isready", 7) == 0) {
+			printf("readyok\n");
+			continue;
+		}
+
+		else if (strncmp(input, "position", 8) == 0) {
+			pos = get_position(input);
+		}
+
+		else if (strncmp(input, "ucinewgame", 10) == 0) {
+			pos = get_position(STARTPOS);
+		}
+
+		else if (strncmp(input, "go", 2) == 0) {
+			best_move = get_go(pos, input);
+
+			char move[6] = ".....";
+			move_to_str(best_move.move, move);
+
+			if (move[4] == '.') move[4] = '\0';
+
+			printf("bestmove %s\n", move);
+		}
+
+		else if (strncmp(input, "quit", 4) == 0) {
+			break;
+		}
+
+		else if (strncmp(input, "uci", 3) == 0) {
+			printf("id name byteboard\n");
+			printf("id author Shark && Duck\n");
+			printf("uciok\n");
+		}
+	}
+
+	free(pos->state);
+	free(pos);
 }
