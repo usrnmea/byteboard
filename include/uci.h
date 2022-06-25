@@ -6,6 +6,9 @@
 
 #include "position.h"
 
+/// Start position macro
+#define STARTPOS "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1"
+
 /**
  * \brief Converts a given string to a move.
  *
@@ -25,5 +28,14 @@ Move str_to_move(Position *pos, char *str);
  * \param str out parameter, pointer to the converted string
  */
 void move_to_str(Move move, char *str);
+
+/**
+ * \brief Converts a given UCI string to the position.
+ *
+ * \param str string in the UCI format
+ *
+ * \return pointer to the #Position
+ */
+Position *get_position(char *str);
 
 #endif
