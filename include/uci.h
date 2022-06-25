@@ -51,4 +51,9 @@ Position *get_position(char *str);
  */
 ExtMove get_go(Position *pos, char *str);
 
+/**
+ * \brief Main UCI loop.
+ */
+void uci_loop();
+
 #endif
