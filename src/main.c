@@ -22,6 +22,8 @@ int main(void)
 		"position fen 5r2/k5P1/8/8/8/8/8/2K5 w - - 0 1 moves g7f8q"
 	);
 
+	get_go(pos, "go depth 7");
+
 	free(pos->state);
 	free(pos);
 

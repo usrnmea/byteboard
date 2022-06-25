@@ -4,10 +4,12 @@
 #include "piece.h"
 #include "patterns.h"
 #include "uci.h"
+#include "search.h"
 
 #include <assert.h>
 #include <string.h>
 #include <stdint.h>
+#include <stdlib.h>
 
 Move str_to_move(Position *pos, char *str)
 {
@@ -164,7 +166,7 @@ Position *get_position(char *str)
 				move = str_to_move(pos, command);
 				do_move(pos, move);
 
-				curr_char += 5;
+				curr_char += 4;
 
 			}
 
@@ -178,10 +180,30 @@ Position *get_position(char *str)
 				move = str_to_move(pos, command);
 				do_move(pos, move);
 
-				curr_char += 6;
+				curr_char += 5;
 			}
 	        }
 	}
 
 	return pos;
+}
+
+ExtMove get_go(Position *pos, char *str)
+{
+	uint32_t depth = 0;
+
+	char *curr_depth = NULL;
+
+	if (strstr(str, "depth")) {
+		curr_depth = strstr(str, "depth");
+		depth = atoi(curr_depth + 6);
+	}
+
+	else
+		depth = 5;
+
+	// TODO: add depth parameter in find_best function
+	ExtMove best_move = find_best(pos);
+
+	return best_move;
 }
