@@ -190,6 +190,9 @@ Position *get_position(char *str)
 
 ExtMove get_go(Position *pos, char *str)
 {
+	assert(pos != NULL);
+	assert(strlen(str) > 2);
+
 	uint32_t depth = 0;
 
 	char *curr_depth = NULL;
