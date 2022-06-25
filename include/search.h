@@ -14,9 +14,11 @@
  *
  * \param position position
  *
+ * \param depth search depth
+ *
  * \return #ExtMove with the evaluation and the move
  */
-ExtMove find_best(Position *position);
+ExtMove find_best(Position *position, uint32_t depth);
 
 /**
  * \brief Selects one random move from the #MoveList

@@ -8,7 +8,7 @@
 #include <stdlib.h>
 #include <time.h>
 
-ExtMove find_best(Position *position)
+ExtMove find_best(Position *position, __attribute__((unused)) uint32_t depth)
 {
 	assert(position != NULL);
 
