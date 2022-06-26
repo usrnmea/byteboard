@@ -11,11 +11,6 @@
 uint32_t max_depth = 3;
 
 ExtMove best_move = {
-	.move = (Move) {
-		.source = SQ_NONE,
-		.destination = SQ_NONE,
-		.color = COLOR_NB,
-	},
 	.eval = NO_EVAL,
 };
 
@@ -30,6 +25,8 @@ ExtMove find_best(Position *position, uint32_t depth)
 	int32_t turn = !position->state->previous_move.color == 0 ? 1 : -1;
 
 	Evaluation best_score = negamax(position, move_list, max_depth, turn);
+
+	best_move.eval = best_score;
 
 	free(move_list);
 	return best_move;
