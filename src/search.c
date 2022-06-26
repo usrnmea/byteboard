@@ -22,9 +22,7 @@ ExtMove find_best(Position *position, uint32_t depth)
 
 	max_depth = depth;
 
-	int32_t turn = !position->state->previous_move.color == 0 ? 1 : -1;
-
-	Evaluation best_score = negamax(position, move_list, max_depth, turn);
+	Evaluation best_score = negamax(position, move_list, max_depth);
 
 	best_move.eval = best_score;
 
@@ -45,11 +43,11 @@ ExtMove get_random_move(MoveList *move_list)
 }
 
 Evaluation negamax(
-	Position *pos, MoveList *move_list, uint32_t depth, uint32_t turn
+	Position *pos, MoveList *move_list, uint32_t depth
 )
 {
 	if (depth == 0) {
-		return turn * evaluate_material(pos);
+		return evaluate_material(pos);
 	}
 
 	Evaluation max_score = BLACK_WIN;
@@ -59,7 +57,7 @@ Evaluation negamax(
 
 		MoveList *next_moves = generate_all_moves(pos);
 
-		Evaluation score = -negamax(pos, next_moves, depth - 1, -turn);
+		Evaluation score = -negamax(pos, next_moves, depth - 1);
 
 		if (score > max_score) {
 			max_score = score;

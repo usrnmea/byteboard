@@ -45,7 +45,7 @@ ExtMove get_random_move(MoveList *move_list);
  * \return best evaluation of the given position
  */
 Evaluation negamax(
-	Position *pos, MoveList *move_list, uint32_t depth, uint32_t turn
+	Position *pos, MoveList *move_list, uint32_t depth
 );
 
 #endif
