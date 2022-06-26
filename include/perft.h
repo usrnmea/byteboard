@@ -8,8 +8,8 @@
 #include "position.h"
 
 /**
- * \brief Debugging function to walk the move generation tree of strictly legal moves
- * to count all the leaf nodes of a certain depth
+ * \brief Debugging function to walk the move generation tree of strictly legal
+ * moves to count all the leaf nodes of a certain depth
  *
  * \param pos current position
  *

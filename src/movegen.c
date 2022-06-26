@@ -27,8 +27,8 @@ MoveList *init_move_list(void)
 
 void add_common_moves(
 	MoveList *move_list,
-	const Piece piece,
-	const Square source,
+	Piece piece,
+	Square source,
 	U64 destinations
 )
 {
@@ -56,7 +56,7 @@ void add_common_moves(
 
 void add_castlings(
 	MoveList *move_list,
-	const Square source,
+	Square source,
 	U64 destinations
 )
 {
@@ -278,6 +278,9 @@ Castling possible_castlings(
 
 void generate_castlings(Position *pos, MoveList *move_list)
 {
+	assert(pos != NULL);
+	assert(move_list != NULL);
+
 	Castling castlings = pos->state->castling;
 	Color color = !pos->state->previous_move.color;
 

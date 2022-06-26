@@ -12,6 +12,10 @@
 #include <stdlib.h>
 #include <stdio.h>
 
+static char piece_symbol[PIECE_TYPE_NB + 1] = {
+	' ', 'p', 'n', 'b', 'r', 'q', 'k'
+};
+
 Move str_to_move(Position *pos, char *str)
 {
 	assert(pos != NULL);
@@ -111,14 +115,13 @@ void move_to_str(Move move, char *str)
 	if (move.move_type == PROMOTION) {
 		PieceType pt = move.promotion_piece_type;
 
-		if (pt == KNIGHT)
-			str[4] = 'n';
-		else if (pt == QUEEN)
-			str[4] = 'q';
-		else if (pt == BISHOP)
-			str[4] = 'b';
-		else if (pt == ROOK)
-			str[4] = 'r';
+		if(pt < KNIGHT || pt > QUEEN)
+			str[4] = '\0';
+		else
+			str[4] = piece_symbol[pt];
+
+	} else {
+		str[4] = '\0';
 	}
 }
 
@@ -230,7 +233,7 @@ void uci_loop()
 
 	char input[2000];
 
-	Position *pos = NULL;
+	Position *pos = init_position(STARTPOS);
 	ExtMove best_move;
 
 	while (1) {
@@ -261,8 +264,6 @@ void uci_loop()
 
 			char move[6] = ".....";
 			move_to_str(best_move.move, move);
-
-			if (move[4] == '.') move[4] = '\0';
 
 			printf("bestmove %s\n", move);
 		}
