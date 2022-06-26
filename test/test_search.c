@@ -24,7 +24,7 @@ void test_find_best(void)
 		"rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1"
 	);
 
-	ExtMove best = find_best(pos);
+	ExtMove best = find_best(pos, 1);
 
 	TEST_ASSERT_TRUE(best.move.moved_piece_type != NO_PIECE_TYPE);
 	TEST_ASSERT_TRUE(best.move.color < COLOR_NB);
