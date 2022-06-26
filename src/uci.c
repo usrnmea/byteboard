@@ -219,7 +219,7 @@ ExtMove get_go(Position *pos, char *str)
 		depth = 5;
 
 	// TODO: add depth parameter in find_best function
-	ExtMove best_move = find_best(pos);
+	ExtMove best_move = find_best(pos, depth);
 
 	return best_move;
 }
