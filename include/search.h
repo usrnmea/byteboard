@@ -2,21 +2,24 @@
  * \file
  */
 #ifndef __SEARCH_H__
-#define __SEARCH_H__ 
+#define __SEARCH_H__
 
 #include "bitboard.h"
 #include "position.h"
 #include "evaluate.h"
 #include "movegen.h"
 
+
 /**
  * \brief Returns the best move according to the chess engine
  *
  * \param position position
  *
+ * \param depth the depth at which the engine will find the best move
+ *
  * \return #ExtMove with the evaluation and the move
  */
-ExtMove find_best(Position *position);
+ExtMove find_best(Position *position, uint32_t depth);
 
 /**
  * \brief Selects one random move from the #MoveList
@@ -26,5 +29,23 @@ ExtMove find_best(Position *position);
  * \return random move
  */
 ExtMove get_random_move(MoveList *move_list);
+
+/**
+ * \brief Negamax algorithm which returns the best evaluation of the given
+ * position.
+ *
+ * \param pos current position
+ *
+ * \param move_list legal moves
+ *
+ * \param depth
+ *
+ * \param turn -1 when black's turn to move and 1 when white's turn to move
+ *
+ * \return best evaluation of the given position
+ */
+int64_t negamax(
+	Position *pos, MoveList *move_list, uint32_t depth, uint32_t turn
+);
 
 #endif
