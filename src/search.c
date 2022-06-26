@@ -72,5 +72,12 @@ Evaluation negamax(
 		undo_move(pos);
 	}
 
+	if(ml_len(move_list) == 0) {
+		if(get_check_type(pos))
+			max_score = WHITE_WIN;
+		else
+			max_score = DRAW;
+	}
+
 	return max_score;
 }
