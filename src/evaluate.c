@@ -14,6 +14,10 @@ Evaluation evaluate_position(const Position *pos)
 {
 	assert(pos != NULL);
 
+	Evaluation eval = NO_EVAL;
+
+	eval += evaluate_material(pos);
+
 	return NO_EVAL;
 }
 
