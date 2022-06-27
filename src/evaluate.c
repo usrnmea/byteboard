@@ -18,13 +18,13 @@ Evaluation evaluate_material(const Position *pos)
 			pieces(pos, make_piece(WHITE, pt))
 		);
 
-		value += piece_count * piece_type_value[pt];
+		value += piece_count * piece_type_value[pt - 1];
 
 		piece_count = population_count(
 			pieces(pos, make_piece(BLACK, pt))
 		);
 
-		value -= piece_count * piece_type_value[pt];
+		value -= piece_count * piece_type_value[pt - 1];
 	}
 
 	return value;
