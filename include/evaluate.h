@@ -27,6 +27,15 @@ typedef struct ExtMove {
 extern Evaluation piece_type_value[PIECE_TYPE_NB];
 
 /**
+ * \brief Main function for position evaluation.
+ *
+ * \param position position
+ *
+ * \return evaluation
+ */
+Evaluation evaluate_position(const Position *position);
+
+/**
  * \brief Evaluates the position on the material on both sides
  *
  * \param position

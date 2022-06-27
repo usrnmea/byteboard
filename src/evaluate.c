@@ -4,10 +4,18 @@
 #include "evaluate.h"
 
 #include <assert.h>
+#include <stdlib.h>
 
 Evaluation piece_type_value[PIECE_TYPE_NB] = {
 	10, 35, 35, 52, 100, 0
 };
+
+Evaluation evaluate_position(const Position *pos)
+{
+	assert(pos != NULL);
+
+	return NO_EVAL;
+}
 
 Evaluation evaluate_material(const Position *pos)
 {
