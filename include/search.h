@@ -40,12 +40,15 @@ ExtMove get_random_move(MoveList *move_list);
  *
  * \param depth
  *
- * \param turn -1 when black's turn to move and 1 when white's turn to move
+ * \param alpha #Evaluation alpha parameter for negamax
+ *
+ * \param beta #Evaluation beta parameter for negamax
  *
  * \return best evaluation of the given position
  */
 Evaluation negamax(
-	Position *pos, MoveList *move_list, uint32_t depth
+	Position *pos, MoveList *move_list, uint32_t depth,
+	Evaluation alpha, Evaluation beta
 );
 
 #endif

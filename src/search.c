@@ -25,7 +25,10 @@ ExtMove find_best(Position *position, uint32_t depth)
 
 		MoveList *new_move_list = generate_all_moves(position);
 
-		move.eval = -negamax(position, new_move_list, depth - 1);
+		move.eval = -negamax(
+			position, new_move_list, depth - 1,
+			BLACK_WIN, WHITE_WIN
+		);
 
 		free(new_move_list);
 
@@ -53,7 +56,8 @@ ExtMove get_random_move(MoveList *move_list)
 }
 
 Evaluation negamax(
-	Position *pos, MoveList *move_list, uint32_t depth
+	Position *pos, MoveList *move_list, uint32_t depth,
+	Evaluation alpha, Evaluation beta
 )
 {
 	Evaluation max_score = BLACK_WIN;
@@ -72,7 +76,9 @@ Evaluation negamax(
 
 		MoveList *next_moves = generate_all_moves(pos);
 
-		Evaluation score = -negamax(pos, next_moves, depth - 1);
+		Evaluation score = -negamax(
+			pos, next_moves, depth - 1, -beta, -alpha
+		);
 
 		if (score > max_score)
 			max_score = score;
@@ -80,6 +86,12 @@ Evaluation negamax(
 		free(next_moves);
 
 		undo_move(pos);
+
+		if (max_score > alpha)
+			alpha = max_score;
+
+		if (alpha >= beta)
+			break;
 	}
 
 end:
