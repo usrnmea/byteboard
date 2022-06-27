@@ -53,14 +53,14 @@ void test_evaluate_central_pawns(void)
 {
 	Position *pos = init_position("K7/8/8/4p3/3PP3/2P5/8/k7 w - - 0 1");
 
-	TEST_ASSERT_GREATER_THAN(DRAW, evaluate_material(pos));
+	TEST_ASSERT_GREATER_THAN(DRAW, evaluate_central_pawns(pos));
 
 	free(pos->state);
 	free(pos);
 
 	pos = init_position("K7/8/2p2p2/3pp3/4P3/2P5/8/k7 w - - 0 1");
 
-	TEST_ASSERT_LESS_THAN(DRAW, evaluate_material(pos));
+	TEST_ASSERT_LESS_THAN(DRAW, evaluate_central_pawns(pos));
 
 	free(pos->state);
 	free(pos);
@@ -72,7 +72,7 @@ void test_evaluate_doubled_pawns(void)
 		"4k3/pp1pppp1/3p2p1/8/8/8/PPPPPPPP/4K3 w - - 0 1"
 	);
 
-	TEST_ASSERT_GREATER_THAN(DRAW, evaluate_material(pos));
+	TEST_ASSERT_GREATER_THAN(DRAW, evaluate_doubled_pawns(pos));
 
 	free(pos->state);
 	free(pos);
@@ -81,7 +81,7 @@ void test_evaluate_doubled_pawns(void)
 		"4k3/pp1pppp1/3p2p1/8/8/P2P2P1/P1PP1PP1/4K3 w - - 0 1"
 	);
 
-	TEST_ASSERT_LESS_THAN(DRAW, evaluate_material(pos));
+	TEST_ASSERT_LESS_THAN(DRAW, evaluate_doubled_pawns(pos));
 
 	free(pos->state);
 	free(pos);
