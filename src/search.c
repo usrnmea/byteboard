@@ -8,25 +8,35 @@
 #include <stdlib.h>
 #include <time.h>
 
-uint32_t max_depth = 3;
-
-ExtMove best_move = {
-	.eval = NO_EVAL,
-};
-
 ExtMove find_best(Position *position, uint32_t depth)
 {
 	assert(position != NULL);
 
 	MoveList *move_list = generate_all_moves(position);
 
-	max_depth = depth;
+	ExtMove best_move = {
+		.eval = BLACK_WIN
+	};
 
-	Evaluation best_score = negamax(position, move_list, max_depth);
+	while(ml_len(move_list)) {
+		ExtMove move = ml_pop(move_list);
 
-	best_move.eval = best_score;
+		do_move(position, move.move);
+
+		MoveList *new_move_list = generate_all_moves(position);
+
+		move.eval = negamax(position, new_move_list, depth - 1);
+
+		free(new_move_list);
+
+		undo_move(position);
+
+		if(move.eval >= BLACK_WIN)
+			best_move = move;
+	}
 
 	free(move_list);
+
 	return best_move;
 }
 
@@ -46,11 +56,16 @@ Evaluation negamax(
 	Position *pos, MoveList *move_list, uint32_t depth
 )
 {
-	if (depth == 0) {
-		return evaluate_material(pos);
-	}
-
 	Evaluation max_score = BLACK_WIN;
+
+
+	if (depth == 0) {
+		Color color = !pos->state->previous_move.color;
+
+		max_score = evaluate_material(pos) * (color ? -1 : 1);
+
+		goto end;
+	}
 
 	for (uint32_t i = 0; i < ml_len(move_list); i++) {
 		do_move(pos, move_list->move_list[i].move);
@@ -59,22 +74,18 @@ Evaluation negamax(
 
 		Evaluation score = -negamax(pos, next_moves, depth - 1);
 
-		if (score > max_score) {
+		if (score > max_score)
 			max_score = score;
 
-			if (depth == max_depth) {
-				move_list->move_list[i].eval = score;
-				best_move = move_list->move_list[i];
-			}
-		}
-
 		free(next_moves);
+
 		undo_move(pos);
 	}
 
+end:
 	if(ml_len(move_list) == 0) {
 		if(get_check_type(pos))
-			max_score = WHITE_WIN;
+			max_score = BLACK_WIN;
 		else
 			max_score = DRAW;
 	}
