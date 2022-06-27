@@ -51,14 +51,14 @@ void test_evaluate_material(void)
 
 void test_evaluate_central_pawns(void)
 {
-	Position *pos = init_position("K7/8/8/4p3/3PP3/2P5/8/k7 w - - 0 1")
+	Position *pos = init_position("K7/8/8/4p3/3PP3/2P5/8/k7 w - - 0 1");
 
 	TEST_ASSERT_GREATER_THAN(DRAW, evaluate_material(pos));
 
 	free(pos->state);
 	free(pos);
 
-	pos = init_position("K7/8/2p2p2/3pp3/4P3/2P5/8/k7 w - - 0 1")
+	pos = init_position("K7/8/2p2p2/3pp3/4P3/2P5/8/k7 w - - 0 1");
 
 	TEST_ASSERT_LESS_THAN(DRAW, evaluate_material(pos));
 
