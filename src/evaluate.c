@@ -17,6 +17,7 @@ Evaluation evaluate_position(const Position *pos)
 	Evaluation eval = NO_EVAL;
 
 	eval += evaluate_material(pos);
+	eval += evaluate_central_pawns(pos);
 
 	return NO_EVAL;
 }
