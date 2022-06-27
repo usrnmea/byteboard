@@ -25,13 +25,13 @@ ExtMove find_best(Position *position, uint32_t depth)
 
 		MoveList *new_move_list = generate_all_moves(position);
 
-		move.eval = negamax(position, new_move_list, depth - 1);
+		move.eval = -negamax(position, new_move_list, depth - 1);
 
 		free(new_move_list);
 
 		undo_move(position);
 
-		if(move.eval >= BLACK_WIN)
+		if(move.eval >= best_move.eval)
 			best_move = move;
 	}
 
