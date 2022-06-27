@@ -27,6 +27,9 @@ extern const U64 RANK_3;
 extern const U64 RANK_2;
 extern const U64 RANK_1;
 
+/// Nubmer of ranks
+extern const uint32_t RANK_NB;
+
 /// [FILE_1;FILE_8] bitboard represenration of chess files(vertical lines). 
 extern const U64 FILE_H;
 extern const U64 FILE_G;
@@ -36,6 +39,14 @@ extern const U64 FILE_D;
 extern const U64 FILE_C;
 extern const U64 FILE_B;
 extern const U64 FILE_A;
+
+/// Number of files
+extern const uint32_t FILE_NB;
+
+/// Array with all ranks
+extern const U64 ranks[8];
+/// Array with all files
+extern const U64 files[8];
 
 /// Bitboard of all light squares (1 = light, 0 = dark)
 extern const U64 LIGHT_SQUARES;
