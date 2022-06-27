@@ -66,7 +66,7 @@ Evaluation negamax(
 	if (depth == 0) {
 		Color color = !pos->state->previous_move.color;
 
-		max_score = evaluate_material(pos) * (color ? -1 : 1);
+		max_score = evaluate_position(pos) * (color ? -1 : 1);
 
 		goto end;
 	}
