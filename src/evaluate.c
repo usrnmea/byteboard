@@ -46,5 +46,28 @@ Evaluation evaluate_central_pawns(const Position *pos)
 {
 	assert(pos != NULL);
 
-	return NO_EVAL;
+	Evaluation value = DRAW;
+
+	U64 white_pawns = pieces(pos, W_PAWN);
+	U64 black_pawns = pieces(pos, B_PAWN);
+
+	Evaluation central_pawn_value[2] = {5, 2};
+
+	value += population_count(
+		0x1818000000ULL & white_pawns
+	) * central_pawn_value[0];
+
+	value -= population_count(
+		0x1818000000ULL & black_pawns
+	) * central_pawn_value[0];
+
+	value += population_count(
+		0x3c24243c0000ULL & white_pawns
+	) * central_pawn_value[1];
+
+	value -= population_count(
+		0x3c24243c0000ULL & black_pawns
+	) * central_pawn_value[1];
+
+	return value;
 }
