@@ -41,3 +41,10 @@ Evaluation evaluate_material(const Position *pos)
 
 	return value;
 }
+
+Evaluation evaluate_central_pawns(const Position *pos)
+{
+	assert(pos != NULL);
+
+	return NO_EVAL;
+}
