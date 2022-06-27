@@ -77,5 +77,22 @@ Evaluation evaluate_doubled_pawns(const Position *pos)
 {
 	assert(pos != NULL);
 
-	return NO_EVAL;
+	Evaluation value = DRAW;
+
+	U64 white_pawns = pieces(pos, W_PAWN);
+	U64 black_pawns = pieces(pos, B_PAWN);
+
+	for(uint32_t i = 0; i < FILE_NB; i++) {
+		uint32_t pawns_nb = population_count(white_pawns & files[i]);
+
+		value -= pawns_nb * 5;
+		value += !!pawns_nb * 5;
+
+		pawns_nb = population_count(black_pawns & files[i]);
+
+		value += pawns_nb * 5;
+		value -= !!pawns_nb * 5;
+	}
+
+	return value;
 }
