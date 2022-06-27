@@ -53,4 +53,13 @@ Evaluation evaluate_material(const Position *position);
  */
 Evaluation evaluate_central_pawns(const Position *position);
 
+/**
+ * \brieft Evaluates doubled pawns
+ *
+ * \param position position
+ *
+ * \return evaluation
+ */
+Evaluation evaluate_doubled_pawns(const Position *position);
+
 #endif
