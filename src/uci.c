@@ -209,7 +209,7 @@ ExtMove get_go(Position *pos, char *str)
 	if (str[strlen(str) - 1] == '\n')
 		str[strlen(str) - 1] = '\0';
 
-	uint32_t depth = 0;
+	uint32_t depth = 5;
 
 	char *curr_depth = NULL;
 
@@ -217,9 +217,6 @@ ExtMove get_go(Position *pos, char *str)
 		curr_depth = strstr(str, "depth");
 		depth = atoi(curr_depth + 6);
 	}
-
-	else
-		depth = 5;
 
 	ExtMove best_move = find_best(pos, depth);
 
