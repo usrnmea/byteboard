@@ -136,3 +136,25 @@ void test_evaluate_doubled_pawns(void)
 	free(pos->state);
 	free(pos);
 }
+
+void test_evaluate_king_position(void)
+{
+	Position *pos = init_position(
+		"r6r/ppq1pp1p/2n2npk/2Pp4/1P1P2b1/2N2N2/P3BPPP/R2Q1RK1 b - -"
+		" 0 1"
+	);
+
+	TEST_ASSERT_GREATER_THAN(DRAW, evaluate_king_position(pos, MIDDLEGAME));
+
+	free(pos->state);
+	free(pos);
+
+	pos = init_position(
+		"8/8/r5kP/6P1/1R6/8/8/6K1 w - - 0 1"
+	);
+
+	TEST_ASSERT_LESS_THAN(DRAW, evaluate_king_position(pos, ENDGAME));
+
+	free(pos->state);
+	free(pos);
+}
