@@ -23,6 +23,15 @@ typedef struct ExtMove {
 	Evaluation eval;	///< Evaluation(Use #NO_EVAL by default)
 } ExtMove;
 
+/// Game phases. Depending on the phase of the game, one or another score can
+/// take on very different meanings
+typedef enum GamePhase {
+	Opening,
+	Middlegame,
+	Endgame,
+	GamePhasesNumber,
+} GamePhase;
+
 /// Returns the value of the #PieceType
 extern Evaluation piece_type_value[PIECE_TYPE_NB];
 
