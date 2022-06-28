@@ -31,6 +31,21 @@ ExtMove find_best(Position *position, uint32_t depth);
 ExtMove get_random_move(MoveList *move_list);
 
 /**
+ * \brief Function which realises quiescence search algorithm.
+ *
+ * \param pos current position
+ *
+ * \param alpha alpha value
+ *
+ * \param beta beta value
+ *
+ * \return evaluation of the quiet moves
+ *
+ * \see https://www.chessprogramming.org/Quiescence_Search
+ */
+Evaluation quiescence(Position *pos, Evaluation alpha, Evaluation beta);
+
+/**
  * \brief Negamax algorithm which returns the best evaluation of the given
  * position.
  *

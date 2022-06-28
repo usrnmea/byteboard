@@ -55,6 +55,50 @@ ExtMove get_random_move(MoveList *move_list)
 	return move_list->move_list[i];
 }
 
+Evaluation quiescence(Position *pos, Evaluation alpha, Evaluation beta)
+{
+	assert(pos != NULL);
+
+	Color color = !pos->state->previous_move.color;
+	Evaluation stand_pat = evaluate_position(pos) * (color ? -1 : 1);
+
+	if (stand_pat >= beta)
+		return beta;
+	if (alpha < stand_pat)
+		alpha = stand_pat;
+
+	MoveList *move_list = generate_all_moves(pos);
+
+	if (ml_len(move_list) > 0) {
+		for (uint32_t i = 0; i < ml_len(move_list); i++) {
+			Move current_move = move_list->move_list[i].move;
+
+			// Capture
+			if (piece_on(pos, current_move.destination) != NO_PIECE)
+			{
+				do_move(pos, current_move);
+
+				Evaluation score = -quiescence(
+					pos, -beta, -alpha
+				);
+
+				undo_move(pos);
+
+				if (score >= beta) {
+					free(move_list);
+					return beta;
+				}
+				if (score > alpha)
+					alpha = score;
+			}
+		}
+	}
+
+	free(move_list);
+
+	return alpha;
+}
+
 Evaluation negamax(
 	Position *pos, MoveList *move_list, uint32_t depth,
 	Evaluation alpha, Evaluation beta
@@ -64,9 +108,7 @@ Evaluation negamax(
 
 
 	if (depth == 0) {
-		Color color = !pos->state->previous_move.color;
-
-		max_score = evaluate_position(pos) * (color ? -1 : 1);
+		max_score = quiescence(pos, alpha, beta);
 
 		goto end;
 	}
