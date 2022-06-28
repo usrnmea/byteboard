@@ -105,11 +105,11 @@ Evaluation evaluate_central_pawns(const Position *pos)
 
 	value += population_count(
 		0x1818000000ULL & white_pawns
-	) * 3;
+	) * 10;
 
 	value -= population_count(
 		0x1818000000ULL & black_pawns
-	) * 3;
+	) * 10;
 
 	return value;
 }
@@ -126,13 +126,13 @@ Evaluation evaluate_doubled_pawns(const Position *pos)
 	for(uint32_t i = 0; i < FILE_NB; i++) {
 		uint32_t pawns_nb = population_count(white_pawns & files[i]);
 
-		value -= pawns_nb * 5;
-		value += !!pawns_nb * 5;
+		value -= pawns_nb * 15;
+		value += !!pawns_nb * 15;
 
 		pawns_nb = population_count(black_pawns & files[i]);
 
-		value += pawns_nb * 5;
-		value -= !!pawns_nb * 5;
+		value += pawns_nb * 15;
+		value -= !!pawns_nb * 15;
 	}
 
 	return value;
