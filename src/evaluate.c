@@ -10,6 +10,13 @@ Evaluation piece_type_value[PIECE_TYPE_NB] = {
 	10, 35, 35, 52, 100, 0
 };
 
+GamePhase get_game_phase(const Position *pos)
+{
+	assert(pos != NULL);
+
+	return OPENING;
+}
+
 Evaluation evaluate_position(const Position *pos)
 {
 	assert(pos != NULL);

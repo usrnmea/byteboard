@@ -36,6 +36,15 @@ typedef enum GamePhase {
 extern Evaluation piece_type_value[PIECE_TYPE_NB];
 
 /**
+ * \brief Function for determining the phase of the game
+ *
+ * \param position position
+ *
+ * \return Game phase
+ */
+GamePhase get_game_phase(const Position *position);
+
+/**
  * \brief Main function for position evaluation.
  *
  * \param position position
