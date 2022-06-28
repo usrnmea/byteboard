@@ -65,10 +65,12 @@ Evaluation evaluate_position(const Position *pos)
 	assert(pos != NULL);
 
 	Evaluation eval = NO_EVAL;
+	GamePhase gp = get_game_phase(pos);
 
 	eval += evaluate_material(pos);
 	eval += evaluate_central_pawns(pos);
 	eval += evaluate_doubled_pawns(pos);
+	eval += evaluate_king_position(pos, gp);
 
 	return eval;
 }
