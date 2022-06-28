@@ -148,13 +148,8 @@ Evaluation evaluate_king_position(const Position *pos, GamePhase gp)
 
 	if(gp == MIDDLEGAME) {
 		U64 safest_squares[COLOR_NB] = {
-			0xe7,
-			0xe700000000000000ULL,
-		};
-
-		U64 safe_squares[COLOR_NB] = {
-			0xc318ULL,
-			0xc318000000000000ULL,
+			0x46,
+			0x4600000000000000ULL,
 		};
 
 		U64 unsafe_squares[COLOR_NB] = {
@@ -164,14 +159,12 @@ Evaluation evaluate_king_position(const Position *pos, GamePhase gp)
 
 		U64 king = pieces(pos, W_KING);
 
-		value += !!(safest_squares[WHITE] & king) * 25;
-		value += !!(safe_squares[WHITE] & king) * 10;
+		value += !!(safest_squares[WHITE] & king) * 20;
 		value -= !!(unsafe_squares[WHITE] & king) * 40;
 
 		king = pieces(pos, B_KING);
 
-		value -= !!(safest_squares[BLACK] & king) * 25;
-		value -= !!(safe_squares[BLACK] & king) * 10;
+		value -= !!(safest_squares[BLACK] & king) * 20;
 		value += !!(unsafe_squares[BLACK] & king) * 40;
 	} else {
 		U64 worst = 0xe7c381000081c3e7ULL;
