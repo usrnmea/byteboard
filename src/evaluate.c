@@ -142,5 +142,52 @@ Evaluation evaluate_king_position(const Position *pos, GamePhase gp)
 {
 	assert(pos != NULL);
 
-	return NO_EVAL;
+	Evaluation value = NO_EVAL;
+
+	if(gp == MIDDLEGAME) {
+		U64 safest_squares[COLOR_NB] = {
+			0xe7,
+			0xe700000000000000ULL,
+		};
+
+		U64 safe_squares[COLOR_NB] = {
+			0xc318ULL,
+			0xc318000000000000ULL,
+		};
+
+		U64 unsafe_squares[COLOR_NB] = {
+			0x3cffffffff3c00ULL,
+			0x3cffffffff3c00ULL,
+		};
+
+		U64 king = pieces(pos, W_KING);
+
+		value += !!(safest_squares[WHITE] & king) * 25;
+		value += !!(safe_squares[WHITE] & king) * 10;
+		value -= !!(unsafe_squares[WHITE] & king) * 40;
+
+		king = pieces(pos, B_KING);
+
+		value -= !!(safest_squares[BLACK] & king) * 25;
+		value -= !!(safe_squares[BLACK] & king) * 10;
+		value += !!(unsafe_squares[BLACK] & king) * 40;
+	} else {
+		U64 worst = 0xe7c381000081c3e7ULL;
+		U64 near_center = 0x3c664242663c00ULL;
+		U64 center = 0x183c3c180000ULL;
+
+		U64 king = pieces(pos, W_KING);
+
+		value -= !!(worst & king) * 40;
+		value += !!(near_center & king) * 10;
+		value += !!(center & king) * 40;
+
+		king = pieces(pos, B_KING);
+
+		value += !!(worst & king) * 40;
+		value -= !!(near_center & king) * 10;
+		value -= !!(center & king) * 40;
+	}
+
+	return value;
 }
