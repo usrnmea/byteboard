@@ -12,8 +12,8 @@ typedef enum Evaluation {
 	NO_EVAL = 0,		///< No value
 	DRAW = 0,		///< Draw
 
-	WHITE_WIN = 10000,	///< Checkmate black
-	BLACK_WIN = -10000,	///< Checkmate white
+	WHITE_WIN = 100000,	///< Checkmate black
+	BLACK_WIN = -100000,	///< Checkmate white
 } Evaluation;
 
 /// Extended move structure containing, in addition to the move,
