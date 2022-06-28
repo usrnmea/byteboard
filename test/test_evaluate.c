@@ -46,7 +46,7 @@ void test_get_game_phase(void)
 
 	pos = init_position(
 		"r3k2r/ppq1pp1p/2n2np1/2Pp4/1P1P2b1/2N2N2/P3BPPP/R2Q1RK1 b"
-		"Qkq - 2 5"
+		" Qkq - 2 5"
 	);
 
 	TEST_ASSERT_EQUAL(MIDDLEGAME, get_game_phase(pos));
@@ -56,7 +56,7 @@ void test_get_game_phase(void)
 
 	pos = init_position(
 		"r2q1rk1/p1pp1ppp/bbp2n2/6B1/4P3/2N3P1/PPPQ1PBP/R3R1K1 b Qq -"
-		"0 1"
+		" 0 1"
 	);
 
 	TEST_ASSERT_EQUAL(MIDDLEGAME, get_game_phase(pos));

@@ -7,15 +7,58 @@
 #include <stdlib.h>
 
 Evaluation piece_type_value[PIECE_TYPE_NB] = {
-	10, 35, 35, 52, 100, 0
+	100, 350, 350, 520, 1000, 0
 };
+
+#define MAX(a, b) ((a) > (b) ? (a) : (b))
+#define MIN(a, b) ((a) < (b) ? (a) : (b))
+
+static Evaluation non_pawn_material(const Position *pos, Color color)
+{
+	assert(pos != NULL);
+	assert(color < COLOR_NB);
+
+	Evaluation value = NO_EVAL;
+
+	for(PieceType pt = KNIGHT; pt < PIECE_TYPE_NB; pt++) {
+		uint32_t piece_count = population_count(
+			pieces(pos, make_piece(color, pt))
+		);
+
+		value += piece_count * piece_type_value[pt - 1];
+	}
+
+	return value;
+}
 
 GamePhase get_game_phase(const Position *pos)
 {
 	assert(pos != NULL);
 
-	return OPENING;
+	const Evaluation midgame_limit = 6880;
+	const Evaluation endgame_limit = 3400;
+
+	Evaluation npm = non_pawn_material(pos, WHITE);
+	npm += non_pawn_material(pos, BLACK);
+
+	npm = MAX(
+		endgame_limit,
+		MIN(npm, midgame_limit)
+	);
+
+	npm = (
+		((npm - endgame_limit) * 100) / (midgame_limit - endgame_limit)
+	) << 0;
+
+	// TODO: Use the npm as a coefficient of the phase of the game
+	if(npm > 10)
+		return MIDDLEGAME;
+	else
+		return ENDGAME;
 }
+
+#undef MAX
+#undef MIN
 
 Evaluation evaluate_position(const Position *pos)
 {
