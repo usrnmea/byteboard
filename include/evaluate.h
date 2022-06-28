@@ -26,10 +26,10 @@ typedef struct ExtMove {
 /// Game phases. Depending on the phase of the game, one or another score can
 /// take on very different meanings
 typedef enum GamePhase {
-	Opening,
-	Middlegame,
-	Endgame,
-	GamePhasesNumber,
+	OPENING,
+	MIDDLEGAME,
+	ENDGAME,
+	GAME_PHASES_NB,
 } GamePhase;
 
 /// Returns the value of the #PieceType
