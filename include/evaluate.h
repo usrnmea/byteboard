@@ -82,4 +82,17 @@ Evaluation evaluate_central_pawns(const Position *position);
  */
 Evaluation evaluate_doubled_pawns(const Position *position);
 
+/**
+ * \brieft Evaluates king position
+ *
+ * \param position position
+ *
+ * \param game_phase game phase
+ *
+ * \return evaluation
+ */
+Evaluation evaluate_king_position(
+	const Position *position, GamePhase game_phase
+);
+
 #endif

@@ -137,3 +137,10 @@ Evaluation evaluate_doubled_pawns(const Position *pos)
 
 	return value;
 }
+
+Evaluation evaluate_king_position(const Position *pos, GamePhase gp)
+{
+	assert(pos != NULL);
+
+	return NO_EVAL;
+}
