@@ -37,6 +37,8 @@ extern Evaluation piece_type_value[PIECE_TYPE_NB];
 
 /**
  * \brief Function for determining the phase of the game
+ * There are no clear criteria for separating #MIDDLEGAME from #OPENING, so this
+ * function always returns #MIDDLEGAME instead of #OPENING.
  *
  * \param position position
  *

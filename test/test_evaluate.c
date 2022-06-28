@@ -15,6 +15,56 @@
 /// there is an obvious white advantage, the function does not return DRAW or
 /// less.
 
+void test_get_game_phase(void)
+{
+	Position *pos = init_position(
+		"8/8/8/p3kPp1/6P1/4K3/8/8 w - - 0 1"
+	);
+
+	TEST_ASSERT_EQUAL(ENDGAME, get_game_phase(pos));
+
+	free(pos->state);
+	free(pos);
+
+	pos = init_position(
+		"3k4/4r3/3K4/3B4/8/8/8/5R2 w - - 0 1"
+	);
+
+	TEST_ASSERT_EQUAL(ENDGAME, get_game_phase(pos));
+
+	free(pos->state);
+	free(pos);
+
+	pos = init_position(
+		"6k1/8/6PP/5K2/2B5/2b5/8/8 b - - 0 1"
+	);
+
+	TEST_ASSERT_EQUAL(ENDGAME, get_game_phase(pos));
+
+	free(pos->state);
+	free(pos);
+
+	pos = init_position(
+		"r3k2r/ppq1pp1p/2n2np1/2Pp4/1P1P2b1/2N2N2/P3BPPP/R2Q1RK1 b"
+		"Qkq - 2 5"
+	);
+
+	TEST_ASSERT_EQUAL(MIDDLEGAME, get_game_phase(pos));
+
+	free(pos->state);
+	free(pos);
+
+	pos = init_position(
+		"r2q1rk1/p1pp1ppp/bbp2n2/6B1/4P3/2N3P1/PPPQ1PBP/R3R1K1 b Qq -"
+		"0 1"
+	);
+
+	TEST_ASSERT_EQUAL(MIDDLEGAME, get_game_phase(pos));
+
+	free(pos->state);
+	free(pos);
+}
+
 void test_evaluate_position()
 {
 	Position *pos = init_position("8/1nbk4/8/8/8/8/1QRK4/8 w - - 0 1");
