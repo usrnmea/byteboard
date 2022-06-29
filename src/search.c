@@ -10,11 +10,24 @@
 
 U64 nodes = 0;
 
+int cmp(const void *elem1, const void *elem2)
+{
+	ExtMove first = *((ExtMove*)elem1);
+	ExtMove second = *((ExtMove*)elem2);
+
+	if (first.eval > second.eval) return -1;
+	if (first.eval < second.eval) return 1;
+
+	return 0;
+}
+
 ExtMove find_best(Position *position, uint32_t depth)
 {
 	assert(position != NULL);
 
 	MoveList *move_list = generate_all_moves(position);
+
+	sort_move_list(position, move_list);
 
 	ExtMove best_move = {
 		.eval = BLACK_WIN
@@ -57,6 +70,24 @@ ExtMove get_random_move(MoveList *move_list)
 	uint32_t i = rand() % ml_len(move_list);
 
 	return move_list->move_list[i];
+}
+
+void sort_move_list(Position *pos, MoveList *move_list)
+{
+	assert(move_list != NULL);
+
+	if (ml_len(move_list) > 0) {
+		for (uint32_t i = 0; i < ml_len(move_list); i++) {
+			evaluate_move(pos, &move_list->move_list[i]);
+		}
+
+		qsort(
+			move_list->move_list,
+			ml_len(move_list),
+			sizeof(*move_list->move_list),
+			cmp
+		);
+	}
 }
 
 void evaluate_move(Position *pos, ExtMove *move)
@@ -105,6 +136,7 @@ Evaluation quiescence(Position *pos, Evaluation alpha, Evaluation beta)
 		alpha = stand_pat;
 
 	MoveList *move_list = generate_all_moves(pos);
+	sort_move_list(pos, move_list);
 
 	if (ml_len(move_list) > 0) {
 		for (uint32_t i = 0; i < ml_len(move_list); i++) {
@@ -157,6 +189,8 @@ Evaluation negamax(
 		do_move(pos, move_list->move_list[i].move);
 
 		MoveList *next_moves = generate_all_moves(pos);
+
+		sort_move_list(pos, move_list);
 
 		Evaluation score = -negamax(
 			pos, next_moves, depth - 1, -beta, -alpha

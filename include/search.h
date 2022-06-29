@@ -43,6 +43,15 @@ ExtMove find_best(Position *position, uint32_t depth);
 ExtMove get_random_move(MoveList *move_list);
 
 /**
+ * \brief Sorts moves from the strongest to the weakest.
+ *
+ * \param pos current position
+ *
+ * \param move_list move list
+ */
+void sort_move_list(Position *pos, MoveList *move_list);
+
+/**
  * \brief Evaluates the given move.
  *
  * \param pos current position
