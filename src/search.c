@@ -74,27 +74,25 @@ ExtMove get_random_move(MoveList *move_list)
 
 void sort_move_list(Position *pos, MoveList *move_list)
 {
+	assert(pos != NULL);
 	assert(move_list != NULL);
 
-	if (ml_len(move_list) > 0) {
-		for (uint32_t i = 0; i < ml_len(move_list); i++) {
-			evaluate_move(pos, &move_list->move_list[i]);
-		}
-
-		qsort(
-			move_list->move_list,
-			ml_len(move_list),
-			sizeof(*move_list->move_list),
-			cmp
-		);
+	for (uint32_t i = 0; i < ml_len(move_list); i++) {
+		evaluate_move(pos, &move_list->move_list[i]);
 	}
+
+	qsort(
+		move_list->move_list,
+		ml_len(move_list),
+		sizeof(*move_list->move_list),
+		cmp
+	);
 }
 
 void evaluate_move(Position *pos, ExtMove *move)
 {
 	assert(pos != NULL);
 
-	// Capture case
 	if (
 		piece_on(pos, move->move.destination) != NO_PIECE
 		|| move->move.move_type == EN_PASSANT
@@ -113,9 +111,12 @@ void evaluate_move(Position *pos, ExtMove *move)
 	}
 
 	else {
+		assert(piece_on(pos, move->move.destination) != W_KING);
 		do_move(pos, move->move);
 
-		move->eval = evaluate_position(pos);
+		Color color = pos->state->previous_move.color;
+
+		move->eval = evaluate_position(pos) * (color ? -1 : 1);
 
 		undo_move(pos);
 	}
@@ -138,30 +139,37 @@ Evaluation quiescence(Position *pos, Evaluation alpha, Evaluation beta)
 	MoveList *move_list = generate_all_moves(pos);
 	sort_move_list(pos, move_list);
 
-	if (ml_len(move_list) > 0) {
-		for (uint32_t i = 0; i < ml_len(move_list); i++) {
-			Move current_move = move_list->move_list[i].move;
+	if(ml_len(move_list) == 0) {
+		if(get_check_type(pos))
+			return color ? WHITE_WIN : BLACK_WIN;
+		else
+			return DRAW;
+	}
 
-			// Capture
-			if (piece_on(pos, current_move.destination) != NO_PIECE
-			|| current_move.move_type == EN_PASSANT)
-			{
-				do_move(pos, current_move);
+	while(ml_len(move_list)) {
+		Move current_move = ml_pop(move_list).move;
 
-				Evaluation score = -quiescence(
-					pos, -beta, -alpha
-				);
+		if(
+			piece_on(pos, current_move.destination) == NO_PIECE
+			|| current_move.move_type != EN_PASSANT
+		)
+			continue;
 
-				undo_move(pos);
+		do_move(pos, current_move);
 
-				if (score >= beta) {
-					free(move_list);
-					return beta;
-				}
-				if (score > alpha)
-					alpha = score;
-			}
+		Evaluation score = -quiescence(
+			pos, -beta, -alpha
+		);
+
+		undo_move(pos);
+
+		if(score >= beta) {
+			free(move_list);
+			return beta;
 		}
+
+		if(score > alpha)
+			alpha = score;
 	}
 
 	free(move_list);
@@ -176,10 +184,8 @@ Evaluation negamax(
 {
 	Evaluation max_score = BLACK_WIN;
 
-
 	if (depth == 0) {
 		max_score = quiescence(pos, alpha, beta);
-
 		goto end;
 	}
 
@@ -189,8 +195,7 @@ Evaluation negamax(
 		do_move(pos, move_list->move_list[i].move);
 
 		MoveList *next_moves = generate_all_moves(pos);
-
-		sort_move_list(pos, move_list);
+		sort_move_list(pos, next_moves);
 
 		Evaluation score = -negamax(
 			pos, next_moves, depth - 1, -beta, -alpha
