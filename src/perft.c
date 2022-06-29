@@ -7,6 +7,7 @@
 #include "evaluate.h"
 #include "movegen.h"
 #include "perft.h"
+#include "search.h"
 
 #include <stdlib.h>
 #include <stdio.h>
@@ -94,7 +95,7 @@ U64 perft_test(Position *pos, int depth)
 		);
 	}
 
-	printf("\n\n");
+	printf("Nodes searched: %li\n\n", nodes);
 
 	free(move_list);
 
