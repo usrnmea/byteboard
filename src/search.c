@@ -59,6 +59,37 @@ ExtMove get_random_move(MoveList *move_list)
 	return move_list->move_list[i];
 }
 
+void evaluate_move(Position *pos, ExtMove *move)
+{
+	assert(pos != NULL);
+
+	// Capture case
+	if (
+		piece_on(pos, move->move.destination) != NO_PIECE
+		|| move->move.move_type == EN_PASSANT
+	)
+	{
+		PieceType victim = PAWN;
+		PieceType attacker = move->move.moved_piece_type;
+
+		if (move->move.move_type != EN_PASSANT) {
+			victim = type_of_piece(
+				piece_on(pos, move->move.destination)
+			);
+		}
+
+		move->eval = mvv_lva[attacker - 1][victim - 1];
+	}
+
+	else {
+		do_move(pos, move->move);
+
+		move->eval = evaluate_position(pos);
+
+		undo_move(pos);
+	}
+}
+
 Evaluation quiescence(Position *pos, Evaluation alpha, Evaluation beta)
 {
 	assert(pos != NULL);
@@ -80,7 +111,8 @@ Evaluation quiescence(Position *pos, Evaluation alpha, Evaluation beta)
 			Move current_move = move_list->move_list[i].move;
 
 			// Capture
-			if (piece_on(pos, current_move.destination) != NO_PIECE)
+			if (piece_on(pos, current_move.destination) != NO_PIECE
+			|| current_move.move_type == EN_PASSANT)
 			{
 				do_move(pos, current_move);
 
