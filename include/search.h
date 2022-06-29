@@ -9,6 +9,8 @@
 #include "evaluate.h"
 #include "movegen.h"
 
+/// Counter for the number of nodes
+extern U64 nodes;
 
 /**
  * \brief Returns the best move according to the chess engine

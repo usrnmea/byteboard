@@ -8,6 +8,8 @@
 #include <stdlib.h>
 #include <time.h>
 
+U64 nodes = 0;
+
 ExtMove find_best(Position *position, uint32_t depth)
 {
 	assert(position != NULL);
@@ -17,6 +19,8 @@ ExtMove find_best(Position *position, uint32_t depth)
 	ExtMove best_move = {
 		.eval = BLACK_WIN
 	};
+
+	nodes = 0;
 
 	while(ml_len(move_list)) {
 		ExtMove move = ml_pop(move_list);
@@ -58,6 +62,8 @@ ExtMove get_random_move(MoveList *move_list)
 Evaluation quiescence(Position *pos, Evaluation alpha, Evaluation beta)
 {
 	assert(pos != NULL);
+
+	nodes++;
 
 	Color color = !pos->state->previous_move.color;
 	Evaluation stand_pat = evaluate_position(pos) * (color ? -1 : 1);
@@ -112,6 +118,8 @@ Evaluation negamax(
 
 		goto end;
 	}
+
+	nodes++;
 
 	for (uint32_t i = 0; i < ml_len(move_list); i++) {
 		do_move(pos, move_list->move_list[i].move);
