@@ -12,6 +12,9 @@
 /// Counter for the number of nodes
 extern U64 nodes;
 
+/// Ply counter
+extern U64 ply;
+
 /// MVV LVA table
 static const Evaluation mvv_lva[6][6] = {
 	{105, 355, 355, 525, 1005, 100005},
@@ -21,6 +24,12 @@ static const Evaluation mvv_lva[6][6] = {
 	{101, 351, 351, 521, 1001, 100001},
 	{100, 350, 350, 520, 1000, 100000}
 };
+
+/// Array for killer moves
+ExtMove killer_moves[2][64];
+
+/// Array with evaluation of history moves caused cutoff
+Evaluation history_moves[12][64];
 
 /**
  * \brief Returns the best move according to the chess engine
