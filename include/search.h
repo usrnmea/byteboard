@@ -25,12 +25,6 @@ static const Evaluation mvv_lva[6][6] = {
 	{100, 350, 350, 520, 1000, 100000}
 };
 
-/// Array for killer moves
-ExtMove killer_moves[2][64];
-
-/// Array with evaluation of history moves caused cutoff
-Evaluation history_moves[12][64];
-
 /**
  * \brief Returns the best move according to the chess engine
  *

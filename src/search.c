@@ -11,6 +11,12 @@
 U64 nodes = 0;
 U64 ply = 0;
 
+/// Array for killer moves
+ExtMove killer_moves[2][64];
+
+/// Array with evaluation of history moves caused cutoff
+Evaluation history_moves[12][64];
+
 int cmp(const void *elem1, const void *elem2)
 {
 	ExtMove first = *((ExtMove*)elem1);
