@@ -248,7 +248,8 @@ Evaluation negamax(
 			Color color = current_move.color + 1;
 			Square target = current_move.destination;
 
-			history_moves[pt * color][target] += depth;
+			if (piece_on(pos, target) == NO_PIECE)
+				history_moves[pt * color][target] += depth;
 
 			alpha = max_score;
 		}
