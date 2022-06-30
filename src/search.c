@@ -11,6 +11,18 @@
 U64 nodes = 0;
 U64 ply = 0;
 
+/// Array for killer moves
+ExtMove killer_moves[2][64];
+
+/// Array with evaluation of history moves caused cutoff
+Evaluation history_moves[12][64];
+
+/// Lenght of the principle variation table
+uint32_t pv_lenght[64];
+
+/// Principle variation table
+Move pv_table[64][64];
+
 int cmp(const void *elem1, const void *elem2)
 {
 	ExtMove first = *((ExtMove*)elem1);
@@ -49,25 +61,13 @@ ExtMove find_best(Position *position, uint32_t depth)
 
 	nodes = 0;
 
-	while(ml_len(move_list)) {
-		ExtMove move = ml_pop(move_list);
-
-		do_move(position, move.move);
-
-		MoveList *new_move_list = generate_all_moves(position);
-
-		move.eval = -negamax(
-			position, new_move_list, depth - 1,
+	Evaluation score = -negamax(
+			position, move_list, depth,
 			BLACK_WIN, WHITE_WIN
-		);
+	);
 
-		free(new_move_list);
-
-		undo_move(position);
-
-		if(move.eval >= best_move.eval)
-			best_move = move;
-	}
+	best_move.eval = score;
+	best_move.move = pv_table[0][0];
 
 	free(move_list);
 
@@ -213,6 +213,8 @@ Evaluation negamax(
 {
 	Evaluation max_score = BLACK_WIN;
 
+	pv_lenght[ply] = ply;
+
 	if (depth == 0) {
 		max_score = quiescence(pos, alpha, beta);
 		goto end;
@@ -232,6 +234,8 @@ Evaluation negamax(
 			pos, next_moves, depth - 1, -beta, -alpha
 		);
 
+		//move_list->move_list[i].eval = score;
+
 		ply--;
 
 		if (score > max_score)
@@ -244,6 +248,7 @@ Evaluation negamax(
 		if (max_score > alpha) {
 			Move current_move = move_list->move_list[i].move;
 
+			// History heuristic
 			PieceType pt = current_move.moved_piece_type - 1;
 			Color color = current_move.color + 1;
 			Square target = current_move.destination;
@@ -252,6 +257,18 @@ Evaluation negamax(
 				history_moves[pt * color][target] += depth;
 
 			alpha = max_score;
+
+			// PV Table
+			pv_table[ply][ply] = current_move;
+
+			uint32_t next_ply = ply + 1;
+
+			for (; next_ply < pv_lenght[ply + 1]; next_ply++) {
+				Move deep_move = pv_table[ply + 1][next_ply];
+				pv_table[ply][next_ply] = deep_move;
+			}
+
+			pv_lenght[ply] = pv_lenght[ply + 1];
 		}
 
 		if (alpha >= beta) {
