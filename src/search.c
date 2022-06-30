@@ -9,6 +9,7 @@
 #include <time.h>
 
 U64 nodes = 0;
+U64 ply = 0;
 
 int cmp(const void *elem1, const void *elem2)
 {
@@ -19,6 +20,19 @@ int cmp(const void *elem1, const void *elem2)
 	if (first.eval < second.eval) return 1;
 
 	return 0;
+}
+
+// Function for comparing between two Move structures
+static inline int cmp_moves(Move move_1, Move move_2)
+{
+	return (
+		move_1.color == move_2.color &&
+		move_1.destination == move_2.destination &&
+		move_1.moved_piece_type == move_2.moved_piece_type &&
+		move_1.move_type == move_2.move_type &&
+		move_1.promotion_piece_type == move_2.promotion_piece_type &&
+		move_1.source == move_2.source
+	);
 }
 
 ExtMove find_best(Position *position, uint32_t depth)
@@ -107,18 +121,26 @@ void evaluate_move(Position *pos, ExtMove *move)
 			);
 		}
 
-		move->eval = mvv_lva[attacker - 1][victim - 1];
+		move->eval = mvv_lva[attacker - 1][victim - 1] + 10000;
 	}
 
 	else {
+		// Evaluate quite moves
 		assert(piece_on(pos, move->move.destination) != W_KING);
-		do_move(pos, move->move);
 
-		Color color = pos->state->previous_move.color;
+		if (cmp_moves(killer_moves[0][ply].move, move->move))
+			move->eval = 9000;
 
-		move->eval = evaluate_position(pos) * (color ? -1 : 1);
+		else if (cmp_moves(killer_moves[1][ply].move, move->move))
+			move->eval = 8000;
 
-		undo_move(pos);
+		else {
+			PieceType pt = move->move.moved_piece_type - 1;
+			Color color = move->move.color + 1;
+			Square target = move->move.destination;
+
+			move->eval = history_moves[pt * color][target];
+		}
 	}
 }
 
@@ -141,7 +163,7 @@ Evaluation quiescence(Position *pos, Evaluation alpha, Evaluation beta)
 
 	if(ml_len(move_list) == 0) {
 		if(get_check_type(pos))
-			return color ? WHITE_WIN : BLACK_WIN;
+			return (color ? WHITE_WIN : BLACK_WIN) + ply;
 		else
 			return DRAW;
 	}
@@ -149,17 +171,24 @@ Evaluation quiescence(Position *pos, Evaluation alpha, Evaluation beta)
 	while(ml_len(move_list)) {
 		Move current_move = ml_pop(move_list).move;
 
+		ply++;
+
 		if(
 			piece_on(pos, current_move.destination) == NO_PIECE
 			|| current_move.move_type != EN_PASSANT
 		)
+		{
+			ply--;
 			continue;
+		}
 
 		do_move(pos, current_move);
 
 		Evaluation score = -quiescence(
 			pos, -beta, -alpha
 		);
+
+		ply--;
 
 		undo_move(pos);
 
@@ -194,12 +223,16 @@ Evaluation negamax(
 	for (uint32_t i = 0; i < ml_len(move_list); i++) {
 		do_move(pos, move_list->move_list[i].move);
 
+		ply++;
+
 		MoveList *next_moves = generate_all_moves(pos);
 		sort_move_list(pos, next_moves);
 
 		Evaluation score = -negamax(
 			pos, next_moves, depth - 1, -beta, -alpha
 		);
+
+		ply--;
 
 		if (score > max_score)
 			max_score = score;
@@ -208,17 +241,35 @@ Evaluation negamax(
 
 		undo_move(pos);
 
-		if (max_score > alpha)
-			alpha = max_score;
+		if (max_score > alpha) {
+			Move current_move = move_list->move_list[i].move;
 
-		if (alpha >= beta)
+			PieceType pt = current_move.moved_piece_type - 1;
+			Color color = current_move.color + 1;
+			Square target = current_move.destination;
+
+			history_moves[pt * color][target] += depth;
+
+			alpha = max_score;
+		}
+
+		if (alpha >= beta) {
+			ExtMove ext_move = move_list->move_list[i];
+			Square target = ext_move.move.destination;
+
+			if (piece_on(pos, target) == NO_PIECE) {
+				killer_moves[1][ply] = killer_moves[0][ply];
+				killer_moves[0][ply] = ext_move;
+			}
+
 			break;
+		}
 	}
 
 end:
 	if(ml_len(move_list) == 0) {
 		if(get_check_type(pos))
-			max_score = BLACK_WIN;
+			max_score = BLACK_WIN + ply;
 		else
 			max_score = DRAW;
 	}
