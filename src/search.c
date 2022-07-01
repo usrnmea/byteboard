@@ -3,6 +3,7 @@
 #include "evaluate.h"
 #include "movegen.h"
 #include "search.h"
+#include "uci.h"
 
 #include <assert.h>
 #include <stdlib.h>
@@ -12,19 +13,17 @@
 U64 nodes = 0;
 U64 ply = 0;
 
-const U64 max_ply = 64;
-
 /// Array for killer moves
-ExtMove killer_moves[2][64];
+ExtMove killer_moves[2][MAX_PLY];
 
 /// Array with evaluation of history moves caused cutoff
 Evaluation history_moves[12][64];
 
 /// Lenght of the principle variation table
-uint32_t pv_lenght[64];
+uint32_t pv_lenght[MAX_PLY];
 
 /// Principle variation table
-Move pv_table[64][64];
+Move pv_table[MAX_PLY][MAX_PLY];
 
 int cmp(const void *elem1, const void *elem2)
 {
