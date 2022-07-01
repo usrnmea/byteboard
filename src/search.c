@@ -61,12 +61,10 @@ ExtMove find_best(Position *position, uint32_t depth)
 
 	nodes = 0;
 
-	Color color = !position->state->previous_move.color;
-
-	Evaluation score = -negamax(
+	Evaluation score = negamax(
 			position, move_list, depth,
 			BLACK_WIN, WHITE_WIN
-	) * (color ? -1 : 1);
+	);
 
 	best_move.eval = score;
 	best_move.move = pv_table[0][0];
@@ -235,8 +233,6 @@ Evaluation negamax(
 		Evaluation score = -negamax(
 			pos, next_moves, depth - 1, -beta, -alpha
 		);
-
-		//move_list->move_list[i].eval = score;
 
 		ply--;
 
