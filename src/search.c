@@ -14,6 +14,9 @@
 U64 nodes = 0;
 U64 ply = 0;
 
+uint8_t follow_PV = 0;
+uint8_t eval_PV = 0;
+
 /// Array for killer moves
 ExtMove killer_moves[2][MAX_PLY];
 
@@ -54,9 +57,9 @@ ExtMove find_best(Position *position, uint32_t depth)
 {
 	assert(position != NULL);
 
-	MoveList *move_list = generate_all_moves(position);
+	/*MoveList *move_list = generate_all_moves(position);
 
-	sort_move_list(position, move_list);
+	sort_move_list(position, move_list);*/
 
 	ExtMove best_move = {
 		.eval = BLACK_WIN
@@ -72,8 +75,10 @@ ExtMove find_best(Position *position, uint32_t depth)
 	memset(pv_lenght, 0, sizeof(pv_lenght));
 
 	for (uint32_t curr_depth = 1; curr_depth <= depth; curr_depth++) {
+		follow_PV = 1;
+
 		Evaluation score = negamax(
-			position, move_list, curr_depth,
+			position, curr_depth,
 			BLACK_WIN, WHITE_WIN
 		);
 
@@ -94,8 +99,6 @@ ExtMove find_best(Position *position, uint32_t depth)
 
 		printf("\n");
 	}
-
-	free(move_list);
 
 	return best_move;
 }
@@ -120,6 +123,14 @@ void sort_move_list(Position *pos, MoveList *move_list)
 void evaluate_move(Position *pos, ExtMove *move)
 {
 	assert(pos != NULL);
+
+	if (eval_PV) {
+		if (cmp_moves(pv_table[0][ply], move->move)) {
+			eval_PV = 0;
+
+			move->eval = 20000;
+		}
+	}
 
 	if (
 		piece_on(pos, move->move.destination) != NO_PIECE
@@ -154,6 +165,19 @@ void evaluate_move(Position *pos, ExtMove *move)
 			Square target = move->move.destination;
 
 			move->eval = history_moves[pt * color][target];
+		}
+	}
+}
+
+void complete_pv_evaluation(MoveList *move_list)
+{
+	follow_PV = 0;
+
+	for (uint32_t i = 0; i < ml_len(move_list); i++) {
+		if (cmp_moves(pv_table[0][ply], move_list->move_list[i].move)) {
+			eval_PV = 1;
+
+			follow_PV = 1;
 		}
 	}
 }
@@ -221,10 +245,12 @@ Evaluation quiescence(Position *pos, Evaluation alpha, Evaluation beta)
 }
 
 Evaluation negamax(
-	Position *pos, MoveList *move_list, uint32_t depth,
+	Position *pos, uint32_t depth,
 	Evaluation alpha, Evaluation beta
 )
 {
+	assert(pos != NULL);
+
 	Evaluation max_score = BLACK_WIN;
 
 	pv_lenght[ply] = ply;
@@ -239,24 +265,26 @@ Evaluation negamax(
 
 	nodes++;
 
+	MoveList *move_list = generate_all_moves(pos);
+
+	if (follow_PV)
+		complete_pv_evaluation(move_list);
+
+	sort_move_list(pos, move_list);
+
 	for (uint32_t i = 0; i < ml_len(move_list); i++) {
 		do_move(pos, move_list->move_list[i].move);
 
 		ply++;
 
-		MoveList *next_moves = generate_all_moves(pos);
-		sort_move_list(pos, next_moves);
-
 		Evaluation score = -negamax(
-			pos, next_moves, depth - 1, -beta, -alpha
+			pos, depth - 1, -beta, -alpha
 		);
 
 		ply--;
 
 		if (score > max_score)
 			max_score = score;
-
-		free(next_moves);
 
 		undo_move(pos);
 
@@ -298,6 +326,8 @@ Evaluation negamax(
 			break;
 		}
 	}
+
+	free(move_list);
 
 end:
 	if(ml_len(move_list) == 0) {

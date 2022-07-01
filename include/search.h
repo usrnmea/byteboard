@@ -15,6 +15,12 @@ extern U64 nodes;
 /// Ply counter
 extern U64 ply;
 
+/// PV flag that indicates do we follow PV line or not
+extern uint8_t follow_PV;
+
+/// PV flag that indicates do we evaluate PV moves or not
+extern uint8_t eval_PV;
+
 /// Max number of plies
 #define MAX_PLY 64
 
@@ -58,6 +64,13 @@ void sort_move_list(Position *pos, MoveList *move_list);
 void evaluate_move(Position *pos, ExtMove *move);
 
 /**
+ * \brief Evaluates pv moves in move list
+ *
+ * \param move_list move list
+ */
+void complete_pv_evaluation(MoveList *move_list);
+
+/**
  * \brief Function which realises quiescence search algorithm.
  *
  * \param pos current position
@@ -78,9 +91,7 @@ Evaluation quiescence(Position *pos, Evaluation alpha, Evaluation beta);
  *
  * \param pos current position
  *
- * \param move_list legal moves
- *
- * \param depth
+ * \param depth search depth
  *
  * \param alpha #Evaluation alpha parameter for negamax
  *
@@ -89,7 +100,7 @@ Evaluation quiescence(Position *pos, Evaluation alpha, Evaluation beta);
  * \return best evaluation of the given position
  */
 Evaluation negamax(
-	Position *pos, MoveList *move_list, uint32_t depth,
+	Position *pos, uint32_t depth,
 	Evaluation alpha, Evaluation beta
 );
 
