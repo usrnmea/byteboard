@@ -6,10 +6,13 @@
 
 #include <assert.h>
 #include <stdlib.h>
+#include <stdio.h>
 #include <time.h>
 
 U64 nodes = 0;
 U64 ply = 0;
+
+const U64 max_ply = 64;
 
 /// Array for killer moves
 ExtMove killer_moves[2][64];

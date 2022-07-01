@@ -15,6 +15,9 @@ extern U64 nodes;
 /// Ply counter
 extern U64 ply;
 
+/// Max number of plies
+extern const U64 max_ply;
+
 /// MVV LVA table
 static const Evaluation mvv_lva[6][6] = {
 	{105, 355, 355, 525, 1005, 100005},
