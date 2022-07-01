@@ -7,6 +7,7 @@
 
 #include <assert.h>
 #include <stdlib.h>
+#include <string.h>
 #include <stdio.h>
 #include <time.h>
 
@@ -62,25 +63,36 @@ ExtMove find_best(Position *position, uint32_t depth)
 	};
 
 	nodes = 0;
+	ply = 0;
 
-	Evaluation score = negamax(
-			position, move_list, depth,
+	memset(killer_moves, 0, sizeof(killer_moves));
+	memset(history_moves, 0, sizeof(history_moves));
+
+	memset(pv_table, 0, sizeof(pv_table));
+	memset(pv_lenght, 0, sizeof(pv_lenght));
+
+	for (uint32_t curr_depth = 1; curr_depth <= depth; curr_depth++) {
+		Evaluation score = negamax(
+			position, move_list, curr_depth,
 			BLACK_WIN, WHITE_WIN
-	);
+		);
 
-	best_move.eval = score;
-	best_move.move = pv_table[0][0];
+		best_move.eval = score;
+		best_move.move = pv_table[0][0];
 
-	printf(
-		"info score cp %d depth %d nodes %ld pv ",
-		 best_move.eval, depth, nodes
-	);
+		printf(
+			"info score cp %d depth %d nodes %ld pv ",
+			best_move.eval, curr_depth, nodes
+		);
 
-	for (uint32_t i = 0; i < pv_lenght[0]; i++) {
-		char str[6];
+		for (uint32_t i = 0; i < pv_lenght[0]; i++) {
+			char str[6];
 
-		move_to_str(pv_table[0][i], str);
-		printf("%s ", str);
+			move_to_str(pv_table[0][i], str);
+			printf("%s ", str);
+		}
+
+		printf("\n");
 	}
 
 	free(move_list);
@@ -221,6 +233,9 @@ Evaluation negamax(
 		max_score = quiescence(pos, alpha, beta);
 		goto end;
 	}
+
+	if (ply > MAX_PLY - 1)
+		return evaluate_position(pos);
 
 	nodes++;
 
