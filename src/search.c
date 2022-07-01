@@ -251,6 +251,8 @@ Evaluation negamax(
 {
 	assert(pos != NULL);
 
+	uint8_t found_PV = 0;
+
 	Evaluation max_score = BLACK_WIN;
 
 	pv_lenght[ply] = ply;
@@ -277,9 +279,23 @@ Evaluation negamax(
 
 		ply++;
 
-		Evaluation score = -negamax(
-			pos, depth - 1, -beta, -alpha
-		);
+		Evaluation score = NO_EVAL;
+
+		if (found_PV) {
+			score = -negamax(
+				pos, depth - 1, -alpha - 1, -alpha
+			);
+
+			if ((score > alpha) && (score < beta)) {
+				score = -negamax(
+					pos, depth - 1, -beta, -alpha
+				);
+			}
+		}
+		else
+			score = -negamax(
+				pos, depth - 1, -beta, -alpha
+			);
 
 		ply--;
 
@@ -300,6 +316,8 @@ Evaluation negamax(
 				history_moves[pt * color][target] += depth;
 
 			alpha = max_score;
+
+			found_PV = 1;
 
 			// PV Table
 			pv_table[ply][ply] = current_move;
