@@ -40,15 +40,6 @@ static const Evaluation mvv_lva[6][6] = {
 ExtMove find_best(Position *position, uint32_t depth);
 
 /**
- * \brief Selects one random move from the #MoveList
- *
- * \param move_list move list(shouldn't be empty)
- *
- * \return random move
- */
-ExtMove get_random_move(MoveList *move_list);
-
-/**
  * \brief Sorts moves from the strongest to the weakest.
  *
  * \param pos current position
