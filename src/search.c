@@ -267,6 +267,9 @@ Evaluation negamax(
 
 	nodes++;
 
+	if (get_check_type(pos) != NO_CHECK)
+		depth++;
+
 	MoveList *move_list = generate_all_moves(pos);
 
 	if (follow_PV)
