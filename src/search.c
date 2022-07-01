@@ -69,6 +69,18 @@ ExtMove find_best(Position *position, uint32_t depth)
 	best_move.eval = score;
 	best_move.move = pv_table[0][0];
 
+	printf(
+		"info score cp %d depth %d nodes %ld pv ",
+		 best_move.eval, depth, nodes
+	);
+
+	for (uint32_t i = 0; i < pv_lenght[0]; i++) {
+		char str[6];
+
+		move_to_str(pv_table[0][i], str);
+		printf("%s ", str);
+	}
+
 	free(move_list);
 
 	return best_move;

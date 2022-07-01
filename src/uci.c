@@ -220,11 +220,6 @@ ExtMove get_go(Position *pos, char *str)
 
 	ExtMove best_move = find_best(pos, depth);
 
-	printf(
-		"info score cp %d depth %d nodes %ld\n",
-		 best_move.eval, depth, nodes
-	);
-
 	return best_move;
 }
 
