@@ -57,10 +57,6 @@ ExtMove find_best(Position *position, uint32_t depth)
 {
 	assert(position != NULL);
 
-	/*MoveList *move_list = generate_all_moves(position);
-
-	sort_move_list(position, move_list);*/
-
 	ExtMove best_move = {
 		.eval = BLACK_WIN
 	};
@@ -200,6 +196,8 @@ Evaluation quiescence(Position *pos, Evaluation alpha, Evaluation beta)
 	sort_move_list(pos, move_list);
 
 	if(ml_len(move_list) == 0) {
+		free(move_list);
+
 		if(get_check_type(pos))
 			return (color ? WHITE_WIN : BLACK_WIN) + ply;
 		else
@@ -258,8 +256,7 @@ Evaluation negamax(
 	pv_lenght[ply] = ply;
 
 	if (depth == 0) {
-		max_score = quiescence(pos, alpha, beta);
-		goto end;
+		return quiescence(pos, alpha, beta);
 	}
 
 	if (ply > MAX_PLY - 1)
@@ -348,15 +345,14 @@ Evaluation negamax(
 		}
 	}
 
-	free(move_list);
-
-end:
 	if(ml_len(move_list) == 0) {
 		if(get_check_type(pos))
 			max_score = BLACK_WIN + ply;
 		else
 			max_score = DRAW;
 	}
+
+	free(move_list);
 
 	return max_score;
 }
