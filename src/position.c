@@ -468,6 +468,48 @@ void do_castling(Position *pos, Castling castling)
 	move_piece(pos, make_piece(color, ROOK), rook_src, rook_dst);
 }
 
+void do_null_move(Position *pos)
+{
+	assert(pos != NULL);
+
+	PositionState *state = malloc(sizeof(PositionState));
+
+	Color color = !pos->state->previous_move.color;
+
+	Move null_move = {
+		.move_type = COMMON, .moved_piece_type = NO_PIECE_TYPE,
+		.promotion_piece_type = NO_PIECE_TYPE, .color = color,
+		.source = SQ_NB, .destination = SQ_NB
+	};
+
+	state->move_50_rule = pos->state->move_50_rule;
+	state->captured_piece = NO_PIECE;
+	state->castling = pos->state->castling;
+	state->previous_state = pos->state;
+	state->previous_move = null_move;
+
+	pos->state = state;
+
+	state->allies = EMPTY;
+	state->enemies = EMPTY;
+
+	for(PieceType pt = PAWN; pt <= PIECE_TYPE_NB; pt++) {
+		state->allies |= pieces(pos, make_piece(!color, pt));
+		state->enemies |= pieces(pos, make_piece(color, pt));
+	}
+
+	state->occupied = state->allies | state->enemies;
+}
+
+void undo_null_move(Position *pos)
+{
+	assert(pos != NULL);
+
+	PositionState *temp = pos->state;
+	pos->state = pos->state->previous_state;
+	free(temp);
+}
+
 void do_move(Position *pos, Move move)
 {
 	assert(pos != NULL);
