@@ -262,6 +262,100 @@ void test_attaked_by(void)
 	free(pos);
 }
 
+void test_do_null_move(void)
+{
+	Position *pos = init_position(
+		"rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1"
+	);
+
+	do_null_move(pos);
+
+	TEST_ASSERT_EQUAL_UINT64(0xFFFF00000000FFFF, pos->state->occupied);
+	TEST_ASSERT_EQUAL_UINT64(0xFFFF000000000000, pos->state->allies);
+	TEST_ASSERT_EQUAL_UINT64(0xFFFF, pos->state->enemies);
+
+	TEST_ASSERT_EQUAL_UINT32(NO_PIECE, pos->state->captured_piece);
+	TEST_ASSERT_EQUAL_UINT32(ALL_CASTLING, pos->state->castling);
+	TEST_ASSERT_EQUAL_UINT32(0, pos->state->move_50_rule);
+	
+	free(pos->state);
+	free(pos);
+
+	pos = init_position(
+		"rnbk1b1r/ppp1pppp/5n2/3p4/3P4/4P3/PPP2PPP/RNB1KBNR b KQ - 0 1"
+	);
+
+	do_null_move(pos);
+
+	TEST_ASSERT_EQUAL_UINT64(0xAFF720080810E7F7, pos->state->occupied);
+	TEST_ASSERT_EQUAL_UINT64(0x810E7F7, pos->state->allies);
+	TEST_ASSERT_EQUAL_UINT64(0xAFF7200800000000, pos->state->enemies);
+
+	TEST_ASSERT_EQUAL_UINT32(NO_PIECE, pos->state->captured_piece);
+	TEST_ASSERT_EQUAL_UINT32(ALL_WHITE, pos->state->castling);
+	TEST_ASSERT_EQUAL_UINT32(0, pos->state->move_50_rule);
+	
+	free(pos->state);
+	free(pos);
+}
+
+void test_undo_null_move(void)
+{
+	Position *pos = init_position("4k2b/1b6/8/p7/8/7B/2B5/6K1 w - - 0 1");
+
+	do_null_move(pos);
+	undo_null_move(pos);
+
+	TEST_ASSERT_EQUAL_UINT64(
+		0x9002000100800440ULL, pos->state->occupied
+	);
+	
+	TEST_ASSERT_EQUAL_UINT64(0x00ULL, pos->board.WhitePawns);
+	TEST_ASSERT_EQUAL_UINT64(0x00ULL, pos->board.WhiteKnights);
+	TEST_ASSERT_EQUAL_UINT64(0x00ULL, pos->board.WhiteRooks);
+	TEST_ASSERT_EQUAL_UINT64(0x00ULL, pos->board.WhiteQueens);
+	TEST_ASSERT_EQUAL_UINT64(0x00ULL, pos->board.BlackKnights);
+	TEST_ASSERT_EQUAL_UINT64(0x00ULL, pos->board.BlackRooks);
+	TEST_ASSERT_EQUAL_UINT64(0x00ULL, pos->board.BlackQueens);
+
+	TEST_ASSERT_EQUAL_UINT64(0x800400ULL, pos->board.WhiteBishops);
+	TEST_ASSERT_EQUAL_UINT64(0x40ULL, pos->board.WhiteKing);
+	TEST_ASSERT_EQUAL_UINT64(0x100000000ULL, pos->board.BlackPawns);
+	TEST_ASSERT_EQUAL_UINT64(
+		0x8002000000000000ULL, pos->board.BlackBishops
+	);
+	TEST_ASSERT_EQUAL_UINT64(0x1000000000000000ULL, pos->board.BlackKing);
+	free(pos->state);
+	free(pos);
+
+	pos = init_position(
+		"rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1"
+	);
+
+	do_null_move(pos);
+	undo_null_move(pos);
+
+	TEST_ASSERT_EQUAL_UINT64(
+		0xFFFF00000000FFFFULL, pos->state->occupied
+	);
+
+	TEST_ASSERT_EQUAL_UINT64(0xFF00ULL, pos->board.WhitePawns);
+	TEST_ASSERT_EQUAL_UINT64(0x42ULL, pos->board.WhiteKnights);
+	TEST_ASSERT_EQUAL_UINT64(0x24ULL, pos->board.WhiteBishops);
+	TEST_ASSERT_EQUAL_UINT64(0x81ULL, pos->board.WhiteRooks);
+	TEST_ASSERT_EQUAL_UINT64(0x8ULL, pos->board.WhiteQueens);
+	TEST_ASSERT_EQUAL_UINT64(0x10ULL, pos->board.WhiteKing);
+	TEST_ASSERT_EQUAL_UINT64(0xFF000000000000ULL, pos->board.BlackPawns);
+	TEST_ASSERT_EQUAL_UINT64(0x4200000000000000ULL, pos->board.BlackKnights);
+	TEST_ASSERT_EQUAL_UINT64(0x2400000000000000ULL, pos->board.BlackBishops);
+	TEST_ASSERT_EQUAL_UINT64(0x8100000000000000ULL, pos->board.BlackRooks);
+	TEST_ASSERT_EQUAL_UINT64(0x800000000000000ULL, pos->board.BlackQueens);
+	TEST_ASSERT_EQUAL_UINT64(0x1000000000000000ULL, pos->board.BlackKing);
+
+	free(pos->state);
+	free(pos);
+}
+
 void test_do_move(void)
 {
 	Position *pos = init_position(
