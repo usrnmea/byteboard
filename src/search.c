@@ -29,6 +29,12 @@ uint32_t pv_lenght[MAX_PLY];
 /// Principle variation table
 Move pv_table[MAX_PLY][MAX_PLY];
 
+/// Full depth searching constant for LMR
+const uint32_t FULL_DEPTH_MOVES = 4;
+
+/// Reduction limit in LMR
+const uint32_t REDUCTION_LIMIT = 3;
+
 int cmp(const void *elem1, const void *elem2)
 {
 	ExtMove first = *((ExtMove*)elem1);
@@ -249,7 +255,7 @@ Evaluation negamax(
 {
 	assert(pos != NULL);
 
-	uint8_t found_PV = 0;
+	uint32_t moves_searched = 0;
 
 	Evaluation max_score = BLACK_WIN;
 
@@ -275,27 +281,43 @@ Evaluation negamax(
 	sort_move_list(pos, move_list);
 
 	for (uint32_t i = 0; i < ml_len(move_list); i++) {
-		do_move(pos, move_list->move_list[i].move);
+		Move current_move = move_list->move_list[i].move;
+
+		do_move(pos, current_move);
 
 		ply++;
 
 		Evaluation score = NO_EVAL;
 
-		if (found_PV) {
-			score = -negamax(
-				pos, depth - 1, -alpha - 1, -alpha
-			);
+		if (moves_searched == 0)
+			score = -negamax(pos, depth - 1, -beta, -alpha);
 
-			if ((score > alpha) && (score < beta)) {
+		else {
+			Piece capture = piece_on(pos, current_move.destination);
+			PieceType pt = current_move.promotion_piece_type;
+
+			if (
+				moves_searched >= FULL_DEPTH_MOVES &&
+				depth >= REDUCTION_LIMIT &&
+				get_check_type(pos) == NO_CHECK &&
+				capture == NO_PIECE &&
+				pt == NO_PIECE_TYPE
+			)
+				score = -negamax(pos, depth - 1, -beta, -alpha);
+			else
+				score = alpha + 1;
+
+			if (score > alpha) {
 				score = -negamax(
-					pos, depth - 1, -beta, -alpha
+					pos, depth - 1, -alpha - 1, -alpha
 				);
+				if (score > alpha && score < beta)
+					score = -negamax(
+						pos, depth - 1,
+						-beta, -alpha
+					);
 			}
 		}
-		else
-			score = -negamax(
-				pos, depth - 1, -beta, -alpha
-			);
 
 		ply--;
 
@@ -304,9 +326,9 @@ Evaluation negamax(
 
 		undo_move(pos);
 
-		if (max_score > alpha) {
-			Move current_move = move_list->move_list[i].move;
+		moves_searched++;
 
+		if (max_score > alpha) {
 			// History heuristic
 			PieceType pt = current_move.moved_piece_type - 1;
 			Color color = current_move.color + 1;
@@ -316,8 +338,6 @@ Evaluation negamax(
 				history_moves[pt * color][target] += depth;
 
 			alpha = max_score;
-
-			found_PV = 1;
 
 			// PV Table
 			pv_table[ply][ply] = current_move;
