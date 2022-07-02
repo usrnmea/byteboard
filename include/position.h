@@ -217,6 +217,20 @@ void remove_piece(Position *position, Piece piece, Square target);
 void do_castling(Position *position, Castling castling);
 
 /**
+ * \brief Makes null move for null move pruning
+ *
+ * \param pos current position
+ */
+void do_null_move(Position *pos);
+
+/**
+ * \brief Undoes null move
+ *
+ * \param pos current position
+ */
+void undo_null_move(Position *pos);
+
+/**
  * \brief Makes a move
  *
  * \param position
