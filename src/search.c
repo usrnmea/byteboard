@@ -273,6 +273,19 @@ Evaluation negamax(
 	if (get_check_type(pos) != NO_CHECK)
 		depth++;
 
+	if (depth >= 3 && get_check_type(pos) == NO_CHECK && ply) {
+		do_null_move(pos);
+
+		Evaluation score = -negamax(
+			pos, depth - 1 - 2, -beta, -beta + 1
+		);
+
+		undo_null_move(pos);
+
+		if (score >= beta)
+			return beta;
+	}
+
 	MoveList *move_list = generate_all_moves(pos);
 
 	if (follow_PV)
