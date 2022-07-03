@@ -32,7 +32,7 @@ static Evaluation non_pawn_material(const Position *pos, Color color)
 	return value;
 }
 
-GamePhase get_game_phase(const Position *pos)
+int32_t get_game_phase(const Position *pos)
 {
 	assert(pos != NULL);
 
@@ -51,11 +51,7 @@ GamePhase get_game_phase(const Position *pos)
 		((npm - endgame_limit) * 100) / (midgame_limit - endgame_limit)
 	) << 0;
 
-	// TODO: Use the npm as a coefficient of the phase of the game
-	if(npm > 10)
-		return MIDDLEGAME;
-	else
-		return ENDGAME;
+	return npm;
 }
 
 #undef MAX

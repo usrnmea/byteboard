@@ -35,13 +35,15 @@ typedef enum GamePhase {
 extern Evaluation piece_type_value[GAME_PHASES_NB][PIECE_TYPE_NB];
 
 /**
- * \brief Function for determining the phase of the game
+ * \brief returns phase value for tapered evaluation
  *
  * \param position position
  *
- * \return Game phase
+ * \return phase
+ *
+ * \see https://www.chessprogramming.org/Tapered_Eval
  */
-GamePhase get_game_phase(const Position *position);
+int32_t get_phase(const Position *position);
 
 /**
  * \brief Main function for position evaluation.
