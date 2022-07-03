@@ -69,14 +69,14 @@ void test_evaluate_position()
 {
 	Position *pos = init_position("8/1nbk4/8/8/8/8/1QRK4/8 w - - 0 1");
 
-	TEST_ASSERT_GREATER_THAN(DRAW, evaluate_material(pos));
+	TEST_ASSERT_GREATER_THAN(DRAW, evaluate_material(pos, MIDDLEGAME));
 
 	free(pos->state);
 	free(pos);
 
 	pos = init_position("8/1qrk4/8/8/8/8/1BNK4/8 w - - 0 1");
 
-	TEST_ASSERT_LESS_THAN(DRAW, evaluate_material(pos));
+	TEST_ASSERT_LESS_THAN(DRAW, evaluate_material(pos, MIDDLEGAME));
 
 	free(pos->state);
 	free(pos);

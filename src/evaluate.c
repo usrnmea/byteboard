@@ -6,8 +6,9 @@
 #include <assert.h>
 #include <stdlib.h>
 
-Evaluation piece_type_value[PIECE_TYPE_NB] = {
-	100, 350, 350, 520, 1000, 0
+Evaluation piece_type_value[GAME_PHASES_NB][PIECE_TYPE_NB] = {
+	{100, 320, 320, 500, 1000, 0},
+	{150, 320, 320, 550, 1050, 0},
 };
 
 #define MAX(a, b) ((a) > (b) ? (a) : (b))
@@ -25,7 +26,7 @@ static Evaluation non_pawn_material(const Position *pos, Color color)
 			pieces(pos, make_piece(color, pt))
 		);
 
-		value += piece_count * piece_type_value[pt - 1];
+		value += piece_count * piece_type_value[MIDDLEGAME][pt - 1];
 	}
 
 	return value;
@@ -66,13 +67,16 @@ Evaluation evaluate_position(const Position *pos)
 
 	Evaluation eval = NO_EVAL;
 
-	eval += evaluate_material(pos);
+	eval += evaluate_material(pos, MIDDLEGAME);
 
 	return eval;
 }
 
-Evaluation evaluate_material(const Position *pos)
+Evaluation evaluate_material(const Position *pos, GamePhase gp)
 {
+	assert(pos != NULL);
+	assert(gp < GAME_PHASES_NB);
+
 	Evaluation value = DRAW;
 
 	for(PieceType pt = PAWN; pt < PIECE_TYPE_NB; pt++) {
@@ -80,13 +84,11 @@ Evaluation evaluate_material(const Position *pos)
 			pieces(pos, make_piece(WHITE, pt))
 		);
 
-		value += piece_count * piece_type_value[pt - 1];
-
 		piece_count = population_count(
 			pieces(pos, make_piece(BLACK, pt))
 		);
 
-		value -= piece_count * piece_type_value[pt - 1];
+		value += piece_count * piece_type_value[gp][pt - 1];
 	}
 
 	return value;

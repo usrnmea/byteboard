@@ -32,7 +32,7 @@ typedef enum GamePhase {
 } GamePhase;
 
 /// Returns the value of the #PieceType
-extern Evaluation piece_type_value[PIECE_TYPE_NB];
+extern Evaluation piece_type_value[GAME_PHASES_NB][PIECE_TYPE_NB];
 
 /**
  * \brief Function for determining the phase of the game
@@ -57,9 +57,11 @@ Evaluation evaluate_position(const Position *position);
  *
  * \param position position
  *
+ * \param gp game phase
+ *
  * \brief value
  */
-Evaluation evaluate_material(const Position *position);
+Evaluation evaluate_material(const Position *position, GamePhase gp);
 
 /**
  * \brieft Evaluates pawns in the four central squares
