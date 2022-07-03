@@ -102,6 +102,7 @@ Evaluation evaluate_midgame(const Position *pos)
 	eval += evaluate_material(pos, MIDDLEGAME);
 	eval += evaluate_mobility(pos, MIDDLEGAME);
 	eval += evaluate_central_pawns(pos);
+	eval += evaluate_space(pos);
 
 	return eval;
 }
