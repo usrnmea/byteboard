@@ -23,7 +23,7 @@ static Evaluation non_pawn_material(const Position *pos)
 	Evaluation value = NO_EVAL;
 
 	for(PieceType pt = KNIGHT; pt < PIECE_TYPE_NB; pt++) {
-		uint32_t piece_count = population_count(
+		int32_t piece_count = population_count(
 			pieces(pos, make_piece(WHITE, pt))
 		);
 
@@ -219,7 +219,7 @@ Evaluation evaluate_material(const Position *pos, GamePhase gp)
 	Evaluation value = DRAW;
 
 	for(PieceType pt = PAWN; pt < PIECE_TYPE_NB; pt++) {
-		uint32_t piece_count = population_count(
+		int32_t piece_count = population_count(
 			pieces(pos, make_piece(WHITE, pt))
 		);
 
