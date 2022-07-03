@@ -170,3 +170,24 @@ void test_tempo(void)
 	free(pos->state);
 	free(pos);
 }
+
+void test_evaluate_space(void)
+{
+	Position *pos = init_position(
+		"rnbqkbnr/pppppppp/8/8/3PP3/8/PPP2PPP/RNBQKBNR w KQkq - 0 1"
+	);
+
+	TEST_ASSERT_GREATER_THAN(DRAW, evaluate_space(pos));
+
+	free(pos->state);
+	free(pos);
+
+	pos = init_position(
+		"rnbqkbnr/ppp2ppp/8/3pp3/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1"
+	);
+
+	TEST_ASSERT_LESS_THAN(DRAW, evaluate_space(pos));
+
+	free(pos->state);
+	free(pos);
+}
