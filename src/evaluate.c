@@ -71,8 +71,14 @@ Evaluation evaluate_position(const Position *pos)
 	int32_t phase = get_phase(pos);
 
 	Evaluation eval = NO_EVAL;
+
+	eval += evaluate_doubled_pawns(pos);
+
 	Evaluation midgame_eval = evaluate_midgame(pos);
 	Evaluation endgame_eval = evaluate_endgame(pos);
+
+	midgame_eval += eval;
+	endgame_eval += eval;
 
 	eval = (
 		(
