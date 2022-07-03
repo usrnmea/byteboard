@@ -63,6 +63,9 @@ Evaluation evaluate_position(const Position *pos)
 {
 	assert(pos != NULL);
 
+	if(pos->state->move_50_rule == 50)
+		return DRAW;
+
 	int32_t phase = get_phase(pos);
 
 	Evaluation eval = NO_EVAL;
