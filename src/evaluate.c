@@ -378,7 +378,37 @@ Evaluation evaluate_space(const Position *position)
 {
 	assert(position != NULL);
 
+	U64 white_space_mask = 0x3C3C3C00ULL;
+	U64 black_space_mask = 0x3C3C3C00000000ULL;
+
+	U64 white_pawns = pieces(position, W_PAWN);
+	U64 black_pawns = pieces(position, B_PAWN);
+
+	U64 pawns = white_pawns | black_pawns;
+
+	white_space_mask &= ~(pawns);
+	black_space_mask &= ~(pawns);
+
 	Evaluation eval = NO_EVAL;
+
+	while(white_pawns) {
+		Square target = bit_scan_forward(white_pawns);
+		remove_lsb(white_pawns);
+
+		black_space_mask &= ~(pawn_attack_pattern[WHITE](target));
+	}
+
+	while(black_pawns) {
+		Square target = bit_scan_forward(black_pawns);
+		remove_lsb(black_pawns);
+
+		white_space_mask &= ~(pawn_attack_pattern[BLACK](target));
+	}
+
+	eval += (
+		population_count(white_space_mask)
+		- population_count(black_space_mask)
+	) * 3;
 
 	return eval;
 }
