@@ -1,5 +1,7 @@
 #include "bitboard.h"
 #include "piece.h"
+#include "patterns.h"
+#include "masks.h"
 #include "position.h"
 #include "evaluate.h"
 
@@ -111,6 +113,87 @@ Evaluation evaluate_mobility(const Position *pos, GamePhase gp)
 	assert(gp < GAME_PHASES_NB);
 
 	Evaluation eval = DRAW;
+
+	U64 occ = pos->state->occupied;
+
+	U64 w_tmp = pieces(pos, W_BISHOP);
+	U64 b_tmp = pieces(pos, B_BISHOP);
+
+	while(w_tmp) {
+		Square target = bit_scan_forward(w_tmp);
+
+		eval += population_count(bishop_attacks_mask(target, occ));
+
+		remove_lsb(w_tmp);
+	}
+
+	while(b_tmp) {
+		Square target = bit_scan_forward(b_tmp);
+
+		eval -= population_count(bishop_attacks_mask(target, occ));
+
+		remove_lsb(b_tmp);
+	}
+
+	w_tmp = pieces(pos, W_KNIGHT);
+	b_tmp = pieces(pos, B_KNIGHT);
+
+	while(w_tmp) {
+		Square target = bit_scan_forward(w_tmp);
+
+		eval += population_count(knight_move_pattern(target));
+
+		remove_lsb(w_tmp);
+	}
+
+	while(b_tmp) {
+		Square target = bit_scan_forward(b_tmp);
+
+		eval -= population_count(knight_move_pattern(target));
+
+		remove_lsb(b_tmp);
+	}
+
+	if (gp == MIDDLEGAME)
+		return eval;
+
+	w_tmp = pieces(pos, W_ROOK);
+	b_tmp = pieces(pos, B_ROOK);
+
+	while(w_tmp) {
+		Square target = bit_scan_forward(w_tmp);
+
+		eval += population_count(rook_attacks_mask(target, occ));
+
+		remove_lsb(w_tmp);
+	}
+
+	while(b_tmp) {
+		Square target = bit_scan_forward(b_tmp);
+
+		eval -= population_count(rook_attacks_mask(target, occ));
+
+		remove_lsb(b_tmp);
+	}
+
+	w_tmp = pieces(pos, W_QUEEN);
+	b_tmp = pieces(pos, B_QUEEN);
+
+	while(w_tmp) {
+		Square target = bit_scan_forward(w_tmp);
+
+		eval += population_count(queen_attacks_mask(target, occ));
+
+		remove_lsb(w_tmp);
+	}
+
+	while(b_tmp) {
+		Square target = bit_scan_forward(b_tmp);
+
+		eval -= population_count(queen_attacks_mask(target, occ));
+
+		remove_lsb(b_tmp);
+	}
 
 	return eval;
 }
