@@ -409,7 +409,7 @@ Evaluation evaluate_space(const Position *position)
 	eval += (
 		population_count(white_space_mask)
 		- population_count(black_space_mask)
-	) * 3;
+	) * 10;
 
 	return eval;
 }
