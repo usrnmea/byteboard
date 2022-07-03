@@ -192,7 +192,7 @@ Evaluation evaluate_mobility(const Position *pos, GamePhase gp)
 	while(w_tmp) {
 		Square target = bit_scan_forward(w_tmp);
 
-		eval += population_count(queen_attacks_mask(target, occ));
+		eval += population_count(queen_attacks_mask(target, occ)) % 4;
 
 		remove_lsb(w_tmp);
 	}
@@ -200,7 +200,7 @@ Evaluation evaluate_mobility(const Position *pos, GamePhase gp)
 	while(b_tmp) {
 		Square target = bit_scan_forward(b_tmp);
 
-		eval -= population_count(queen_attacks_mask(target, occ));
+		eval -= population_count(queen_attacks_mask(target, occ)) % 4;
 
 		remove_lsb(b_tmp);
 	}
