@@ -143,4 +143,15 @@ Evaluation evaluate_king_position(
  */
 Evaluation tempo(const Position *position);
 
+/**
+ * \brief Evaluates free space 
+ *
+ * \param position position
+ *
+ * \return evaluation
+ *
+ * \see https://www.chessprogramming.org/Space
+ */
+Evaluation evaluate_space(const Position *position);
+
 #endif

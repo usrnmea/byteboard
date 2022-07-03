@@ -373,3 +373,12 @@ Evaluation tempo(const Position *position)
 
 	return 25 * (position->state->previous_move.color ? 1 : -1);
 }
+
+Evaluation evaluate_space(const Position *position)
+{
+	assert(position != NULL);
+
+	Evaluation eval = NO_EVAL;
+
+	return eval;
+}
