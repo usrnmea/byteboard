@@ -85,6 +85,23 @@ void test_evaluate_central_pawns(void)
 	free(pos);
 }
 
+void test_evaluate_passed_pawns(void)
+{
+	Position *pos = init_position("K7/8/6P1/8/8/6p1/6P1/k7 w - - 0 1");
+
+	TEST_ASSERT_GREATER_THAN(DRAW, evaluate_passed_pawns(pos));
+
+	free(pos->state);
+	free(pos);
+
+	pos = init_position("K7/6p1/6P1/8/8/6p1/8/k7 w - - 0 1");
+
+	TEST_ASSERT_LESS_THAN(DRAW, evaluate_passed_pawns(pos));
+
+	free(pos->state);
+	free(pos);
+}
+
 void test_evaluate_doubled_pawns(void)
 {
 	Position *pos = init_position(
