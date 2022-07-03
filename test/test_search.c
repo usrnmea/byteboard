@@ -9,6 +9,7 @@
 #include "masks.h"
 #include "rays.h"
 #include "search.h"
+#include "uci.h"
 
 #include <stdlib.h>
 
@@ -31,26 +32,6 @@ void test_find_best(void)
 	TEST_ASSERT_TRUE(best.move.destination < SQ_NB);
 	TEST_ASSERT_TRUE(best.move.source < SQ_NB);
 
-	free(pos->state);
-	free(pos);
-}
-
-void test_get_random_move(void)
-{
-	Position *pos = init_position(
-		"rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1"
-	);
-
-	MoveList *move_list = generate_all_moves(pos);
-
-	ExtMove random_move = get_random_move(move_list);
-
-	TEST_ASSERT_TRUE(random_move.move.moved_piece_type != NO_PIECE_TYPE);
-	TEST_ASSERT_TRUE(random_move.move.color < COLOR_NB);
-	TEST_ASSERT_TRUE(random_move.move.destination < SQ_NB);
-	TEST_ASSERT_TRUE(random_move.move.source < SQ_NB);
-
-	free(move_list);
 	free(pos->state);
 	free(pos);
 }
