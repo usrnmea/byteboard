@@ -112,6 +112,7 @@ Evaluation evaluate_endgame(const Position *pos)
 
 	eval += evaluate_material(pos, ENDGAME);
 	eval += evaluate_mobility(pos, ENDGAME);
+	eval += evaluate_passed_pawns(pos);
 
 	return eval;
 }
