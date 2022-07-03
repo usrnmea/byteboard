@@ -14,16 +14,19 @@ Evaluation piece_type_value[GAME_PHASES_NB][PIECE_TYPE_NB] = {
 #define MAX(a, b) ((a) > (b) ? (a) : (b))
 #define MIN(a, b) ((a) < (b) ? (a) : (b))
 
-static Evaluation non_pawn_material(const Position *pos, Color color)
+static Evaluation non_pawn_material(const Position *pos)
 {
 	assert(pos != NULL);
-	assert(color < COLOR_NB);
 
 	Evaluation value = NO_EVAL;
 
 	for(PieceType pt = KNIGHT; pt < PIECE_TYPE_NB; pt++) {
 		uint32_t piece_count = population_count(
-			pieces(pos, make_piece(color, pt))
+			pieces(pos, make_piece(WHITE, pt))
+		);
+
+		piece_count -= population_count(
+			pieces(pos, make_piece(BLACK, pt))
 		);
 
 		value += piece_count * piece_type_value[MIDDLEGAME][pt - 1];
@@ -39,8 +42,7 @@ int32_t get_game_phase(const Position *pos)
 	const Evaluation midgame_limit = 6880;
 	const Evaluation endgame_limit = 3400;
 
-	Evaluation npm = non_pawn_material(pos, WHITE);
-	npm += non_pawn_material(pos, BLACK);
+	Evaluation npm = non_pawn_material(pos);
 
 	npm = MAX(
 		endgame_limit,
@@ -98,7 +100,7 @@ Evaluation evaluate_material(const Position *pos, GamePhase gp)
 			pieces(pos, make_piece(WHITE, pt))
 		);
 
-		piece_count = population_count(
+		piece_count -= population_count(
 			pieces(pos, make_piece(BLACK, pt))
 		);
 
