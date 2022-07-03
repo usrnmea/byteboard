@@ -53,6 +53,24 @@ GamePhase get_game_phase(const Position *position);
 Evaluation evaluate_position(const Position *position);
 
 /**
+ * \brief Main function for midgame evaluation.
+ *
+ * \param position position
+ *
+ * \return evaluation
+ */
+Evaluation evaluate_midgame(const Position *pos);
+
+/**
+ * \brief Main function for endgame evaluation.
+ *
+ * \param position position
+ *
+ * \return evaluation
+ */
+Evaluation evaluate_endgame(const Position *pos);
+
+/**
  * \brief Evaluates the position on the material on both sides
  *
  * \param position position

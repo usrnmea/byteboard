@@ -72,6 +72,24 @@ Evaluation evaluate_position(const Position *pos)
 	return eval;
 }
 
+Evaluation evaluate_midgame(const Position *pos)
+{
+	assert(pos != NULL);
+
+	Evaluation eval = NO_EVAL;
+
+	return eval;
+}
+
+Evaluation evaluate_endgame(const Position *pos)
+{
+	assert(pos != NULL);
+
+	Evaluation eval = NO_EVAL;
+
+	return eval;
+}
+
 Evaluation evaluate_material(const Position *pos, GamePhase gp)
 {
 	assert(pos != NULL);
