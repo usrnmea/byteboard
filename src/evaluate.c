@@ -27,7 +27,7 @@ static Evaluation non_pawn_material(const Position *pos)
 			pieces(pos, make_piece(WHITE, pt))
 		);
 
-		piece_count -= population_count(
+		piece_count += population_count(
 			pieces(pos, make_piece(BLACK, pt))
 		);
 
