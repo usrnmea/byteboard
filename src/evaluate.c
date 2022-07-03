@@ -9,8 +9,8 @@
 #include <stdlib.h>
 
 Evaluation piece_type_value[GAME_PHASES_NB][PIECE_TYPE_NB] = {
-	{100, 320, 320, 500, 1000, 0},
-	{150, 320, 320, 550, 1050, 0},
+	{126, 781, 825, 1276, 2538, 0},
+	{208, 854, 915, 1380, 2568, 0},
 };
 
 #define MAX(a, b) ((a) > (b) ? (a) : (b))
@@ -42,7 +42,7 @@ int32_t get_phase(const Position *pos)
 	assert(pos != NULL);
 
 	const Evaluation midgame_limit = 15258;
-	const Evaluation endgame_limit = 3000;
+	const Evaluation endgame_limit = 3915;
 
 	Evaluation npm = non_pawn_material(pos);
 
@@ -52,7 +52,7 @@ int32_t get_phase(const Position *pos)
 	);
 
 	npm = (
-		((npm - endgame_limit) * 100) / (midgame_limit - endgame_limit)
+		((npm - endgame_limit) * 128) / (midgame_limit - endgame_limit)
 	) << 0;
 
 	return npm;
@@ -135,7 +135,7 @@ Evaluation evaluate_mobility(const Position *pos, GamePhase gp)
 	while(w_tmp) {
 		Square target = bit_scan_forward(w_tmp);
 
-		eval += population_count(bishop_attacks_mask(target, occ));
+		eval += population_count(bishop_attacks_mask(target, occ)) * 4;
 
 		remove_lsb(w_tmp);
 	}
@@ -143,7 +143,7 @@ Evaluation evaluate_mobility(const Position *pos, GamePhase gp)
 	while(b_tmp) {
 		Square target = bit_scan_forward(b_tmp);
 
-		eval -= population_count(bishop_attacks_mask(target, occ));
+		eval -= population_count(bishop_attacks_mask(target, occ)) * 4;
 
 		remove_lsb(b_tmp);
 	}
@@ -154,7 +154,7 @@ Evaluation evaluate_mobility(const Position *pos, GamePhase gp)
 	while(w_tmp) {
 		Square target = bit_scan_forward(w_tmp);
 
-		eval += population_count(knight_move_pattern(target));
+		eval += population_count(knight_move_pattern(target)) * 4;
 
 		remove_lsb(w_tmp);
 	}
@@ -162,7 +162,7 @@ Evaluation evaluate_mobility(const Position *pos, GamePhase gp)
 	while(b_tmp) {
 		Square target = bit_scan_forward(b_tmp);
 
-		eval -= population_count(knight_move_pattern(target));
+		eval -= population_count(knight_move_pattern(target)) * 4;
 
 		remove_lsb(b_tmp);
 	}
@@ -176,7 +176,7 @@ Evaluation evaluate_mobility(const Position *pos, GamePhase gp)
 	while(w_tmp) {
 		Square target = bit_scan_forward(w_tmp);
 
-		eval += population_count(rook_attacks_mask(target, occ));
+		eval += population_count(rook_attacks_mask(target, occ)) * 4;
 
 		remove_lsb(w_tmp);
 	}
@@ -184,7 +184,7 @@ Evaluation evaluate_mobility(const Position *pos, GamePhase gp)
 	while(b_tmp) {
 		Square target = bit_scan_forward(b_tmp);
 
-		eval -= population_count(rook_attacks_mask(target, occ));
+		eval -= population_count(rook_attacks_mask(target, occ)) * 4;
 
 		remove_lsb(b_tmp);
 	}
@@ -195,7 +195,7 @@ Evaluation evaluate_mobility(const Position *pos, GamePhase gp)
 	while(w_tmp) {
 		Square target = bit_scan_forward(w_tmp);
 
-		eval += population_count(queen_attacks_mask(target, occ)) % 4;
+		eval += population_count(queen_attacks_mask(target, occ)) % 2;
 
 		remove_lsb(w_tmp);
 	}
@@ -203,7 +203,7 @@ Evaluation evaluate_mobility(const Position *pos, GamePhase gp)
 	while(b_tmp) {
 		Square target = bit_scan_forward(b_tmp);
 
-		eval -= population_count(queen_attacks_mask(target, occ)) % 4;
+		eval -= population_count(queen_attacks_mask(target, occ)) % 2;
 
 		remove_lsb(b_tmp);
 	}
@@ -275,7 +275,7 @@ Evaluation evaluate_passed_pawns(const Position *pos)
 
 		value += population_count(
 			file & ray_south[target]
-		) * 2;
+		) * 4;
 	}
 
 	tmp = black_pawns;
@@ -291,7 +291,7 @@ Evaluation evaluate_passed_pawns(const Position *pos)
 
 		value -= population_count(
 			file & ray_north[target]
-		) * 2;
+		) * 4;
 	}
 
 	return value;
