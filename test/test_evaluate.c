@@ -52,7 +52,7 @@ void test_evaluate_material(void)
 void test_evaluate_mobility(void)
 {
 	Position *pos = init_position(
-		"rnbqb1nr/pppppppp/8/4P3/2N5/1P1P2P1/PBP1NPBP/R2QK2R w KQ - 0 1"
+		"rrnbqkbnr/pppppppp/8/4P3/2N5/1P1P2P1/PBP1NPBP/R2QK2R w - - 0 1"
 	);
 
 	TEST_ASSERT_GREATER_THAN(DRAW, evaluate_mobility(pos, MIDDLEGAME));
