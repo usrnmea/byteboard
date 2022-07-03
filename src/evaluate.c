@@ -35,7 +35,7 @@ static Evaluation non_pawn_material(const Position *pos)
 	return value;
 }
 
-int32_t get_game_phase(const Position *pos)
+int32_t get_phase(const Position *pos)
 {
 	assert(pos != NULL);
 
@@ -63,9 +63,19 @@ Evaluation evaluate_position(const Position *pos)
 {
 	assert(pos != NULL);
 
-	Evaluation eval = NO_EVAL;
+	int32_t phase = get_phase(pos);
 
-	eval += evaluate_material(pos, MIDDLEGAME);
+	Evaluation eval = NO_EVAL;
+	Evaluation midgame_eval = evaluate_midgame(pos);
+	Evaluation endgame_eval = evaluate_endgame(pos);
+
+	eval = (
+		(
+			(midgame_eval * phase + (
+				(endgame_eval * (128 - phase)) << 0
+			)
+		) / 128) << 0
+	);
 
 	return eval;
 }
@@ -76,6 +86,8 @@ Evaluation evaluate_midgame(const Position *pos)
 
 	Evaluation eval = NO_EVAL;
 
+	eval += evaluate_material(pos, MIDDLEGAME);
+
 	return eval;
 }
 
@@ -84,6 +96,8 @@ Evaluation evaluate_endgame(const Position *pos)
 	assert(pos != NULL);
 
 	Evaluation eval = NO_EVAL;
+
+	eval += evaluate_material(pos, ENDGAME);
 
 	return eval;
 }
