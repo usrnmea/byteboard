@@ -369,5 +369,5 @@ Evaluation tempo(const Position *position)
 {
 	assert(position != NULL);
 
-	return NO_EVAL;
+	return 25 * (position->state->previous_move.color ? 1 : -1);
 }
