@@ -41,8 +41,8 @@ int32_t get_phase(const Position *pos)
 {
 	assert(pos != NULL);
 
-	const Evaluation midgame_limit = 6880;
-	const Evaluation endgame_limit = 3400;
+	const Evaluation midgame_limit = 15258;
+	const Evaluation endgame_limit = 3000;
 
 	Evaluation npm = non_pawn_material(pos);
 
