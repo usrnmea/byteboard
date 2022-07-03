@@ -9,6 +9,11 @@
 /// Converts square to bitboard(U64)
 #define square_to_bitboard(square) (0x01ULL << (square))
 
+/// Returns the file square index
+#define file_of(square) ((square) % 8)
+/// Returns the rank square index
+#define rank_of(square) ((square) / 8)
+
 /**
  * \brief A set of all 64 squares enumerated from 0..63. Each bit of the
  * bitboard can be marked with one chessboard. We use little-endian,
