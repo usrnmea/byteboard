@@ -149,3 +149,24 @@ void test_evaluate_king_position(void)
 	free(pos->state);
 	free(pos);
 }
+
+void test_tempo(void)
+{
+	Position *pos = init_position(
+		"4k3/pp1pppp1/3p2p1/8/8/8/PPPPPPPP/4K3 w - - 0 1"
+	);
+
+	TEST_ASSERT_GREATER_THAN(DRAW, tempo(pos));
+
+	free(pos->state);
+	free(pos);
+
+	pos = init_position(
+		"4k3/pp1pppp1/3p2p1/8/8/P2P2P1/P1PP1PP1/4K3 b - - 0 1"
+	);
+
+	TEST_ASSERT_LESS_THAN(DRAW, tempo(pos));
+
+	free(pos->state);
+	free(pos);
+}
