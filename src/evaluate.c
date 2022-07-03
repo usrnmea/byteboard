@@ -92,6 +92,7 @@ Evaluation evaluate_midgame(const Position *pos)
 	Evaluation eval = NO_EVAL;
 
 	eval += evaluate_material(pos, MIDDLEGAME);
+	eval += evaluate_mobility(pos, MIDDLEGAME);
 
 	return eval;
 }
@@ -103,6 +104,7 @@ Evaluation evaluate_endgame(const Position *pos)
 	Evaluation eval = NO_EVAL;
 
 	eval += evaluate_material(pos, ENDGAME);
+	eval += evaluate_mobility(pos, ENDGAME);
 
 	return eval;
 }
