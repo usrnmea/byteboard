@@ -26,7 +26,6 @@ typedef struct ExtMove {
 /// Game phases. Depending on the phase of the game, one or another score can
 /// take on very different meanings
 typedef enum GamePhase {
-	OPENING,
 	MIDDLEGAME,
 	ENDGAME,
 	GAME_PHASES_NB,
@@ -37,8 +36,6 @@ extern Evaluation piece_type_value[PIECE_TYPE_NB];
 
 /**
  * \brief Function for determining the phase of the game
- * There are no clear criteria for separating #MIDDLEGAME from #OPENING, so this
- * function always returns #MIDDLEGAME instead of #OPENING.
  *
  * \param position position
  *
