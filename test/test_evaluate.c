@@ -15,6 +15,11 @@
 /// there is an obvious white advantage, the function does not return DRAW or
 /// less.
 
+void test_init(void)
+{
+	init_rays();
+}
+
 void test_evaluate_position()
 {
 	Position *pos = init_position("8/1nbk4/8/8/8/8/1QRK4/8 w - - 0 1");

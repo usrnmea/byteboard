@@ -255,6 +255,41 @@ Evaluation evaluate_passed_pawns(const Position *pos)
 
 	Evaluation value = DRAW;
 
+	U64 white_pawns = pieces(pos, W_PAWN);
+	U64 black_pawns = pieces(pos, B_PAWN);
+
+	U64 tmp = white_pawns;
+
+	while(tmp) {
+		Square target = bit_scan_forward(tmp);
+		remove_lsb(tmp);
+
+		if(ray_north[target] & black_pawns)
+			continue;
+
+		U64 file = files[file_of(target)];
+
+		value += population_count(
+			file & ray_south[target]
+		) * 2;
+	}
+
+	tmp = black_pawns;
+
+	while(tmp) {
+		Square target = bit_scan_forward(tmp);
+		remove_lsb(tmp);
+
+		if(ray_south[target] & white_pawns)
+			continue;
+
+		U64 file = files[file_of(target)];
+
+		value -= population_count(
+			file & ray_north[target]
+		) * 2;
+	}
+
 	return value;
 }
 
