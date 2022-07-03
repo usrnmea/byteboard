@@ -249,6 +249,15 @@ Evaluation evaluate_central_pawns(const Position *pos)
 	return value;
 }
 
+Evaluation evaluate_passed_pawns(const Position *pos)
+{
+	assert(pos != NULL);
+
+	Evaluation value = DRAW;
+
+	return value;
+}
+
 Evaluation evaluate_doubled_pawns(const Position *pos)
 {
 	assert(pos != NULL);

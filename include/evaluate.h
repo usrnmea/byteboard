@@ -104,6 +104,15 @@ Evaluation evaluate_mobility(const Position *position, GamePhase gp);
 Evaluation evaluate_central_pawns(const Position *position);
 
 /**
+ * \brieft Evaluates passed pawns
+ *
+ * \param position position
+ *
+ * \return evaluation
+ */
+Evaluation evaluate_passed_pawns(const Position *pos);
+
+/**
  * \brieft Evaluates doubled pawns
  *
  * \param position position
