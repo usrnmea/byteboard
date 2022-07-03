@@ -88,6 +88,8 @@ Evaluation evaluate_position(const Position *pos)
 		) / 128) << 0
 	);
 
+	eval += tempo(pos);
+
 	return eval;
 }
 
