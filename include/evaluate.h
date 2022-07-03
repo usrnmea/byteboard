@@ -95,7 +95,7 @@ Evaluation evaluate_material(const Position *position, GamePhase gp);
 Evaluation evaluate_mobility(const Position *position, GamePhase gp);
 
 /**
- * \brieft Evaluates pawns in the four central squares
+ * \brief Evaluates pawns in the four central squares
  *
  * \param position position
  *
@@ -104,7 +104,7 @@ Evaluation evaluate_mobility(const Position *position, GamePhase gp);
 Evaluation evaluate_central_pawns(const Position *position);
 
 /**
- * \brieft Evaluates passed pawns
+ * \brief Evaluates passed pawns
  *
  * \param position position
  *
@@ -113,7 +113,7 @@ Evaluation evaluate_central_pawns(const Position *position);
 Evaluation evaluate_passed_pawns(const Position *pos);
 
 /**
- * \brieft Evaluates doubled pawns
+ * \brief Evaluates doubled pawns
  *
  * \param position position
  *
@@ -122,7 +122,7 @@ Evaluation evaluate_passed_pawns(const Position *pos);
 Evaluation evaluate_doubled_pawns(const Position *position);
 
 /**
- * \brieft Evaluates king position
+ * \brief Evaluates king position
  *
  * \param position position
  *
@@ -133,5 +133,14 @@ Evaluation evaluate_doubled_pawns(const Position *position);
 Evaluation evaluate_king_position(
 	const Position *position, GamePhase game_phase
 );
+
+/**
+ * \brief Evaluates turn
+ *
+ * \param position position
+ *
+ * \return evaluation
+ */
+Evaluation tempo(const Position *position);
 
 #endif

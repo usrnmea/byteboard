@@ -364,3 +364,10 @@ Evaluation evaluate_king_position(const Position *pos, GamePhase gp)
 
 	return value;
 }
+
+Evaluation tempo(const Position *position)
+{
+	assert(position != NULL);
+
+	return NO_EVAL;
+}
