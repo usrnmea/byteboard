@@ -84,6 +84,17 @@ Evaluation evaluate_endgame(const Position *pos);
 Evaluation evaluate_material(const Position *position, GamePhase gp);
 
 /**
+ * \brief Evaluates pieces mobility
+ *
+ * \param position position
+ *
+ * \param gp game phase
+ *
+ * \brief value
+ */
+Evaluation evaluate_mobility(const Position *position, GamePhase gp);
+
+/**
  * \brieft Evaluates pawns in the four central squares
  *
  * \param position position

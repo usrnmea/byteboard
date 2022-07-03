@@ -105,6 +105,16 @@ Evaluation evaluate_endgame(const Position *pos)
 	return eval;
 }
 
+Evaluation evaluate_mobility(const Position *pos, GamePhase gp)
+{
+	assert(pos != NULL);
+	assert(gp < GAME_PHASES_NB);
+
+	Evaluation eval = DRAW;
+
+	return eval;
+}
+
 Evaluation evaluate_material(const Position *pos, GamePhase gp)
 {
 	assert(pos != NULL);
