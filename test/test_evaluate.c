@@ -49,6 +49,25 @@ void test_evaluate_material(void)
 	free(pos);
 }
 
+void test_evaluate_mobility(void)
+{
+	Position *pos = init_position(
+		"rnbqb1nr/pppppppp/8/4P3/2N5/1P1P2P1/PBP1NPBP/R2QK2R w KQ - 0 1"
+	);
+
+	TEST_ASSERT_GREATER_THAN(DRAW, evaluate_mobility(pos, MIDDLEGAME));
+
+	free(pos->state);
+	free(pos);
+
+	pos = init_position("8/1k6/3b1n2/8/2q5/8/3K4/7R w - - 0 1");
+
+	TEST_ASSERT_LESS_THAN(DRAW, evaluate_mobility(pos, ENDGAME));
+
+	free(pos->state);
+	free(pos);
+}
+
 void test_evaluate_central_pawns(void)
 {
 	Position *pos = init_position("K7/8/8/4p3/3PP3/2P5/8/k7 w - - 0 1");
