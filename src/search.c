@@ -79,16 +79,12 @@ ExtMove find_best(Position *position, uint32_t depth)
 	memset(pv_lenght, 0, sizeof(pv_lenght));
 
 	for (uint32_t curr_depth = 1; curr_depth <= depth; curr_depth++) {
-		if (time_info.stopped == 1)
-			break;
-
 		follow_PV = 1;
 
 		Evaluation score = negamax(
 			position, curr_depth,
 			BLACK_WIN, WHITE_WIN
 		);
-
 		best_move.eval = score;
 		best_move.move = pv_table[0][0];
 
@@ -105,6 +101,10 @@ ExtMove find_best(Position *position, uint32_t depth)
 		}
 
 		printf("\n");
+
+		if (time_info.stopped == 1)
+			break;
+
 	}
 
 	return best_move;

@@ -349,14 +349,14 @@ ExtMove get_go(Position *pos, char *command)
 	if ((argument = strstr(command,"depth")))
 		depth = atoi(argument + 6);
 
-	if(time_info.move_time != -1) {
+	if (time_info.move_time != -1) {
 		time_info.time_uci = time_info.move_time;
 		time_info.moves_to_go = 1;
 	}
 
 	time_info.start_time = get_time_ms();
 
-	if(time_info.time_uci != -1) {
+	if (time_info.time_uci != -1) {
 		time_info.time_set = 1;
 
 		time_info.time_uci /= time_info.moves_to_go;
@@ -364,7 +364,7 @@ ExtMove get_go(Position *pos, char *command)
 		time_info.stop_time = time_info.start_time + time_info.time_uci + time_info.inc;
 	}
 
-	if(depth == 0)
+	if (depth == 0)
 		depth = 64;
 
 	ExtMove best_move = find_best(pos, depth);
