@@ -26,6 +26,9 @@ typedef struct TimeInfo {
 	int time_uci;
 } TimeInfo;
 
+/// Structure for time control
+extern TimeInfo time_info;
+
 /**
  * \brief Gets current time in milliseconds
  *
@@ -48,7 +51,7 @@ void read_input(void);
 /**
  * \brief Bridge function to interact between search and user\GUI input
  */
-static void communicate(void);
+void communicate(void);
 
 /**
  * \brief Converts a given string to a move.

@@ -121,7 +121,7 @@ void read_input(void)
     }
 }
 
-static void communicate(void)
+void communicate(void)
 {
 	// if time is up break here
 	if (time_info.time_set == 1 && get_time_ms() > time_info.stop_time)
