@@ -315,22 +315,57 @@ Position *get_position(char *str)
 	return pos;
 }
 
-ExtMove get_go(Position *pos, char *str)
+ExtMove get_go(Position *pos, char *command)
 {
 	assert(pos != NULL);
-	assert(strlen(str) > 2);
+	assert(strlen(command) > 2);
 
-	if (str[strlen(str) - 1] == '\n')
-		str[strlen(str) - 1] = '\0';
+	uint32_t depth = 0;
 
-	uint32_t depth = 7;
+	char *argument = NULL;
 
-	char *curr_depth = NULL;
+	Color color = !pos->state->previous_move.color;
 
-	if (strstr(str, "depth")) {
-		curr_depth = strstr(str, "depth");
-		depth = atoi(curr_depth + 6);
+	if ((argument = strstr(command,"infinite"))) {}
+
+	if ((argument = strstr(command,"binc")) && color == BLACK)
+		time_info.inc = atoi(argument + 5);
+
+	if ((argument = strstr(command,"winc")) && color == WHITE)
+		time_info.inc = atoi(argument + 5);
+
+	if ((argument = strstr(command,"wtime")) && color == WHITE)
+		time_info.time_uci = atoi(argument + 6);
+
+	if ((argument = strstr(command,"btime")) && color == BLACK)
+		time_info.time_uci = atoi(argument + 6);
+
+	if ((argument = strstr(command,"movestogo")))
+		time_info.moves_to_go = atoi(argument + 10);
+
+	if ((argument = strstr(command,"movetime")))
+		time_info.move_time = atoi(argument + 9);
+
+	if ((argument = strstr(command,"depth")))
+		depth = atoi(argument + 6);
+
+	if(time_info.move_time != -1) {
+		time_info.time_uci = time_info.move_time;
+		time_info.moves_to_go = 1;
 	}
+
+	time_info.start_time = get_time_ms();
+
+	if(time_info.time_uci != -1) {
+		time_info.time_set = 1;
+
+		time_info.time_uci /= time_info.moves_to_go;
+		time_info.time_uci -= 50;
+		time_info.stop_time = time_info.start_time + time_info.time_uci + time_info.inc;
+	}
+
+	if(depth == 0)
+		depth = 64;
 
 	ExtMove best_move = find_best(pos, depth);
 
