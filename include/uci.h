@@ -10,6 +10,46 @@
 /// Start position macro
 #define STARTPOS "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1"
 
+/// Structure with fields for time control
+typedef struct TimeInfo {
+	uint8_t quit;
+	uint8_t time_set;
+	uint8_t stopped;
+
+	int moves_to_go;
+	int inc;
+
+	int start_time;
+	int stop_time;
+
+	int move_time;
+	int time_uci;
+} TimeInfo;
+
+/**
+ * \brief Gets current time in milliseconds
+ *
+ * \return time in ms
+ */
+int get_time_ms(void);
+
+/**
+ * \brief Waits for user input\GUI input in STDIN
+ *
+ * \return 1 or 0, depends on input
+ */
+int input_waiting(void);
+
+/**
+ * \brief Reads user\GUI input from STDIN
+ */
+void read_input(void);
+
+/**
+ * \brief Bridge function to interact between search and user\GUI input
+ */
+static void communicate(void);
+
 /**
  * \brief Converts a given string to a move.
  *

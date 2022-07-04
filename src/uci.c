@@ -11,10 +11,124 @@
 #include <stdint.h>
 #include <stdlib.h>
 #include <stdio.h>
+#include <unistd.h>
+
+#ifdef WIN64
+    #include <windows.h>
+#else
+    # include <sys/time.h>
+#endif
+
+
+TimeInfo time_info = {
+	.moves_to_go = 30, .move_time = -1, .time_uci = -1
+};
 
 static char piece_symbol[PIECE_TYPE_NB + 1] = {
 	' ', 'p', 'n', 'b', 'r', 'q', 'k'
 };
+
+// Forked functions from VICE chess engine
+
+int get_time_ms(void)
+{
+	#ifdef WIN64
+		return GetTickCount();
+	#else
+		struct timeval time_value;
+		gettimeofday(&time_value, NULL);
+		return time_value * 1000 + time_value.tv_usec / 1000;
+	#endif // WIN64
+}
+
+int input_waiting(void)
+{
+    #ifndef WIN32
+        fd_set readfds;
+        struct timeval tv;
+        FD_ZERO (&readfds);
+        FD_SET (fileno(stdin), &readfds);
+        tv.tv_sec=0; tv.tv_usec=0;
+        select(16, &readfds, 0, 0, &tv);
+
+        return (FD_ISSET(fileno(stdin), &readfds));
+    #else
+        static int init = 0, pipe;
+        static HANDLE inh;
+        DWORD dw;
+
+        if (!init)
+        {
+            init = 1;
+            inh = GetStdHandle(STD_INPUT_HANDLE);
+            pipe = !GetConsoleMode(inh, &dw);
+            if (!pipe)
+            {
+                SetConsoleMode(inh, dw & ~(ENABLE_MOUSE_INPUT|ENABLE_WINDOW_INPUT));
+                FlushConsoleInputBuffer(inh);
+            }
+        }
+
+        if (pipe)
+        {
+           if (!PeekNamedPipe(inh, NULL, 0, NULL, &dw, NULL)) return 1;
+           return dw;
+        }
+
+        else
+        {
+           GetNumberOfConsoleInputEvents(inh, &dw);
+           return dw <= 1 ? 0 : dw;
+        }
+
+    #endif
+}
+
+void read_input(void)
+{
+    int bytes;
+
+    char input[256] = "", *endc;
+
+    if (input_waiting())
+    {
+        time_info.stopped = 1;
+
+        // loop to read bytes from STDIN
+        do
+        {
+            bytes=read(fileno(stdin), input, 256);
+        }
+
+        // until bytes available
+        while (bytes < 0);
+
+        endc = strchr(input,'\n');
+
+        if (endc) *endc=0;
+
+	if (strlen(input) > 0)
+        {
+            if (!strncmp(input, "quit", 4))
+            {
+                time_info.quit = 1;
+            }
+
+            else if (!strncmp(input, "stop", 4))    {
+                time_info.quit = 1;
+            }
+        }
+    }
+}
+
+static void communicate(void)
+{
+	// if time is up break here
+	if (time_info.time_set == 1 && get_time_ms() > time_info.stop_time)
+		time_info.stopped = 1;
+
+	read_input();
+}
 
 Move str_to_move(Position *pos, char *str)
 {
