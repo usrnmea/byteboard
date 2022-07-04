@@ -67,6 +67,8 @@ ExtMove find_best(Position *position, uint32_t depth)
 		.eval = BLACK_WIN
 	};
 
+	time_info.stopped = 0;
+
 	nodes = 0;
 	ply = 0;
 
@@ -77,6 +79,9 @@ ExtMove find_best(Position *position, uint32_t depth)
 	memset(pv_lenght, 0, sizeof(pv_lenght));
 
 	for (uint32_t curr_depth = 1; curr_depth <= depth; curr_depth++) {
+		if (time_info.stopped == 1)
+			break;
+
 		follow_PV = 1;
 
 		Evaluation score = negamax(
@@ -188,6 +193,9 @@ Evaluation quiescence(Position *pos, Evaluation alpha, Evaluation beta)
 {
 	assert(pos != NULL);
 
+	if ((nodes & 2047) == 0)
+		communicate();
+
 	nodes++;
 
 	Color color = !pos->state->previous_move.color;
@@ -234,6 +242,9 @@ Evaluation quiescence(Position *pos, Evaluation alpha, Evaluation beta)
 
 		undo_move(pos);
 
+		if (time_info.stopped == 1)
+			return NO_EVAL;
+
 		if(score >= beta) {
 			free(move_list);
 			return beta;
@@ -254,6 +265,9 @@ Evaluation negamax(
 )
 {
 	assert(pos != NULL);
+
+	if ((nodes & 2047) == 0)
+		communicate();
 
 	uint32_t moves_searched = 0;
 
@@ -281,6 +295,9 @@ Evaluation negamax(
 		);
 
 		undo_null_move(pos);
+
+		if (time_info.stopped == 1)
+			return NO_EVAL;
 
 		if (score >= beta)
 			return beta;
@@ -338,6 +355,9 @@ Evaluation negamax(
 			max_score = score;
 
 		undo_move(pos);
+
+		if (time_info.stopped == 1)
+			return NO_EVAL;
 
 		moves_searched++;
 
