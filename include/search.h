@@ -35,7 +35,7 @@ static const Evaluation mvv_lva[6][6] = {
 };
 
 /// Random piece keys
-U64 piece_keys[6][64];
+U64 piece_keys[15][64];
 
 /// Random en passant keys
 U64 en_passant_keys[64];

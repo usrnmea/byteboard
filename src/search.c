@@ -65,9 +65,9 @@ U64 get_random_U64_number(void)
 
 void init_hash_keys(void)
 {
-	for (PieceType pt = PAWN; pt <= KING; pt++) {
+	for (Piece piece = PAWN; piece <= B_KING; piece += (piece == 6) * 2 + 1) {
 		for (Square sq = SQ_A1; sq < SQ_NB; sq++)
-			piece_keys[pt][sq] = get_random_U64_number();
+			piece_keys[piece][sq] = get_random_U64_number();
 	}
 
 	for (Square sq = SQ_A1; sq < SQ_NB; sq++)
