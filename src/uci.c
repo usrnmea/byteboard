@@ -399,6 +399,7 @@ void uci_loop()
 
 		else if (strncmp(input, "position", 8) == 0) {
 			pos = get_position(input);
+			generate_hash_key(pos);
 		}
 
 		else if (strncmp(input, "ucinewgame", 10) == 0) {
