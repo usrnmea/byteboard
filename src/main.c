@@ -16,6 +16,8 @@
 
 int main(void)
 {
+	init_hash_keys();
+
 	init_rays();
 	uci_loop();
 
