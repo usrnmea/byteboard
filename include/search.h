@@ -34,6 +34,37 @@ static const Evaluation mvv_lva[6][6] = {
 	{100, 350, 350, 520, 1000, 100000}
 };
 
+/// Random piece keys
+U64 piece_keys[6][64];
+
+/// Random en passant keys
+U64 en_passant_keys[64];
+
+/// Random castlings keys
+U64 castling_keys[16];
+
+/// Random side key
+U64 side_key;
+
+/**
+ * \brief Generates random u32 number
+ *
+ * \return random u32 number
+ */
+uint32_t get_random_U32_number(void);
+
+/**
+ * \brief Generates random u64 number
+ *
+ * \return random u64 number
+ */
+U64 get_random_U64_number(void);
+
+/**
+ * \brief Initializes all hash keys with random numbers
+ */
+void init_hash_keys(void);
+
 /**
  * \brief Returns the best move according to the chess engine
  *
