@@ -35,6 +35,58 @@ const uint32_t FULL_DEPTH_MOVES = 4;
 /// Reduction limit in LMR
 const uint32_t REDUCTION_LIMIT = 3;
 
+/// Seed for init hash keys
+uint32_t random_state = 1804289383;
+
+uint32_t get_random_U32_number(void)
+{
+    uint32_t number = random_state;
+
+    number ^= number << 13;
+    number ^= number >> 17;
+    number ^= number << 5;
+
+    random_state = number;
+
+    return number;
+}
+
+U64 get_random_U64_number(void)
+{
+    U64 n1, n2, n3, n4;
+
+    n1 = (U64)(get_random_U32_number()) & 0xFFFF;
+    n2 = (U64)(get_random_U32_number()) & 0xFFFF;
+    n3 = (U64)(get_random_U32_number()) & 0xFFFF;
+    n4 = (U64)(get_random_U32_number()) & 0xFFFF;
+
+    return n1 | (n2 << 16) | (n3 << 32) | (n4 << 48);
+}
+
+void init_hash_keys(void)
+{
+	for (PieceType pt = PAWN; pt <= KING; pt++) {
+		for (Square sq = SQ_A1; sq < SQ_NB; sq++)
+			piece_keys[pt][sq] = get_random_U64_number();
+	}
+
+	for (Square sq = SQ_A1; sq < SQ_NB; sq++)
+		en_passant_keys[sq] = get_random_U64_number();
+
+	side_key = get_random_U64_number();
+
+	castling_keys[NO_CASTLING] = get_random_U64_number();
+	castling_keys[WHITE_OO] = get_random_U64_number();
+	castling_keys[WHITE_OOO] = get_random_U64_number();
+	castling_keys[BLACK_OO] = get_random_U64_number();
+	castling_keys[BLACK_OOO] = get_random_U64_number();
+	castling_keys[KING_SIDE] = get_random_U64_number();
+	castling_keys[QUEEN_SIDE] = get_random_U64_number();
+	castling_keys[ALL_WHITE] = get_random_U64_number();
+	castling_keys[ALL_BLACK] = get_random_U64_number();
+	castling_keys[ALL_CASTLING] = get_random_U64_number();
+}
+
 int cmp(const void *elem1, const void *elem2)
 {
 	ExtMove first = *((ExtMove*)elem1);
@@ -287,7 +339,10 @@ Evaluation negamax(
 	if (get_check_type(pos) != NO_CHECK)
 		depth++;
 
-	if (depth >= 3 && get_check_type(pos) == NO_CHECK && ply) {
+	if (
+		depth >= 3 && get_check_type(pos) == NO_CHECK &&
+		ply && get_phase(pos) != ENDGAME
+	) {
 		do_null_move(pos);
 
 		Evaluation score = -negamax(
