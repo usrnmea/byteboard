@@ -21,12 +21,6 @@ extern uint8_t follow_PV;
 /// PV flag that indicates do we evaluate PV moves or not
 extern uint8_t eval_PV;
 
-/// Random side key
-extern U64 side_key;
-
-/// Unique position hash key
-extern U64 hash_key;
-
 /// Max number of plies
 #define MAX_PLY 64
 
