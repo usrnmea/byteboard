@@ -8,6 +8,7 @@
 #include "position.h"
 #include "evaluate.h"
 #include "movegen.h"
+#include "hash.h"
 
 /// Counter for the number of nodes
 extern U64 nodes;
@@ -33,43 +34,6 @@ static const Evaluation mvv_lva[6][6] = {
 	{101, 351, 351, 521, 1001, 100001},
 	{100, 350, 350, 520, 1000, 100000}
 };
-
-/// Random piece keys
-U64 piece_keys[12][64];
-
-/// Random en passant keys
-U64 en_passant_keys[64];
-
-/// Random castling keys
-U64 castling_keys[16];
-
-/**
- * \brief Generates random u32 number
- *
- * \return random u32 number
- */
-uint32_t get_random_U32_number(void);
-
-/**
- * \brief Generates random u64 number
- *
- * \return random u64 number
- */
-U64 get_random_U64_number(void);
-
-/**
- * \brief Initializes all hash keys with random numbers
- */
-void init_hash_keys(void);
-
-/**
- * \brief Generates unique hash key for the position
- *
- * \param pos current position
- *
- * \return #U64 hash key
- */
-U64 generate_hash_key(const Position *pos);
 
 /**
  * \brief Returns the best move according to the chess engine

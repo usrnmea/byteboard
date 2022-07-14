@@ -14,13 +14,13 @@ extern U64 side_key;
 extern U64 hash_key;
 
 /// Random piece keys
-U64 piece_keys[12][64];
+extern U64 piece_keys[12][64];
 
 /// Random en passant keys
-U64 en_passant_keys[64];
+extern U64 en_passant_keys[64];
 
 /// Random castling keys
-U64 castling_keys[16];
+extern U64 castling_keys[16];
 
 /**
  * \brief Generates random u32 number

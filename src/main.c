@@ -8,6 +8,7 @@
 #include "evaluate.h"
 #include "movegen.h"
 #include "perft.h"
+#include "hash.h"
 #include "search.h"
 #include "uci.h"
 

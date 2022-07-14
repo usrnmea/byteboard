@@ -14,11 +14,10 @@
 #include <unistd.h>
 
 #ifdef WIN64
-    #include <windows.h>
+	#include <windows.h>
 #else
-    # include <sys/time.h>
+	#include <sys/time.h>
 #endif
-
 
 TimeInfo time_info = {
 	.moves_to_go = 30, .move_time = -1, .time_uci = -1
@@ -32,93 +31,94 @@ static char piece_symbol[PIECE_TYPE_NB + 1] = {
 
 int get_time_ms(void)
 {
-	#ifdef WIN64
-		return GetTickCount();
-	#else
-		struct timeval time_value;
-		gettimeofday(&time_value, NULL);
-		return time_value * 1000 + time_value.tv_usec / 1000;
-	#endif // WIN64
+#ifdef WIN64
+	return GetTickCount();
+#else
+	struct timeval time_value;
+	gettimeofday(&time_value, NULL);
+
+	return time_value.tv_sec * 1000 + time_value.tv_usec / 1000;
+#endif // WIN64
 }
 
 int input_waiting(void)
 {
-    #ifndef WIN32
-        fd_set readfds;
-        struct timeval tv;
-        FD_ZERO (&readfds);
-        FD_SET (fileno(stdin), &readfds);
-        tv.tv_sec=0; tv.tv_usec=0;
-        select(16, &readfds, 0, 0, &tv);
+#ifndef WIN32
+	fd_set readfds;
 
-        return (FD_ISSET(fileno(stdin), &readfds));
-    #else
-        static int init = 0, pipe;
-        static HANDLE inh;
-        DWORD dw;
+	struct timeval tv;
 
-        if (!init)
-        {
-            init = 1;
-            inh = GetStdHandle(STD_INPUT_HANDLE);
-            pipe = !GetConsoleMode(inh, &dw);
-            if (!pipe)
-            {
-                SetConsoleMode(inh, dw & ~(ENABLE_MOUSE_INPUT|ENABLE_WINDOW_INPUT));
-                FlushConsoleInputBuffer(inh);
-            }
-        }
+	FD_ZERO(&readfds);
+	FD_SET(STDIN_FILENO, &readfds);
 
-        if (pipe)
-        {
-           if (!PeekNamedPipe(inh, NULL, 0, NULL, &dw, NULL)) return 1;
-           return dw;
-        }
+	tv.tv_sec=0; tv.tv_usec=0;
 
-        else
-        {
-           GetNumberOfConsoleInputEvents(inh, &dw);
-           return dw <= 1 ? 0 : dw;
-        }
+	select(16, &readfds, 0, 0, &tv);
 
-    #endif
+	return (FD_ISSET(STDIN_FILENO, &readfds));
+#else
+	static int init = 0, pipe;
+	static HANDLE inh;
+
+	DWORD dw;
+
+	if (!init) {
+		init = 1;
+
+		inh = GetStdHandle(STD_INPUT_HANDLE);
+		pipe = !GetConsoleMode(inh, &dw);
+
+		if (!pipe) {
+			SetConsoleMode(inh, dw & ~(
+					ENABLE_MOUSE_INPUT|ENABLE_WINDOW_INPUT)
+			);
+			FlushConsoleInputBuffer(inh);
+		}
+	}
+
+	if (pipe) {
+		if (!PeekNamedPipe(inh, NULL, 0, NULL, &dw, NULL))
+			return 1;
+
+		return dw;
+	} else {
+		GetNumberOfConsoleInputEvents(inh, &dw);
+		return dw <= 1 ? 0 : dw;
+	}
+#endif // WIN32
 }
 
 void read_input(void)
 {
-    int bytes;
+	int bytes;
 
-    char input[256] = "", *endc;
+	char input[256] = "", *endc;
 
-    if (input_waiting())
-    {
-        time_info.stopped = 1;
+	if (input_waiting())
+	{
+		time_info.stopped = 1;
 
-        // loop to read bytes from STDIN
-        do
-        {
-            bytes=read(fileno(stdin), input, 256);
-        }
+		do
+		{
+			bytes=read(STDIN_FILENO, input, 256);
+		} while (bytes < 0);
 
-        // until bytes available
-        while (bytes < 0);
+		endc = strchr(input,'\n');
 
-        endc = strchr(input,'\n');
+		if (endc) *endc=0;
 
-        if (endc) *endc=0;
+		if (strlen(input) > 0)
+		{
+			if (!strncmp(input, "quit", 4))
+			{
+				time_info.quit = 1;
+			}
 
-	if (strlen(input) > 0)
-        {
-            if (!strncmp(input, "quit", 4))
-            {
-                time_info.quit = 1;
-            }
-
-            else if (!strncmp(input, "stop", 4))    {
-                time_info.quit = 1;
-            }
-        }
-    }
+			else if (!strncmp(input, "stop", 4))    {
+				time_info.quit = 1;
+			}
+		}
+	}
 }
 
 void communicate(void)
@@ -361,7 +361,11 @@ ExtMove get_go(Position *pos, char *command)
 
 		time_info.time_uci /= time_info.moves_to_go;
 		time_info.time_uci -= 50;
-		time_info.stop_time = time_info.start_time + time_info.time_uci + time_info.inc;
+		time_info.stop_time = (
+			time_info.start_time
+			+ time_info.time_uci
+			+ time_info.inc
+		);
 	}
 
 	if (depth == 0)

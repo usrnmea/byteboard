@@ -2,6 +2,7 @@
 #include "position.h"
 #include "evaluate.h"
 #include "movegen.h"
+#include "hash.h"
 #include "search.h"
 #include "uci.h"
 
@@ -11,20 +12,24 @@
 U64 side_key = 0;
 U64 hash_hey = 0;
 
+U64 piece_keys[12][64];
+U64 en_passant_keys[64];
+U64 castling_keys[16];
+
 /// Seed for init hash keys
 uint32_t random_state = 1804289383;
 
 uint32_t get_random_U32_number(void)
 {
-    uint32_t number = random_state;
+	uint32_t number = random_state;
 
-    number ^= number << 13;
-    number ^= number >> 17;
-    number ^= number << 5;
+	number ^= number << 13;
+	number ^= number >> 17;
+	number ^= number << 5;
 
-    random_state = number;
+	random_state = number;
 
-    return number;
+	return number;
 }
 
 U64 get_random_U64_number(void)
